@@ -1,0 +1,63 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\signup.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --neutral-color: #dddddd; /* Light Gray */
+    --background-color: #ffffff; /* Off-White */
+    --text-color: #333333; /* Dark Gray */
+}
+
+body, html {
+    background: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+.signup-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form p, form label {
+    margin: 0;
+    color: var(--text-color);
+}
+
+form input[type="text"], form input[type="email"], form input[type="password"], form button {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid var(--neutral-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+form button {
+    background-color: var(--accent-color-1);
+    color: var(--background-color);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: var(--accent-color-2);
+}

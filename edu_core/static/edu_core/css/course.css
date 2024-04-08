@@ -1,0 +1,120 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\course.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ff6b6b; /* Red for deletion */
+    --text-color: #333; /* Dark Gray */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background: var(--secondary-color-1);
+    color: var(--text-color);
+}
+
+.course-container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.course-info, .course-image-and-controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.author {
+    margin-top: 10px; /* Adjusted for visual break */
+}
+
+.course-description {
+    margin-top: 10px;
+}
+
+.course-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    align-self: center; /* Center the image in its grid area */
+}
+
+.created-date {
+    align-self: end;
+    margin-top: 10px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center; /* Center the buttons under the image */
+    gap: 10px; /* Add a small gap between buttons */
+    margin-top: 10px;
+}
+
+.edit-course, .delete-course {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--secondary-color-1);
+}
+
+.edit-course {
+    background-color: var(--accent-color-1);
+}
+
+.delete-course {
+    background-color: var(--accent-color-2);
+}
+
+
+.lessons-container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 1fr; /* Change this to a single column layout */
+    gap: 20px;
+}
+
+.lesson {
+    border: 1px solid var(--neutral-color);
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--secondary-color-1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px; /* Adjust space between lessons */
+}
+
+.add-lesson-container {
+    grid-column: 1 / -1; /* This makes sure the button spans the entire grid column */
+}
+
+.add-lesson-button {
+    display: block; /* Full width for the button */
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 20px; /* Additional space above the button */
+    margin-bottom: 20px; /* Space below the button */
+}
+
+.add-lesson-button:hover {
+    background-color: darken(var(--accent-color-1), 10%);
+}

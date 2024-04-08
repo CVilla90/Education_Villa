@@ -1,0 +1,32 @@
+.lesson-container {
+    width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.lesson-container h2 {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+.lesson-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.lesson-container button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.lesson-container button:hover {
+    background-color: darken(var(--accent-color-1), 10%);
+}

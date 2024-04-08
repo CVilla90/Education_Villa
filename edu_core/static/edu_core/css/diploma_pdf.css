@@ -1,0 +1,141 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\diploma_pdf.css */
+
+@page {
+    size: Letter landscape;
+    margin: 1in;
+}
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+.diploma {
+    border: 2px solid #444;
+    padding: 1rem;
+    margin: auto;
+    background-color: #fff;
+    width: 8.6in; /* Fixed width, adjust as needed */
+    height: 5in; /* Fixed height, adjust as needed */
+    box-shadow: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start; /* Aligns children to the start of the container's cross axis, which is the top edge in a row flex container */
+    position: relative; /* This is necessary for positioning the footer elements */
+}
+
+
+.diploma-left-section {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around; /* This will distribute the space evenly */
+    margin-left: 4rem;
+    margin-right: auto;
+}
+
+
+.diploma-left-section {
+    position: relative; /* This is necessary for absolute positioning inside */
+}
+
+
+.diploma-signature {
+    text-align: center; /* Center-aligns the signature and text */
+    width: 100%; /* Ensures the text is centered within the full width of its container */
+    gap: 10px; /* Space between the name and the title */
+}
+
+
+.diploma-signature p {
+    margin: 10; /* Optional: Removes margin from paragraphs if necessary */
+}
+
+
+.diploma-main-content {
+    width: 70%; /* Allocate width for main content */
+    text-align: center;
+    padding: 0 1rem; /* Padding on the sides */
+}
+
+
+.diploma-logo-left img, .diploma-signature img {
+    max-width: 150px; /* Set a fixed maximum width */
+    height: auto;
+}
+
+
+/* Header styles */
+.certificate-title {
+    font-size: 36px;
+    margin-top: 0; /* Align with the top of the page */
+}
+
+
+/* Name and course styles */
+.diploma-student-name {
+    font-size: 36px;
+    text-decoration: underline; /* This underlines the text */
+}
+
+
+.diploma-course-name {
+    font-size: 34px;
+}
+
+/* Position the right logo and other information at the bottom-right */
+.diploma-logo-right {
+    position: absolute;
+    bottom: 1.5rem; /* Align with the bottom padding of the diploma */
+    right: 1.5rem; /* Align with the right padding of the diploma */
+}
+
+
+.diploma-logo-right img {
+    max-width: 100px; /* Adjust the size of the EVX logo */
+    height: auto;
+}
+
+
+/* Issued by and verification key */
+/* Positioned at the bottom left */
+.diploma-issued-by {
+    position: absolute;
+    bottom: 7.1rem;
+    left: 17rem;
+    text-align: left;
+    font-size: 14px;
+}
+
+
+/* Positioned at the bottom right */
+.diploma-verification-key {
+    position: absolute;
+    bottom: 7.1rem;
+    right: 2rem;
+    text-align: right;
+    font-size: 12px;
+}
+
+
+/* Additional styles for positioning the EVX logo at the bottom right */
+.diploma-evx-logo-container {
+    position: absolute;
+    bottom: 9rem; /* Adjust as necessary to bring it inside the frame */
+    right: 1.5rem; /* Adjust as necessary to bring it inside the frame */
+    text-align: right;
+    /* If your diploma has a defined height, you might need to adjust this to ensure it is inside the border */
+}
+
+
+/* You may need to adjust the max-width and height based on your logo's dimensions */
+.diploma-evx-logo-container img {
+    max-width: 100px; /* Maximum width for the EVX logo */
+    height: auto; /* Maintain aspect ratio */
+}

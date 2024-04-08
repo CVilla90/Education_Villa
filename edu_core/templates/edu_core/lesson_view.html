@@ -1,0 +1,40 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\lesson_view.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/lesson_view.css' %}" type="text/css">
+
+<div class="lesson-view-container">
+    <h1>{{ lesson.name }}</h1>
+    <div class="lesson-content">
+        <p>{{ lesson.content }}</p>
+    </div>
+
+
+<!-- Activities Section -->
+<div class="activities-section">
+    <h2>Activities</h2>
+    {% for activity in lesson.activities.all %}
+        <div class="activity">
+            <!-- Directly link to the activity detail view -->
+            <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
+            <p>{{ activity.description }}</p>
+        </div>
+    {% endfor %}
+
+
+    {% if request.user == lesson.course.author %}
+        <div class="activity-buttons">
+            <!-- Button to add a new activity -->
+            <a href="{% url 'activity_add' lesson.id %}" class="add-activity-button">Add Activity</a>
+        </div>
+    {% endif %}
+
+    <!-- Button to go back to the course detail page -->
+    <a href="{% url 'course_detail' lesson.course.id %}" class="back-to-course-button">Back to Course</a>
+</div>
+
+{% endblock %}

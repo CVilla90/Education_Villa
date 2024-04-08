@@ -1,0 +1,40 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\profile.html -->
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/profile.css' %}" type="text/css">
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-picture">
+            {% if user.userprofile.profile_picture %}
+            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile picture" class="profile-img">
+            {% else %}
+            <div class="no-profile-picture">No profile picture uploaded</div>
+            {% endif %}
+        </div>
+        <div class="bio-container">
+            <p class="profile-name">{{ user.get_full_name }}</p>
+            <p class="bio">{{ user.userprofile.bio }}</p>
+        </div>
+    </div>
+
+    <div class="certifications">
+        <h3>Certifications</h3>
+        {% for cert in user.userprofile.certifications.all %}
+            <div class="certification">
+                <img src="{{ cert.image.url }}" alt="{{ cert.description }}" class="cert-img">
+                <p class="cert-description">{{ cert.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    {% if user == request.user %}
+        <a href="{% url 'edit_profile' %}" class="edit-profile-button">Edit Profile</a>
+    {% endif %}
+</div>
+
+<script src="{% static 'edu_core/js/profile.js' %}"></script>
+{% endblock %}

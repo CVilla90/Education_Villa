@@ -1,0 +1,26 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\edit_profile.html -->
+{% extends "edu_core/base.html" %}
+
+{% block content %}
+<h2>Edit Profile</h2>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <button type="submit" name="profile_form">Save Profile</button>
+</form>
+
+<h3>Add Certification</h3>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ certification_form.as_p }}
+    <button type="submit" name="certification_form">Add Certification</button>
+</form>
+
+<h3>Existing Certifications</h3>
+*The oldest certification will be deleted if the limit of 5 is reached.
+{% for cert in certifications %}
+    <div>{{ cert.description }}</div>
+    <img src="{{ cert.image.url }}" alt="{{ cert.description }}" width="100">
+    <!-- Implement certification deletion if desired -->
+{% endfor %}
+{% endblock %}

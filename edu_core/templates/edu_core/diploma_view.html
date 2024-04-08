@@ -1,0 +1,54 @@
+<!-- diploma_view.html -->
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/diploma_view.css' %}" type="text/css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diploma View</title>
+
+</head>
+<body>
+    <div class="diploma">
+        {% if diploma %}
+            <div class="diploma-left-section">
+                <div class="diploma-logo-left">
+                    <img src="{% static 'edu_core/images/Education Villa logo 2.jpg' %}" alt="Education Villa Logo">
+                </div>
+                <div class="diploma-signature">
+                    <img src="{% static 'edu_core/images/evsignature.jpg' %}" alt="Signature">
+                    <p>Carlos Villa, Founder</p>
+                    <p>Education Villa</p>
+                </div>
+            </div>
+            <div class="diploma-main-content">
+                <h1 class="certificate-title">Certificate</h1>
+                <p class="certify-statement">to certify that</p>
+                <p class="diploma-student-name">{{ diploma.student_name }}</p>
+                <p class="course-completion-statement">received passing grades and successfully completed</p>
+                <p class="diploma-course-name">{{ diploma.course_name }}</p>
+                <p class="course-offered-statement">a course offered by Education Villa</p>
+            </div>
+            <div class="diploma-logo-right">
+                <img src="{% static 'edu_core/images/EVX logo 1.jpg' %}" alt="EVX Logo">
+            </div>
+            <div class="diploma-footer">
+                <p class="diploma-issued-by-date">Issued by: 
+                    {% if diploma.issued_by %}
+                        {{ diploma.issued_by.get_full_name }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    on {{ diploma.issue_date }}
+                </p>
+                <p class="diploma-verification-key">Verification Key: {{ diploma.verification_key }}</p>
+            </div>
+        {% else %}
+            <p>No diploma details available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

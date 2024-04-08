@@ -1,0 +1,42 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\home.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/home.css' %}" type="text/css">
+
+<div class="hero">
+    <img src="{% static 'edu_core/images/Education Villa logo 2.jpg' %}" alt="Education Villa Logo" class="hero-logo">
+    <h1>Welcome to Education Villa</h1>
+    <p>Your journey towards knowledge and expertise begins here.</p>
+    <div class="search-container">
+        <form method="get">
+            <input type="search" name="q" placeholder="Search our courses..." value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>    
+</div>
+
+<div class="courses-preview">
+    <h2>Explore Our Courses</h2>
+    <div class="course-cards">
+        {% for course in courses %}
+        <div class="course-card">
+            {% if course.image %}
+            <img src="{{ course.image.url }}" alt="{{ course.name }}" class="course-image">
+            {% endif %}
+            <a href="{% url 'course_detail' course.id %}"><h3>{{ course.name }}</h3></a>
+            <p>{{ course.description|truncatewords:20 }}</p> <!-- Adjust 20 to your desired word limit -->
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<footer>
+    <img src="{% static 'edu_core/images/EVX logo 1.jpg' %}" alt="EVX Logo" class="footer-logo">
+    © Education Villa 2024
+</footer>
+
+{% endblock %}

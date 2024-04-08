@@ -1,0 +1,23 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\mcq_view.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/mcq_view.css' %}" type="text/css">
+
+<div class="activity-container">
+    <h1>{{ activity.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="question">{{ structured_content.question }}</div>
+        {% for key, option in structured_content.options.items %}
+            <label>
+                <input type="radio" name="answer" value="{{ key }}"> {{ option }}
+            </label><br>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+<!-- diploma_pdf.html -->
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Diploma PDF</title>
+</head>
+<body>
+    <div class="diploma">
+        {% if diploma %}
+            <div class="diploma-left-section">
+                <div class="diploma-logo-left">
+                    <img src="data:image/jpeg;base64,{{ logo_image_base64 }}" alt="Education Villa Logo">
+                </div>
+                <br>
+                <br>
+                <div class="diploma-signature">
+                    <img src="data:image/jpeg;base64,{{ signature_image_base64 }}" alt="Signature">
+                    <p>Carlos Villa, <span>Founder</span></p>
+                    <p>Education Villa</p>
+                </div>
+            </div>
+            <div class="diploma-main-content">
+                <h1 class="certificate-title">Certificate</h1>
+                <p class="certify-statement">to certify that</p>
+                <p class="diploma-student-name">{{ diploma.student_name }}</p>
+                <p class="course-completion-statement">received passing grades and successfully completed</p>
+                <p class="diploma-course-name">{{ diploma.course_name }}</p>
+                <p class="course-offered-statement">a course offered by Education Villa</p>
+                <!-- New container for the Issued by, date, and verification key -->
+                <div class="diploma-footer">
+                    <p class="diploma-issued-by">Issued by: {{ diploma.issued_by.get_full_name }} on {{ diploma.issue_date }}</p>
+                    <p class="diploma-verification-key">Verification Key: {{ diploma.verification_key }}</p>
+                </div>
+                <!-- New container for the EVX logo -->
+                <div class="diploma-evx-logo-container">
+                    <img src="data:image/jpeg;base64,{{ evx_logo_image_base64 }}" alt="EVX Logo">
+                </div>
+            </div>
+    </div>
+    {% else %}
+    <p>No diploma details available.</p>
+    {% endif %}
+</body>
+</html>
+{% endblock %}

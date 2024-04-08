@@ -1,0 +1,111 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\diploma_view.css */
+
+.diploma {
+    border: 4px double #444;
+    padding: 20px;
+    margin: 20px auto;
+    background-color: #fff;
+    width: 8.5in; /* width of a letter paper minus the padding */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Softer shadow for depth */
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.diploma-left-section {
+    flex-basis: 30%;
+    text-align: left;
+    position: relative;
+}
+
+/* Add a pseudo-element to .diploma-left-section to create the shadow divider */
+.diploma-left-section::after {
+    content: '';
+    position: absolute;
+    right: -10px; /* Adjust as needed */
+    top: 0;
+    bottom: 0;
+    width: 1px; /* The thickness of the divider */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Adjust the color and spread as needed */
+    background: #fff; /* Match the background color of the diploma */
+}
+
+.diploma-main-content {
+    flex-basis: 70%;
+    text-align: center;
+}
+
+.diploma-logo-left {
+    text-align: center;
+    padding: 20px;
+    margin-right: 20px;
+    display: inline-block;
+    max-width: 180px; /* Adjust the size to better fit the design */
+    margin-top: 20px; /* Provides spacing from the top edge */
+}
+
+.diploma-logo-left img {
+    max-width: 200px; /* Adjust based on your logo size for better control */
+    height: auto;
+    display: block; /* Ensures the image does not stretch to the full width of the container */
+    margin: 0 auto; /* Center the logo within the gradient background */
+}
+
+.diploma-signature {
+    text-align: center; /* Centers the signature within its container */
+    padding-top: 20px; /* Adds spacing above the signature for visual separation */
+}
+
+.diploma-signature img {
+    max-width: 150px; /* Ensures the signature image does not exceed this width */
+    height: auto;
+}
+
+.diploma-signature p {
+    margin: 5px 0; /* Adjusts spacing around the text below the signature image */
+}
+
+.diploma-issued-by-date {
+    text-align: left;
+    position: absolute;
+    bottom: 5px; /* Align with the verification key */
+    left: 36%; /* Align with the left side, similar to the verification key */
+    transform: none; /* Remove the transform as it's no longer needed */
+}
+
+.diploma-logo-right {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.diploma-logo-right img {
+    max-width: 100px;
+    height: auto;
+}
+
+.diploma-verification-key {
+    /* Adjust this to match the style and position of the 'Issued by' text */
+    font-size: 12px;
+    position: absolute;
+    bottom: 5px;
+    right: 3%;
+}
+
+.certificate-title {
+    font-size: 48px; /* Increase the font size for "Certificate" */
+    font-weight: bold; /* Optionally make it bold */
+    margin-bottom: 20px;
+}
+
+.diploma-student-name {
+    font-size: 32px; /* Increase the font size for the student's name */
+    text-decoration: underline;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.diploma-course-name {
+    font-size: 28px; /* Increase the font size for the course name */
+    margin: 20px 0;
+}

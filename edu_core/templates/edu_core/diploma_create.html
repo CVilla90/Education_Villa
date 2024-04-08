@@ -1,0 +1,15 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\create_diploma.html -->
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/diploma_create.css' %}" type="text/css">
+
+<h2>Create Diploma</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Diploma</button>
+</form>
+{% endblock %}

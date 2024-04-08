@@ -1,0 +1,25 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\course_edit.css */
+
+/* course_edit.css */
+.course-edit-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.save-course-btn {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.save-course-btn:hover {
+    background-color: #45a049;
+}

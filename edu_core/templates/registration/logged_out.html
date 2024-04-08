@@ -1,0 +1,10 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\registration\logged_out.html -->
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/logged_out.css' %}" type="text/css">
+
+<p>You have been logged out. <a href="{% url 'login' %}">Log in again?</a></p>
+{% endblock %}

@@ -1,0 +1,94 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\diploma_search.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --neutral-color: #dddddd; /* Light Gray */
+    --background-color: #ffffff; /* Off-White */
+    --text-color: #333333; /* Dark Gray */
+}
+
+.search-bar {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    margin-right: 10px;
+    width: 300px;
+    border: 1px solid var(--neutral-color);
+    border-radius: 20px;
+    background-color: var(--secondary-color-1);
+    color: var(--text-color);
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    background-color: var(--accent-color-1); /* Bright Blue for search button */
+    color: var(--background-color);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.search-bar button:hover {
+    background-color: var(--accent-color-2); /* Golden Yellow on hover */
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.diploma-result {
+    background-color: var(--secondary-color-1);
+    border: 1px solid var(--neutral-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
+    transition: transform 0.2s ease-in-out; /* Smooth transform on hover */
+}
+
+.diploma-result:hover {
+    transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.diploma-result p {
+    margin: 10px 0;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+.view-button, .download-button {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    color: var(--background-color);
+    display: inline-block;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px; /* Adjusted font size for buttons */
+}
+
+.view-button {
+    background-color: var(--primary-color); /* Navy Blue for view button */
+}
+
+.view-button:hover {
+    background-color: var(--accent-color-1); /* Bright Blue on hover */
+}
+
+.download-button {
+    background-color: var(--secondary-color-2); /* Teal for download button */
+}
+
+.download-button:hover {
+    background-color: var(--accent-color-2); /* Golden Yellow on hover */
+}

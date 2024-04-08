@@ -1,0 +1,49 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\logged_out.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --neutral-color: #dddddd; /* Light Gray */
+    --background-color: #ffffff; /* Off-White */
+    --text-color: #333333; /* Dark Gray */
+}
+
+body, html {
+    background: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+.logged-out-container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 20px;
+    background: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.logged-out-container p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.logged-out-container a {
+    display: inline-block;
+    background-color: var(--accent-color-1);
+    color: var(--background-color);
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.logged-out-container a:hover {
+    background-color: var(--accent-color-2);
+}

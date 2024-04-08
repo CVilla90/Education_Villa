@@ -1,0 +1,108 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\profile.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --neutral-color: #dddddd; /* Light Gray */
+    --background-color: #ffffff; /* Off-White */
+    --text-color: #333333; /* Dark Gray */
+}
+
+body {
+    background: var(--background-color);
+    font-family: Arial, sans-serif;
+    color: var(--text-color);
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: var(--secondary-color-1); /* Use white for the container */
+    border-radius: 8px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--neutral-color);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-img, .no-profile-picture {
+    border-radius: 50%;
+    width: 120px; /* Adjusted size */
+    height: 120px;
+    object-fit: cover;
+    border: 4px solid var(--accent-color-1); /* Use bright blue for the border */
+}
+
+.no-profile-picture {
+    background-color: var(--neutral-color);
+    color: var(--primary-color);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bio-container {
+    flex-grow: 1;
+}
+
+.profile-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color); /* Use navy blue for the name */
+}
+
+.bio {
+    margin-top: 10px;
+    font-size: 16px; /* Adjusted font size for readability */
+}
+
+.certifications {
+    margin-top: 20px;
+}
+
+.certification {
+    background-color: var(--secondary-color-2); /* Use teal for certification cards */
+    color: var(--background-color); /* Use off-white for text */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.cert-img {
+    max-width: 250px; /* Increased size */
+    height: auto;
+    border-radius: 8px; /* Rounded corners for images */
+    margin-bottom: 10px;
+}
+
+.cert-description {
+    font-size: 14px; /* Ensures consistency in font size */
+}
+
+.edit-profile-button {
+    background-color: var(--accent-color-1); /* Bright blue for edit button */
+    border: none;
+    color: var(--background-color);
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.edit-profile-button:hover {
+    background-color: var(--accent-color-2); /* Golden yellow on hover */
+}

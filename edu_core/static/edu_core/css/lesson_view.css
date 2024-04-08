@@ -1,0 +1,50 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\lesson_view.css */
+
+.activities-section {
+    margin-top: 30px;
+}
+
+.activity {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.activity h3 {
+    margin-top: 0;
+}
+
+.activity p {
+    margin-bottom: 10px;
+}
+
+.add-activity-button {
+    margin-top: 20px;
+    display: inline-block;
+    background-color: #4CAF50; /* or any color you prefer */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.add-activity-button:hover {
+    background-color: #45a049;
+}
+
+.back-to-course-button {
+    display: block;
+    margin-top: 20px;
+    background-color: #007bff; /* or any color that fits your design */
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.back-to-course-button:hover {
+    background-color: #0056b3;
+}

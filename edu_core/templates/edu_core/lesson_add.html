@@ -1,0 +1,20 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\lesson_add.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/lesson_add.css' %}" type="text/css">
+
+<div class="lesson-container">
+    <h2>Add New Lesson</h2>
+    <form method="post" action="{% url 'lesson_add' course_id=course_id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Lesson</button>
+    </form>
+</div>
+
+{% endblock %}
+

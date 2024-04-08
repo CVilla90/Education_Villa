@@ -1,0 +1,129 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\home.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* Beige */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --neutral-color: #dddddd; /* Light Gray */
+    --background-color: #ffffff; /* Off-White */
+    --text-color: #333333; /* Dark Gray */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.hero-logo {
+    max-width: 200px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: var(--background-color);
+    padding: 20px;
+    box-shadow: 0 0 0 10px var(--background-color);
+}
+
+.hero {
+    text-align: center;
+    padding: 50px 20px;
+    background: radial-gradient(circle at 50% 20%, var(--secondary-color-2) 20%, var(--primary-color) 100%);
+    color: var(--background-color);
+}
+
+.search-container {
+    margin-top: 30px;
+}
+
+.search-container input[type="search"] {
+    padding: 10px;
+    width: 50%;
+    max-width: 300px;
+    border-radius: 20px;
+    border: 1px solid var(--neutral-color);
+    font-size: 16px;
+    color: var(--text-color);
+    background: var(--secondary-color-1);
+}
+
+.search-container button {
+    padding: 10px 20px;
+    margin-left: -5px;
+    background-color: var(--accent-color-1);
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: var(--background-color);
+}
+
+.search-container button:hover {
+    background-color: var(--accent-color-2);
+}
+
+.courses-preview {
+    padding: 50px 20px;
+    background: var(--secondary-color-1);
+}
+
+.course-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--background-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+}
+
+.course-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.course-card h3 {
+    padding-left: 10px;
+    margin-top: 20px;
+    color: var(--primary-color);
+}
+
+.course-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* Number of lines to show */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer-logo {
+    width: 100px;
+    display: block;
+    margin: 20px auto;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+}
