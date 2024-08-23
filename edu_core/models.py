@@ -2,10 +2,12 @@
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
-import os
+from django.core.exceptions import ValidationError
+import os, json
 
 
 class CustomUser(AbstractUser):
@@ -78,20 +80,10 @@ class Lesson(models.Model):
     content = models.TextField()
 
 
-class Activity(models.Model):
-    # Activity fields remain largely the same
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='activities')
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
 class Question(models.Model):
     MULTIPLE_CHOICE = 'MCQ'
     TRUE_FALSE = 'TF'
     ESSAY = 'ESSAY'
-    # Additional question types as needed
 
     QUESTION_TYPES = [
         (MULTIPLE_CHOICE, 'Multiple Choice'),
@@ -100,20 +92,60 @@ class Question(models.Model):
         # Add other types here
     ]
 
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='questions')
+    # Change related_name to avoid conflicts
+    activity = models.ForeignKey('Activity', on_delete=models.CASCADE, related_name='activity_questions', null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_questions')
     question_type = models.CharField(max_length=50, choices=QUESTION_TYPES)
     text = models.TextField()
-    options = models.JSONField(blank=True, null=True)  # For MCQs, could store options and correct answer
-    correct_answer = models.TextField(blank=True, null=True)  # Could be used for true/false, MCQ, etc.
+    correct_answer = models.TextField(blank=True, null=True)
+    randomize_options = models.BooleanField(default=False)
+    key_name = models.CharField(max_length=255, blank=True, null=True)
+    in_bank = models.BooleanField(default=False)  # This is the correct field name
 
     def __str__(self):
-        return f"{self.text[:50]}..."  # Return first 50 characters of question text
+        return self.text[:50]
+
+
+class Activity(models.Model):
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='activities')
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    questions = models.ManyToManyField(Question, through='ActivityQuestion', related_name='activity_set')
+
+    def __str__(self):
+        return self.name
+
+
+class ActivityQuestion(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ('activity', 'question')
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.activity.name} - {self.question.text[:50]}"
+
+
+class Option(models.Model):
+    question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
+    text = models.CharField(max_length=255)
+    is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text
 
 
 class Grade(models.Model):
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='grades')
+    student = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='grades')
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='grades')
     score = models.DecimalField(max_digits=5, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically sets the time when the grade is created
+
+    def __str__(self):
+        return f"{self.student.username} - {self.activity.name} - {self.score}"
 
 
 class Registration(models.Model):

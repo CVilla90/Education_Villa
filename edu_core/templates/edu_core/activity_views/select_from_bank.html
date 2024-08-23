@@ -1,0 +1,38 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\select_from_bank.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/select_from_bank.css' %}" type="text/css">
+
+<div class="select-from-bank">
+    <h2>Select Questions from Bank</h2>
+
+    <form method="get">
+        <input type="text" name="q" placeholder="Search questions..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="question-list">
+            {% for question in questions %}
+                <div class="question-item">
+                    <label>
+                        <input type="checkbox" name="selected_questions" value="{{ question.id }}">
+                        {{ question.key_name }}: {{ question.text }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">Add Selected Questions</button>
+            <a href="{% url 'activity_view' activity.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

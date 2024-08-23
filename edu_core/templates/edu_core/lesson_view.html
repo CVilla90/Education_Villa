@@ -8,33 +8,34 @@
 <link rel="stylesheet" href="{% static 'edu_core/css/lesson_view.css' %}" type="text/css">
 
 <div class="lesson-view-container">
+    <!-- Navigation Menu -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'course_detail' lesson.course.id %}" class="breadcrumb">Back to Course: {{ lesson.course.name }}</a>
+    </nav>
+
     <h1>{{ lesson.name }}</h1>
     <div class="lesson-content">
         <p>{{ lesson.content }}</p>
     </div>
 
+    <!-- Activities Section -->
+    <div class="activities-section">
+        <h2>Activities</h2>
+        {% for activity in lesson.activities.all %}
+            <div class="activity">
+                <!-- Directly link to the activity detail view -->
+                <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
+                <p>{{ activity.description }}</p>
+            </div>
+        {% endfor %}
 
-<!-- Activities Section -->
-<div class="activities-section">
-    <h2>Activities</h2>
-    {% for activity in lesson.activities.all %}
-        <div class="activity">
-            <!-- Directly link to the activity detail view -->
-            <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
-            <p>{{ activity.description }}</p>
-        </div>
-    {% endfor %}
-
-
-    {% if request.user == lesson.course.author %}
-        <div class="activity-buttons">
-            <!-- Button to add a new activity -->
-            <a href="{% url 'activity_add' lesson.id %}" class="add-activity-button">Add Activity</a>
-        </div>
-    {% endif %}
-
-    <!-- Button to go back to the course detail page -->
-    <a href="{% url 'course_detail' lesson.course.id %}" class="back-to-course-button">Back to Course</a>
+        {% if request.user == lesson.course.author or request.user.is_superuser %}
+            <div class="activity-buttons">
+                <!-- Button to add a new activity -->
+                <a href="{% url 'activity_add' lesson.id %}" class="add-activity-button">Add Activity</a>
+            </div>
+        {% endif %}
+    </div>
 </div>
 
 {% endblock %}

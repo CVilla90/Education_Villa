@@ -11,8 +11,8 @@
     <h2>Add a New Multiple Choice Question</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p }}  <!-- This should render the randomize_options checkbox -->
         <button type="submit" class="btn btn-primary">Add MCQ</button>
-    </form>
+    </form>    
 </div>
 {% endblock %}

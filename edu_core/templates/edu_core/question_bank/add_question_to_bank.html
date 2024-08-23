@@ -1,0 +1,12 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\question_bank\add_question_to_bank.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% block content %}
+<h2>Add a New Question to {{ course.name }} Bank</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save Question</button>
+</form>
+{% endblock %}

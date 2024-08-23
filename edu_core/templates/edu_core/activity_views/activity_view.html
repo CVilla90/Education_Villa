@@ -6,12 +6,63 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/activity_view.css' %}" type="text/css">
+<script src="{% static 'edu_core/js/drag_and_drop.js' %}"></script>
 
-<!-- Assuming 'activity' is the context variable for the current activity -->
 <div class="activity-details">
-    <!-- Activity details here -->
-    <a href="">Add Question</a>
-    <!-- Additional links for other types of questions -->
+    <!-- Navigation Menu -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">Back to Course: {{ activity.lesson.course.name }}</a> >
+        <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a>
+    </nav>
+
+    <h2>Activity: {{ activity.name }}</h2>
+    <p>Description: {{ activity.description }}</p>
+
+    {% if score is not None %}
+        <h2>Your Score: {{ score }} / {{ total_questions }} ({{ percentage_score }}%)</h2>
+        <!-- Retry Button -->
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="retry" value="true">
+            <button type="submit" class="btn btn-primary">Retry Activity</button>
+        </form>
+    {% else %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div id="questions-container" class="questions-container" data-activity-id="{{ activity.id }}">
+                {% for aq in activity_questions %}
+                    <div class="question-card" draggable="true" data-id="{{ aq.question.id }}">
+                        <div class="card-header">
+                            <span class="drag-handle">&#x2630;</span> <!-- Cross arrows icon -->
+                            <p>{{ forloop.counter }}. {{ aq.question.text }}</p>
+                        </div>
+                        <div class="card-body">
+                            {% if aq.question.question_type == 'MCQ' %}
+                                {% for option in aq.question.shuffled_options %}
+                                    <label>
+                                        <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"> {{ option.text }}
+                                    </label><br>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Answers</button>
+        </form>
+    {% endif %}
+
+    <!-- Display previous attempts -->
+    {% if grade_history %}
+        <h3>Previous Attempts</h3>
+        <ul>
+            {% for grade in grade_history %}
+                <li>Attempt on {{ grade.created_at }}: {{ grade.score }}%</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{% url 'question_type_selection' activity.id %}" class="btn btn-primary">Add Question</a>
 </div>
 
 {% endblock %}

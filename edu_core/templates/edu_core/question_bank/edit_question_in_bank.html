@@ -1,0 +1,13 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\question_bank\edit_question_in_bank.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% block content %}
+<h2>Edit Question in {{ question.course.name }} Bank</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update Question</button>
+</form>
+{% endblock %}
+

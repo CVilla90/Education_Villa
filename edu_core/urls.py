@@ -38,7 +38,17 @@ urlpatterns = [
     # Activity Management
     path('lessons/<int:lesson_id>/activity_add/', views.activity_add, name='activity_add'),
     path('activities/<int:activity_id>/', views.activity_view, name='activity_view'),
-    path('activities/<int:activity_id>/mcq/', views.mcq_view, name='mcq_view'),  # Adjusted for direct MCQ view
+    path('activities/<int:activity_id>/add_mcq/', views.add_mcq, name='add_mcq'),
+    path('activities/<int:activity_id>/question_type_selection/', views.question_type_selection, name='question_type_selection'),
+    path('activities/<int:activity_id>/select_from_bank/', views.select_from_bank, name='select_from_bank'),
+    path('activities/<int:activity_id>/save_question_order/', views.save_question_order, name='save_question_order'),
+
+    # QuestionsBank
+    path('courses/<int:course_id>/question_bank/', views.question_bank, name='question_bank'),
+    path('courses/<int:course_id>/add_question_to_bank/', views.add_question_to_bank, name='add_question_to_bank'),
+    path('questions/<int:question_id>/edit/', views.edit_question_in_bank, name='edit_question_in_bank'),
+    path('courses/<int:course_id>/question_type_selection/', views.question_type_selection_for_bank, name='question_type_selection_for_bank'),
+    path('courses/<int:course_id>/add_mcq/', views.add_mcq_to_bank, name='add_mcq_to_bank'),
     
     # Additional paths for other activity types as needed
 

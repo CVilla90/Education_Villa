@@ -67,7 +67,6 @@ class ActivityForm(forms.ModelForm):
 
 
 class MCQForm(forms.Form):
-    # No longer a ModelForm since we're not directly creating or updating a model instance in this form
     question_text = forms.CharField(widget=forms.Textarea, label="Question Text")
     option_1 = forms.CharField(label="Option 1")
     option_2 = forms.CharField(label="Option 2")
@@ -80,5 +79,31 @@ class MCQForm(forms.Form):
         ("option_4", "Option 4")],
         label="Correct Answer"
     )
+    randomize_options = forms.BooleanField(
+        label="Randomize Options",
+        required=False,
+        initial=False,
+    )
+    key_name = forms.CharField(label="Key Name", required=False)  # Add KeyName field
+    add_to_bank = forms.BooleanField(
+        label="Add to Course Bank",
+        required=False,
+        initial=True,  # Checked by default
+    )
 
-        
+
+class QuestionBankForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['course', 'key_name', 'question_type', 'text', 'correct_answer', 'randomize_options', 'in_bank']
+        widgets = {
+            'text': forms.Textarea(attrs={'rows': 3}),
+            'key_name': forms.TextInput(attrs={'placeholder': 'Enter a descriptive key name'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionBankForm, self).__init__(*args, **kwargs)
+        # Set initial value for 'in_bank' to True
+        self.fields['in_bank'].initial = True
+        # Other field customizations
+        self.fields['key_name'].widget.attrs.update({'placeholder': 'Key Name (optional)'})
