@@ -118,3 +118,38 @@ body, html {
 .add-lesson-button:hover {
     background-color: darken(var(--accent-color-1), 10%);
 }
+
+
+.delete-lesson-button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-lesson-button:hover {
+    background-color: #c0392b;
+}
+
+
+.breadcrumb-nav {
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.breadcrumb {
+    color: #3498db;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.breadcrumb:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb.current {
+    color: #333;
+    font-weight: bold;
+}

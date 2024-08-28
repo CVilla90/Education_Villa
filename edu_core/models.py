@@ -110,6 +110,8 @@ class Activity(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='activities')
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)  # Add start date
+    end_date = models.DateField(blank=True, null=True)    # Add end date
     questions = models.ManyToManyField(Question, through='ActivityQuestion', related_name='activity_set')
 
     def __str__(self):
@@ -117,16 +119,20 @@ class Activity(models.Model):
 
 
 class ActivityQuestion(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, null=True, blank=True)
     order = models.IntegerField(default=0)
+    page_number = models.IntegerField(default=1)
+    is_separator = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('activity', 'question')
+        unique_together = ('activity', 'order')
         ordering = ['order']
 
     def __str__(self):
-        return f"{self.activity.name} - {self.question.text[:50]}"
+        if self.is_separator:
+            return f"Page Separator (Page {self.page_number})"
+        return f"Question: {self.question.text[:50]}"
 
 
 class Option(models.Model):

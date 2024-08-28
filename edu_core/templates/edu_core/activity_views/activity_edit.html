@@ -1,0 +1,108 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\activity_edit.html -->
+
+{% extends "edu_core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/activity_edit.css' %}" type="text/css">
+
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav">
+    <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+    <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">{{ activity.lesson.course.name }}</a> &gt;
+    <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a>
+    <span class="breadcrumb current">Edit Activity: {{ activity.name }}</span>
+</nav>
+
+<div class="activity-edit-container">
+    <h2>Edit Activity: {{ activity.name }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="activity_name">Name:</label>
+            <input type="text" id="activity_name" name="name" value="{{ form.name.value }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="activity_description">Description:</label>
+            <textarea id="activity_description" name="description" class="form-control">{{ form.description.value }}</textarea>
+        </div>
+
+        <!-- Availability Options -->
+        <div class="form-group">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="end_date">End Date:</label>
+            <input type="date" id="end_date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}" class="form-control">
+        </div>             
+
+        <button type="submit" class="btn btn-primary">Save Activity Details</button>
+    </form>
+
+    <!-- Add Question Button with Insertion Point -->
+    <form method="get" action="{% url 'question_type_selection' activity.id %}">
+        <div class="form-group">
+            <label for="insert_after_question">Insert New Question After:</label>
+            <select id="insert_after_question" name="insert_after" class="form-control">
+                {% for question in activity_questions %}
+                    {% if not question.is_separator %}
+                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text }}</option>
+                    {% endif %}
+                {% endfor %}
+                <option value="0">At the Beginning</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-secondary">Add Question</button>
+    </form>
+
+    <!-- Add New Page Button -->
+    <form method="post" action="{% url 'add_page' activity.id %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="insert_after_page">Insert New Page After:</label>
+            <select id="insert_after_page" name="insert_after" class="form-control">
+                {% for question in activity_questions %}
+                    {% if not question.is_separator %}
+                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text }}</option>
+                    {% endif %}
+                {% endfor %}
+                <option value="0">At the Beginning</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add New Page</button>
+    </form>
+
+    <form method="post" action="{% url 'reorder_questions' activity.id %}">
+        {% csrf_token %}
+        <div id="questions-container" class="questions-container">
+            {% for question in activity_questions %}
+            {% if question.is_separator %}
+                <!-- Page Separator -->
+                <div class="page-separator">
+                    <span class="separator-text">Page {{ question.page_number }}</span>
+                    <button type="submit" name="remove_page" value="{{ question.page_number }}" class="btn btn-danger btn-sm">Remove Page</button>
+                </div>
+            {% else %}
+                <!-- Question Card -->
+                <div class="question-card">
+                    <div class="card-header">
+                        <p>{{ question.order }}. {{ question.question.text }}</p>
+                    </div>
+                    <div class="card-body">
+                        <p>Question Type: {{ question.question.get_question_type_display }}</p>
+                        <p>Key Name: {{ question.question.key_name }}</p>
+                        <!-- Move Up, Move Down, and Remove buttons -->
+                        <button type="submit" name="move_up" value="{{ question.id }}" class="btn btn-info btn-sm">Move Up</button>
+                        <button type="submit" name="move_down" value="{{ question.id }}" class="btn btn-info btn-sm">Move Down</button>
+                        <button type="submit" name="remove_question" value="{{ question.id }}" class="btn btn-danger btn-sm">Remove</button>
+                        <input type="hidden" name="question_order" value="{{ question.id }}">
+                    </div>
+                </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

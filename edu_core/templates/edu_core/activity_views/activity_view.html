@@ -6,7 +6,6 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/activity_view.css' %}" type="text/css">
-<script src="{% static 'edu_core/js/drag_and_drop.js' %}"></script>
 
 <div class="activity-details">
     <!-- Navigation Menu -->
@@ -30,7 +29,7 @@
         <form action="" method="post">
             {% csrf_token %}
             <div id="questions-container" class="questions-container" data-activity-id="{{ activity.id }}">
-                {% for aq in activity_questions %}
+                {% for aq in questions_on_page %}
                     <div class="question-card" draggable="true" data-id="{{ aq.question.id }}">
                         <div class="card-header">
                             <span class="drag-handle">&#x2630;</span> <!-- Cross arrows icon -->
@@ -52,6 +51,16 @@
         </form>
     {% endif %}
 
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+        {% if current_page > 1 %}
+            <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:-1 }}" class="btn btn-secondary">Previous Page</a>
+        {% endif %}
+        {% if current_page < total_pages %}
+            <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:1 }}" class="btn btn-secondary">Next Page</a>
+        {% endif %}
+    </div>
+
     <!-- Display previous attempts -->
     {% if grade_history %}
         <h3>Previous Attempts</h3>
@@ -62,7 +71,9 @@
         </ul>
     {% endif %}
 
-    <a href="{% url 'question_type_selection' activity.id %}" class="btn btn-primary">Add Question</a>
+    {% if request.user == activity.lesson.course.author or request.user.is_superuser %}
+        <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Edit Activity</a>
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -26,6 +26,18 @@
                 <!-- Directly link to the activity detail view -->
                 <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
                 <p>{{ activity.description }}</p>
+                <div class="activity-buttons">
+                    <!-- Button to edit the activity -->
+                    <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Edit Activity</a>
+                    
+                    {% if request.user == lesson.course.author or request.user.is_superuser %}
+                        <!-- Button to delete the activity -->
+                        <form action="{% url 'delete_activity' activity.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this activity?');">Delete Activity</button>
+                        </form>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
 

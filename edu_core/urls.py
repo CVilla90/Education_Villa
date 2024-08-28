@@ -34,14 +34,19 @@ urlpatterns = [
     # Lesson Management
     path('courses/<int:course_id>/lesson_add/', views.lesson_add, name='lesson_add'),    
     path('lessons/<int:lesson_id>/', views.lesson_view, name='lesson_view'),
+    path('lessons/<int:lesson_id>/delete/', views.delete_lesson, name='delete_lesson'),
 
     # Activity Management
     path('lessons/<int:lesson_id>/activity_add/', views.activity_add, name='activity_add'),
+    path('activities/<int:activity_id>/delete/', views.delete_activity, name='delete_activity'),
     path('activities/<int:activity_id>/', views.activity_view, name='activity_view'),
     path('activities/<int:activity_id>/add_mcq/', views.add_mcq, name='add_mcq'),
     path('activities/<int:activity_id>/question_type_selection/', views.question_type_selection, name='question_type_selection'),
     path('activities/<int:activity_id>/select_from_bank/', views.select_from_bank, name='select_from_bank'),
-    path('activities/<int:activity_id>/save_question_order/', views.save_question_order, name='save_question_order'),
+    path('activities/<int:activity_id>/edit/', views.edit_activity, name='edit_activity'),
+    path('activities/<int:activity_id>/reorder_questions/', views.reorder_questions, name='reorder_questions'),
+    path('activities/<int:activity_id>/add_page/', views.add_page, name='add_page'),  # Added URL for adding a new page
+    path('activities/<int:activity_id>/add_question_to_activity/', views.add_question_to_activity, name='add_question_to_activity'),
 
     # QuestionsBank
     path('courses/<int:course_id>/question_bank/', views.question_bank, name='question_bank'),

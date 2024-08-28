@@ -7,6 +7,12 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/course.css' %}" type="text/css">
 
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav">
+    <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+    <span class="breadcrumb current">{{ course.name }}</span>
+</nav>
+
 <div class="course-container">
     <div class="course-info">
         <h1>{{ course.name }}</h1>
@@ -38,6 +44,12 @@
         <div class="lesson">
             <h3><a href="{% url 'lesson_view' lesson.id %}">{{ lesson.name }}</a></h3>
             <p>{{ lesson.content | safe }}</p>
+            {% if request.user == course.author or request.user.is_superuser %}
+                <form action="{% url 'delete_lesson' lesson.id %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-lesson-button">Delete Lesson</button>
+                </form>
+            {% endif %}
         </div>
     {% endfor %}
 

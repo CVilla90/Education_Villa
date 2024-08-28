@@ -63,7 +63,15 @@ class LessonForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
-        fields = ['name', 'description']  
+        fields = ['name', 'description', 'start_date', 'end_date']
+
+    def __init__(self, *args, **kwargs):
+        super(ActivityForm, self).__init__(*args, **kwargs)
+
+        # Ensure that the start_date and end_date fields are populated with the stored values
+        if self.instance.pk:  # Check if the instance exists (i.e., the form is in edit mode)
+            self.fields['start_date'].initial = self.instance.start_date
+            self.fields['end_date'].initial = self.instance.end_date
 
 
 class MCQForm(forms.Form):
