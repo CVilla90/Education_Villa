@@ -1,5 +1,4 @@
 <!-- Portfolio\Education_Villa\edu_core\templates\edu_core\base.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,17 +18,21 @@
                 {% if user.user_type == 'professor' or user.user_type == 'moderator' or user.is_superuser %}
                     <a href="{% url 'create_diploma' %}">Create Diploma</a>
                 {% endif %}
-                <div class="dropdown">
-                    <button class="dropbtn">Profile</button>
-                    <div class="dropdown-content">
-                        <a href="{% url 'profile' %}">View Profile</a>
-                        {% if user.user_type == 'professor' or user.user_type == 'moderator' or user.is_superuser %}
-                            <a href="{% url 'create_course' %}">Create Course</a>
-                        {% endif %}
-                        <a href="{% url 'logout' %}">Logout</a>
+                <div class="profile-section">
+                    <span class="username">{{ user.get_full_name|default:user.username }}</span>
+                    <div class="dropdown">
+                        <button class="dropbtn">Profile</button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'profile' %}">View Profile</a>
+                            {% if user.user_type == 'professor' or user.user_type == 'moderator' or user.is_superuser %}
+                                <a href="{% url 'create_course' %}">Create Course</a>
+                            {% endif %}
+                            <a href="{% url 'logout' %}">Logout</a>
+                        </div>
                     </div>
                 </div>
             {% else %}
+                <span class="login-prompt">Log in -></span>
                 <a href="{% url 'signup' %}">Signup</a>
                 <a href="{% url 'login' %}">Login</a>
             {% endif %}

@@ -9,12 +9,11 @@
 
 <div class="lesson-container">
     <h2>Add New Lesson</h2>
-    <form method="post" action="{% url 'lesson_add' course_id=course_id %}">
+    <form method="post" action="{% url 'lesson_add' course_id=course_id %}" class="lesson-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Add Lesson</button>
+        <button type="submit" class="btn btn-primary">Add Lesson</button>
     </form>
 </div>
 
 {% endblock %}
-

@@ -1,3 +1,5 @@
+# Portfolio\Education_Villa\education_villa\settings.py
+
 """
 Django settings for education_villa project.
 

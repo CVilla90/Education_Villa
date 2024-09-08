@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\course.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\course\course.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -18,26 +18,27 @@
         <h1>{{ course.name }}</h1>
         <p class="author">Author: {{ course.author.get_full_name }}</p>
         <p class="course-description">Description: {{ course.description }}</p>
+        <p class="created-date">Created on: {{ course.creation_date }}</p>
     </div>
+
     {% if course.image %}
     <div class="course-image-and-controls">
         <img src="{{ course.image.url }}" alt="Course Image" class="course-image">
-        <p class="created-date">Created on: {{ course.creation_date }}</p>
-        {% if request.user == course.author or request.user.is_superuser %}
-        <div class="controls">
-            <a href="{% url 'edit_course' course.id %}" class="edit-course">Edit Course</a>
-            <form action="{% url 'delete_course' course.id %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <button type="submit" class="delete-course">Delete Course</button>
-            </form>
-        </div>
-        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if request.user == course.author or request.user.is_superuser %}
+    <div class="controls">
+        <a href="{% url 'edit_course' course.id %}" class="edit-course">Edit Course</a>
+        <form action="{% url 'delete_course' course.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="delete-course">Delete Course</button>
+        </form>
     </div>
     {% endif %}
 </div>
 
 <!-- Lessons -->
-
 <div class="lessons-container">
     <h2>Lessons</h2>
     {% for lesson in course.lessons.all %}

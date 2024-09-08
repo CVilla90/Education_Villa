@@ -1,0 +1,27 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_add.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/activity_add.css' %}" type="text/css">
+
+<div class="activity-container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'lesson_view' lesson.id %}" class="breadcrumb">Back to Lesson</a>
+    </nav>
+
+    <h2>Add New Activity</h2>
+    <form method="post" class="activity-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Add Activity</button>
+            <a href="{% url 'lesson_view' lesson.id %}" class="btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

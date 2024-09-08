@@ -1,67 +1,151 @@
 /* Portfolio\Education_Villa\edu_core\static\edu_core\css\lesson_view.css */
 
-.activities-section {
-    margin-top: 30px;
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ff6b6b; /* Red */
+    --text-color: #333; /* Dark Gray */
+    --background-color: #f5f5f5; /* Light Background */
+    --border-color: #ddd; /* Light Gray Border */
 }
 
-.activity {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-
-.activity h3 {
-    margin-top: 0;
-}
-
-.activity p {
-    margin-bottom: 10px;
-}
-
-.add-activity-button {
-    margin-top: 20px;
-    display: inline-block;
-    background-color: #4CAF50; /* or any color you prefer */
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.add-activity-button:hover {
-    background-color: #45a049;
-}
-
-.back-to-course-button {
-    display: block;
-    margin-top: 20px;
-    background-color: #007bff; /* or any color that fits your design */
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.back-to-course-button:hover {
-    background-color: #0056b3;
+.lesson-view-container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .breadcrumb-nav {
     margin-bottom: 20px;
 }
 
-.breadcrumb-nav .breadcrumb {
-    color: #3498db;
+.breadcrumb {
+    color: var(--accent-color-1);
     text-decoration: none;
 }
 
-.breadcrumb-nav .breadcrumb:hover {
+.breadcrumb:hover {
     text-decoration: underline;
 }
 
-.lesson-view-container h1 {
+.lesson-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.lesson-header h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.lesson-metadata {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.lesson-content {
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.activities-section {
+    margin-top: 30px;
+}
+
+.activities-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between activity cards */
+}
+
+.activity-card {
+    padding: 20px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.activity-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.activity-card h3 {
     margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.activity-card p {
+    margin: 0 0 15px 0;
+    color: var(--text-color);
+}
+
+.activity-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-secondary {
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+}
+
+.btn-secondary:hover {
+    background-color: #1e7dc1; /* Slightly darker blue */
+}
+
+.btn-danger {
+    background-color: var(--accent-color-2);
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b; /* Darker red */
+}
+
+.add-activity-container {
+    text-align: right; /* Align add button to the right */
+}
+
+.add-activity-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.add-activity-button:hover {
+    background-color: #00254d; /* Darker navy */
+}
+
+.no-activities {
+    color: var(--text-color);
+    text-align: center;
+    font-style: italic;
 }

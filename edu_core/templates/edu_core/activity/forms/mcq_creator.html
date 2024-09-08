@@ -1,0 +1,26 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_forms\mcq_creator.html -->
+
+{% extends "edu_core/base.html" %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/mcq_creator.css' %}" type="text/css">
+
+<div class="mcq-creator-container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'activity_view' activity.id %}" class="breadcrumb">Back to Activity: {{ activity.name }}</a>
+    </nav>
+
+    <h2>Add a New Multiple Choice Question</h2>
+    <form method="post" class="mcq-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add MCQ</button>
+            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>    
+</div>
+{% endblock %}

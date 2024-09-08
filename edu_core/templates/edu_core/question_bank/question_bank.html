@@ -2,33 +2,49 @@
 
 {% extends "edu_core/base.html" %}
 
+{% load static %}
+
 {% block content %}
-<h2>Question Bank for {{ course.name }}</h2>
+<link rel="stylesheet" href="{% static 'edu_core/css/question_bank.css' %}">
 
-<table>
-    <thead>
-        <tr>
-            <th>Key Name</th>
-            <th>Question Text</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for question in questions %}
-        <tr>
-            <td>{{ question.key_name }}</td>
-            <td>{{ question.text }}</td>
-            <td>{{ question.get_question_type_display }}</td>
-            <td>
-                <a href="{% url 'edit_question_in_bank' question.id %}">Edit</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav">
+    <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+    <a href="{% url 'course_detail' course.id %}" class="breadcrumb">{{ course.name }}</a> &gt;
+    <span class="breadcrumb current">Question Bank</span>
+</nav>
 
-<!-- Add New Question Button -->
-<a href="{% url 'question_type_selection_for_bank' course.id %}" class="btn btn-primary">Add New Question</a>
+<div class="question-bank-container">
+    <h2>Question Bank for {{ course.name }}</h2>
 
+    <table class="question-bank-table">
+        <thead>
+            <tr>
+                <th>Key Name</th>
+                <th>Question Text</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.key_name }}</td>
+                <td>{{ question.text }}</td>
+                <td>{{ question.get_question_type_display }}</td>
+                <td>
+                    <a href="{% url 'edit_question_in_bank' question.id %}" class="btn edit-btn">Edit</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="no-questions">No questions found for this course.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Add New Question Button -->
+    <a href="{% url 'question_type_selection_for_bank' course.id %}" class="btn add-question-btn">Add New Question</a>
+</div>
 {% endblock %}

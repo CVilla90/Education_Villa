@@ -1,62 +1,70 @@
-/* Portfolio\Education_Villa\edu_core\static\edu_core\css\mcq_creator.css */
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\edit_question_in_bank.css */
 
 :root {
     --primary-color: #003366; /* Navy Blue */
     --secondary-color-1: #ffffff; /* White */
     --accent-color-1: #2a9df4; /* Bright Blue */
-    --neutral-color: #dddddd; /* Light Gray */
     --text-color: #333; /* Dark Gray */
     --input-border-color: #ccc; /* Light border for inputs */
     --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+    --button-cancel-color: #666; /* Gray for cancel button */
+    --button-cancel-hover: #444; /* Darker Gray for hover */
 }
 
-.mcq-creator-container {
+.edit-question-container {
     width: 60%;
-    margin: 40px auto;
+    margin: 50px auto;
     padding: 30px;
     background-color: var(--secondary-color-1);
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between heading and form */
 }
 
-h2 {
+.edit-question-container h2 {
     color: var(--primary-color);
-    margin-bottom: 20px;
     font-size: 24px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
 .breadcrumb-nav {
-    margin-bottom: 20px;
+    margin: 15px 0;
     font-size: 14px;
-    color: var(--accent-color-1);
 }
 
-.breadcrumb-nav .breadcrumb {
+.breadcrumb {
+    color: var(--accent-color-1);
     text-decoration: none;
-    color: var(--accent-color-1);
+    margin-right: 5px;
 }
 
-.breadcrumb-nav .breadcrumb:hover {
+.breadcrumb:hover {
     text-decoration: underline;
-    color: var(--button-hover-color);
 }
 
-.mcq-form {
+.breadcrumb.current {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.edit-question-form {
     display: flex;
     flex-direction: column;
     gap: 15px; /* Adds spacing between form elements */
 }
 
-.mcq-form label {
+.edit-question-form label {
     color: var(--text-color);
     font-weight: bold;
 }
 
-.mcq-form input[type="text"],
-.mcq-form input[type="checkbox"],
-.mcq-form textarea,
-.mcq-form select {
+.edit-question-form input[type="text"],
+.edit-question-form input[type="file"],
+.edit-question-form textarea,
+.edit-question-form select {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--input-border-color);
@@ -66,13 +74,13 @@ h2 {
     color: var(--text-color);
 }
 
-.mcq-form .form-actions {
+.edit-question-form .form-actions {
     display: flex;
     gap: 10px;
-    justify-content: flex-start; /* Align buttons to the left */
+    justify-content: flex-start;
 }
 
-.mcq-form button[type="submit"] {
+.edit-question-form button[type="submit"] {
     padding: 12px 20px;
     border-radius: 5px;
     background-color: var(--accent-color-1);
@@ -83,28 +91,26 @@ h2 {
     transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
-.mcq-form button[type="submit"]:hover {
+.edit-question-form button[type="submit"]:hover {
     background-color: var(--button-hover-color);
     transform: translateY(-3px); /* Adds a slight lift effect */
 }
 
-.mcq-form a.btn-secondary {
+.btn-secondary {
     padding: 12px 20px;
     border-radius: 5px;
-    background-color: var(--neutral-color);
-    color: var(--text-color);
+    background-color: var(--button-cancel-color);
+    color: var(--secondary-color-1);
     text-decoration: none;
-    border: 1px solid var(--input-border-color);
     cursor: pointer;
-    font-weight: bold;
     transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
-.mcq-form a.btn-secondary:hover {
-    background-color: #e0e0e0;
+.btn-secondary:hover {
+    background-color: var(--button-cancel-hover);
     transform: translateY(-3px); /* Adds a slight lift effect */
 }
 
-.mcq-form p {
+.edit-question-form p {
     margin: 0; /* Remove default paragraph margin for form field alignment */
 }

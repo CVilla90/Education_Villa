@@ -1,2 +1,103 @@
-/* Portfolio\Education_Villa\edu_core\templates\edu_core\edit_profile.html */
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\edit_profile.css */
 
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color: #ffffff; /* White */
+    --accent-color: #2a9df4; /* Bright Blue */
+    --text-color: #333; /* Dark Gray */
+    --border-color: #ddd; /* Light Border */
+    --hover-color: #1e7dc1; /* Slightly darker blue for hover */
+    --input-border: #ccc; /* Light border for inputs */
+    --background-color: #f9f9f9; /* Light background for forms */
+}
+
+.edit-profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--secondary-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-form, .certification-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-form input[type="text"],
+.profile-form input[type="email"],
+.profile-form input[type="file"],
+.profile-form select,
+.profile-form textarea,
+.certification-form input[type="text"],
+.certification-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.btn {
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    color: var(--secondary-color);
+}
+
+.save-btn {
+    background-color: var(--accent-color);
+}
+
+.save-btn:hover, .add-cert-btn:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+}
+
+.add-cert-btn {
+    background-color: var(--accent-color);
+}
+
+.certifications-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.certification-item {
+    text-align: center;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--background-color);
+    width: 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.certification-image {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.certification-note {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 20px;
+}

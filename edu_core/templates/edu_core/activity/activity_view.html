@@ -47,19 +47,20 @@
                     </div>
                 {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary">Submit Answers</button>
+
+            <!-- Submit and Pagination Controls -->
+            <div class="submit-container">
+                {% if current_page > 1 %}
+                    <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:-1 }}" class="btn btn-secondary">Previous Page</a>
+                {% endif %}
+                <span class="page-indicator">Page {{ current_page }} of {{ total_pages }}</span>
+                {% if current_page < total_pages %}
+                    <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:1 }}" class="btn btn-secondary">Next Page</a>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Submit Answers</button>
+            </div>
         </form>
     {% endif %}
-
-    <!-- Pagination Controls -->
-    <div class="pagination-controls">
-        {% if current_page > 1 %}
-            <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:-1 }}" class="btn btn-secondary">Previous Page</a>
-        {% endif %}
-        {% if current_page < total_pages %}
-            <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:1 }}" class="btn btn-secondary">Next Page</a>
-        {% endif %}
-    </div>
 
     <!-- Display previous attempts -->
     {% if grade_history %}

@@ -1,33 +1,103 @@
 /* Portfolio\Education_Villa\edu_core\static\edu_core\css\activity_add.css */
 
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ffd700; /* Golden Yellow */
+    --text-color: #333; /* Dark Gray */
+    --input-border-color: #ccc; /* Light border for inputs */
+    --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+}
+
 .activity-container {
-    max-width: 600px;
+    max-width: 700px;
     margin: 40px auto;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    background-color: var(--secondary-color-1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .activity-container h2 {
     margin-bottom: 20px;
+    font-size: 26px;
+    color: var(--primary-color);
+    text-align: center;
 }
 
 .activity-container form {
     display: flex;
     flex-direction: column;
+    gap: 15px;
 }
 
-.activity-container button {
-    padding: 10px;
+.activity-container label {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.activity-container input[type="text"],
+.activity-container textarea,
+.activity-container select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
-    background-color: var(--accent-color-1);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-.activity-container button:hover {
-    background-color: var(--accent-color-2);
+.btn-primary {
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+.btn-secondary {
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: #95a5a6;
+    color: var(--secondary-color-1);
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    margin-bottom: 20px;
+}
+
+.breadcrumb-nav .breadcrumb {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.breadcrumb-nav .breadcrumb:hover {
+    text-decoration: underline;
 }

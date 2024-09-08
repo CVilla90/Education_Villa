@@ -2,12 +2,27 @@
 
 {% extends "edu_core/base.html" %}
 
-{% block content %}
-<h2>Edit Question in {{ question.course.name }} Bank</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Update Question</button>
-</form>
-{% endblock %}
+{% load static %}
 
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/edit_question_in_bank.css' %}" type="text/css">
+
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav">
+    <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+    <a href="{% url 'question_bank' question.course.id %}" class="breadcrumb">Question Bank</a> &gt;
+    <span class="breadcrumb current">Edit Question</span>
+</nav>
+
+<div class="edit-question-container">
+    <h2>Edit Question in {{ question.course.name }} Bank</h2>
+    <form method="post" class="edit-question-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Question</button>
+            <a href="{% url 'question_bank' question.course.id %}" class="btn btn-secondary">Cancel</a> <!-- Cancel button -->
+        </div>
+    </form>
+</div>
+{% endblock %}

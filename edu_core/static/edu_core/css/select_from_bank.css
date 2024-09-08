@@ -1,0 +1,114 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\select_from_bank.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ff6b6b; /* Red for deletion */
+    --text-color: #333; /* Dark Gray */
+    --input-border-color: #ccc; /* Light border for inputs */
+    --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+}
+
+.select-from-bank {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select-from-bank h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.select-from-bank form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.select-from-bank input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.select-from-bank .question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Allow scrolling if the list is too long */
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+}
+
+.question-item {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+.question-item label {
+    font-size: 16px;
+    color: var(--text-color);
+    display: flex;
+    gap: 10px; /* Space between checkbox and text */
+}
+
+.question-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center; /* Center the buttons horizontally */
+    margin-top: 20px;
+}
+
+.actions .btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Gray for secondary actions */
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}

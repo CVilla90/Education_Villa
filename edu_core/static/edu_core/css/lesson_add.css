@@ -1,32 +1,74 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\lesson_add.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --neutral-color: #dddddd; /* Light Gray */
+    --text-color: #333; /* Dark Gray */
+    --input-border-color: #ccc; /* Light border for inputs */
+    --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+}
+
 .lesson-container {
-    width: 600px;
-    margin: 40px auto;
-    padding: 20px;
+    width: 60%;
+    margin: 50px auto;
+    padding: 30px;
     background-color: var(--secondary-color-1);
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between heading and form */
 }
 
 .lesson-container h2 {
-    text-align: center;
     color: var(--primary-color);
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.lesson-container form {
+.lesson-form {
     display: flex;
     flex-direction: column;
+    gap: 15px; /* Adds spacing between form elements */
 }
 
-.lesson-container button {
-    margin-top: 20px;
-    padding: 10px 20px;
+.lesson-form label {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.lesson-form input[type="text"],
+.lesson-form input[type="file"],
+.lesson-form textarea,
+.lesson-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.lesson-form button[type="submit"] {
+    padding: 12px 20px;
+    border-radius: 5px;
     background-color: var(--accent-color-1);
     color: var(--secondary-color-1);
     border: none;
-    border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
-.lesson-container button:hover {
-    background-color: darken(var(--accent-color-1), 10%);
+.lesson-form button[type="submit"]:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+.lesson-form p {
+    margin: 0; /* Remove default paragraph margin for form field alignment */
 }

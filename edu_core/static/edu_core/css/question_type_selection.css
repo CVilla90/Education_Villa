@@ -1,0 +1,51 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\question_type_selection.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ff6b6b; /* Red for deletion */
+    --text-color: #333; /* Dark Gray */
+    --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+}
+
+.question-type-selection-container {
+    width: 60%;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.question-type-list {
+    list-style: none;
+    padding: 0;
+}
+
+.question-type-list li {
+    margin: 15px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}

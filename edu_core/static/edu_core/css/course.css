@@ -4,8 +4,10 @@
     --primary-color: #003366; /* Navy Blue */
     --secondary-color-1: #ffffff; /* White */
     --accent-color-1: #2a9df4; /* Bright Blue */
-    --accent-color-2: #ff6b6b; /* Red for deletion */
+    --accent-color-2: #ff6b6b; /* Soft Red */
     --text-color: #333; /* Dark Gray */
+    --neutral-color: #dddddd; /* Light Gray */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color */
 }
 
 body, html {
@@ -22,43 +24,53 @@ body, html {
     width: 80%;
     margin: 40px auto;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px var(--shadow-color);
     background-color: var(--secondary-color-1);
     border-radius: 10px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 2fr 1fr; /* Redistribute space: 3 for info, 2 for image, 1 for controls */
     gap: 20px;
+    align-items: start;
 }
 
-.course-info, .course-image-and-controls {
+.course-info {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
-.author {
-    margin-top: 10px; /* Adjusted for visual break */
+.course-info h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
 }
 
-.course-description {
-    margin-top: 10px;
+.author, .course-description, .created-date {
+    font-size: 1rem;
+    margin: 5px 0;
+}
+
+.course-image-and-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
 }
 
 .course-image {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
-    align-self: center; /* Center the image in its grid area */
-}
-
-.created-date {
-    align-self: end;
-    margin-top: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .controls {
     display: flex;
-    justify-content: center; /* Center the buttons under the image */
-    gap: 10px; /* Add a small gap between buttons */
+    flex-direction: column;
+    gap: 10px;
+    width: auto; /* Adjust to auto to ensure buttons are only as wide as needed */
+    align-items: center; /* Center-align the buttons */
     margin-top: 10px;
 }
 
@@ -67,27 +79,36 @@ body, html {
     border-radius: 5px;
     text-decoration: none;
     color: var(--secondary-color-1);
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    width: auto; /* Ensure buttons are not overly wide */
 }
 
 .edit-course {
     background-color: var(--accent-color-1);
 }
 
+.edit-course:hover {
+    background-color: #1e7bbf; /* A slightly darker blue for hover */
+    color: var(--secondary-color-1);
+}
+
 .delete-course {
     background-color: var(--accent-color-2);
 }
 
+.delete-course:hover {
+    background-color: #e74c3c; /* A darker red for hover */
+    color: var(--secondary-color-1);
+}
 
 .lessons-container {
     width: 80%;
     margin: 40px auto;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px var(--shadow-color);
     background-color: var(--secondary-color-1);
     border-radius: 10px;
-    display: grid;
-    grid-template-columns: 1fr; /* Change this to a single column layout */
-    gap: 20px;
 }
 
 .lesson {
@@ -95,44 +116,49 @@ body, html {
     padding: 15px;
     border-radius: 5px;
     background-color: var(--secondary-color-1);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-bottom: 20px; /* Adjust space between lessons */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.lesson:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .add-lesson-container {
-    grid-column: 1 / -1; /* This makes sure the button spans the entire grid column */
+    text-align: center;
 }
 
 .add-lesson-button {
-    display: block; /* Full width for the button */
+    display: inline-block;
     background-color: var(--accent-color-1);
     color: var(--secondary-color-1);
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     text-align: center;
-    margin-top: 20px; /* Additional space above the button */
-    margin-bottom: 20px; /* Space below the button */
+    margin-top: 20px;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .add-lesson-button:hover {
-    background-color: darken(var(--accent-color-1), 10%);
+    background-color: #217abf; /* A readable color for hover */
 }
 
-
 .delete-lesson-button {
-    background-color: #e74c3c;
+    background-color: var(--accent-color-2);
     color: white;
     border: none;
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .delete-lesson-button:hover {
     background-color: #c0392b;
 }
-
 
 .breadcrumb-nav {
     margin: 15px 0;
@@ -143,6 +169,7 @@ body, html {
     color: #3498db;
     text-decoration: none;
     margin-right: 5px;
+    transition: color 0.3s ease-in-out;
 }
 
 .breadcrumb:hover {
@@ -152,4 +179,26 @@ body, html {
 .breadcrumb.current {
     color: #333;
     font-weight: bold;
+}
+
+.question-bank-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.question-bank-button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.question-bank-button:hover {
+    background-color: #002244; /* Darker blue for hover to keep it visible */
+    transform: scale(1.05);
 }

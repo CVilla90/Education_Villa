@@ -6,18 +6,19 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/login.css' %}" type="text/css">
 
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="login-container">
+    <h2>Welcome Back</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
 
-    <button type="submit">Login</button>
-    <input type="hidden" name="next" value="{{ next }}">
-</form>
+    {% if form.errors %}
+    <p class="error-message">Your username and password didn't match. Please try again.</p>
+    {% endif %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
-
-<p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    <p class="signup-redirect">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+</div>
 {% endblock %}

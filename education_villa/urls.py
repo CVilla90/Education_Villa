@@ -1,4 +1,5 @@
 # Portfolio\Education_Villa\education_villa\urls.py
+
 """education_villa URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:

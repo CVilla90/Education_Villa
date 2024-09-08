@@ -3,61 +3,108 @@
 :root {
     --primary-color: #003366; /* Navy Blue */
     --secondary-color-1: #ffffff; /* White */
-    --secondary-color-2: #3fada8; /* Teal */
+    --secondary-color-2: #f0f0f0; /* Light Gray */
     --accent-color-1: #2a9df4; /* Bright Blue */
-    --accent-color-2: #ffd700; /* Golden Yellow */
+    --accent-color-2: #1c7ec6; /* Darker Blue */
+    --error-color: #e74c3c; /* Red for errors */
     --neutral-color: #dddddd; /* Light Gray */
-    --background-color: #ffffff; /* Off-White */
+    --background-color: #f9f9f9; /* Off-White */
     --text-color: #333333; /* Dark Gray */
+    --font-family: 'Arial', sans-serif; /* Font */
 }
 
 body, html {
     background: var(--background-color);
     color: var(--text-color);
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
 }
 
 .signup-container {
     max-width: 400px;
-    margin: auto;
-    padding: 20px;
+    margin: 50px auto;
+    padding: 30px 20px;
     background: var(--secondary-color-1);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--accent-color-1);
+    text-align: center;
 }
 
 h2 {
-    text-align: center;
     color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 24px;
 }
 
 form {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    text-align: left;
 }
 
-form p, form label {
+form p {
     margin: 0;
-    color: var(--text-color);
 }
 
-form input[type="text"], form input[type="email"], form input[type="password"], form button {
-    padding: 10px;
-    margin-top: 5px;
+form label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+form input[type="text"], 
+form input[type="email"], 
+form input[type="password"] {
+    width: 100%;
+    padding: 12px;
     border: 1px solid var(--neutral-color);
-    border-radius: 5px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
     box-sizing: border-box;
 }
 
+form input[type="text"]:focus, 
+form input[type="email"]:focus, 
+form input[type="password"]:focus {
+    border-color: var(--accent-color-1);
+    outline: none;
+}
+
 form button {
+    padding: 12px;
     background-color: var(--accent-color-1);
-    color: var(--background-color);
+    color: var(--secondary-color-1);
     border: none;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 form button:hover {
     background-color: var(--accent-color-2);
+    transform: scale(1.02);
+}
+
+form button:active {
+    transform: scale(0.98);
+}
+
+.login-prompt {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.login-prompt a {
+    color: var(--accent-color-1);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-prompt a:hover {
+    color: var(--accent-color-2);
 }

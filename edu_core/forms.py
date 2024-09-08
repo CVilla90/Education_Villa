@@ -64,6 +64,10 @@ class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
         fields = ['name', 'description', 'start_date', 'end_date']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ActivityForm, self).__init__(*args, **kwargs)
@@ -103,7 +107,7 @@ class MCQForm(forms.Form):
 class QuestionBankForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['course', 'key_name', 'question_type', 'text', 'correct_answer', 'randomize_options', 'in_bank']
+        fields = ['key_name', 'question_type', 'text', 'correct_answer', 'randomize_options', 'in_bank']
         widgets = {
             'text': forms.Textarea(attrs={'rows': 3}),
             'key_name': forms.TextInput(attrs={'placeholder': 'Enter a descriptive key name'}),
@@ -113,5 +117,5 @@ class QuestionBankForm(forms.ModelForm):
         super(QuestionBankForm, self).__init__(*args, **kwargs)
         # Set initial value for 'in_bank' to True
         self.fields['in_bank'].initial = True
-        # Other field customizations
+        # Custom placeholder for key_name
         self.fields['key_name'].widget.attrs.update({'placeholder': 'Key Name (optional)'})

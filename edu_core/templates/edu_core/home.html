@@ -6,13 +6,14 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/home.css' %}" type="text/css">
+<script src="{% static 'edu_core/js/home.js' %}" defer></script>
 
 <div class="hero">
     <img src="{% static 'edu_core/images/Education Villa logo 2.jpg' %}" alt="Education Villa Logo" class="hero-logo">
     <h1>Welcome to Education Villa</h1>
     <p>Your journey towards knowledge and expertise begins here.</p>
     <div class="search-container">
-        <form method="get">
+        <form method="get" action="{% url 'home' %}">
             <input type="search" name="q" placeholder="Search our courses..." value="{{ query }}">
             <button type="submit">Search</button>
         </form>
