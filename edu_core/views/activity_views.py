@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.urls import reverse
 from django.http import JsonResponse
 from django.db import transaction
 from django.db.models import F, Q, Max
@@ -193,8 +194,13 @@ def select_from_bank(request, activity_id):
     query = request.GET.get('q', '')
     insert_after_order = int(request.GET.get('insert_after', 0))
 
+    # Fetch all questions from the bank
     questions = Question.objects.filter(course=course, in_bank=True)
 
+    # Get IDs of questions already in the activity
+    existing_question_ids = ActivityQuestion.objects.filter(activity=activity).values_list('question_id', flat=True)
+
+    # Apply search filter if a query is provided
     if query:
         questions = questions.filter(
             Q(key_name__icontains=query) | Q(text__icontains=query)
@@ -202,7 +208,8 @@ def select_from_bank(request, activity_id):
 
     if request.method == 'POST':
         selected_question_ids = request.POST.getlist('selected_questions')
-
+        
+        # Handle addition of questions while avoiding duplicates
         with transaction.atomic():
             ActivityQuestion.objects.filter(activity=activity, order__gt=insert_after_order).update(order=F('order') + len(selected_question_ids) + 1000)
 
@@ -210,27 +217,27 @@ def select_from_bank(request, activity_id):
             new_page_number = previous_question.page_number if previous_question else 1
 
             for i, question_id in enumerate(selected_question_ids):
-                question = get_object_or_404(Question, id=question_id)
-                ActivityQuestion.objects.create(
-                    activity=activity,
-                    question=question,
-                    order=insert_after_order + i + 1,
-                    page_number=new_page_number
-                )
+                if int(question_id) not in existing_question_ids:
+                    question = get_object_or_404(Question, id=question_id)
+                    ActivityQuestion.objects.create(
+                        activity=activity,
+                        question=question,
+                        order=insert_after_order + i + 1,
+                        page_number=new_page_number
+                    )
 
             questions_to_reorder = ActivityQuestion.objects.filter(activity=activity).order_by('order')
             for idx, aq in enumerate(questions_to_reorder):
                 aq.order = idx + 1
                 aq.save()
 
-        # Redirect to the edit activity view instead of the activity view
         return redirect('edit_activity', activity_id=activity.id)
 
-    # Render the select from bank template
     return render(request, 'edu_core/activity/views/select_from_bank.html', {
         'activity': activity,
         'questions': questions,
         'query': query,
+        'existing_question_ids': existing_question_ids,
     })
 
 @login_required

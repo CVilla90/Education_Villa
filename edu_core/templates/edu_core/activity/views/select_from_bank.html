@@ -20,10 +20,16 @@
         <div class="question-list">
             {% for question in questions %}
                 <div class="question-item">
-                    <label>
-                        <input type="checkbox" name="selected_questions" value="{{ question.id }}">
-                        {{ question.key_name }}: {{ question.text }}
-                    </label>
+                    {% if question.id in existing_question_ids %}
+                        <!-- Display a checkmark for already added questions -->
+                        <span class="already-added-checkmark">✔️ {{ question.key_name }}: {{ question.text }}</span>
+                    {% else %}
+                        <!-- Display a checkbox for selectable questions -->
+                        <label>
+                            <input type="checkbox" name="selected_questions" value="{{ question.id }}">
+                            {{ question.key_name }}: {{ question.text }}
+                        </label>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

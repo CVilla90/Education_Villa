@@ -112,3 +112,20 @@
     background-color: #5a6268; /* Darker gray on hover */
     transform: translateY(-3px); /* Adds a slight lift effect */
 }
+
+.alert-warning {
+    background-color: #fff3cd; /* Light yellow */
+    border-left: 4px solid #ffeeba; /* Slightly darker yellow */
+    padding: 10px;
+    border-radius: 4px;
+    color: #856404; /* Darker yellow for text */
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.already-added-checkmark {
+    color: green;
+    font-weight: bold;
+    margin-left: 10px;
+    display: inline-block;
+}
