@@ -1,0 +1,104 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\cb_creator.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --neutral-color: #dddddd; /* Light Gray */
+    --text-color: #333; /* Dark Gray */
+    --input-border-color: #ccc; /* Light border for inputs */
+    --button-hover-color: #1e7dc1; /* Slightly darker blue for hover */
+}
+
+.cb-creator-container {
+    width: 60%;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cb-creator-container h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.cb-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Adds spacing between form elements */
+}
+
+.cb-form label {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+.cb-form input[type="text"],
+.cb-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.cb-form button[type="submit"],
+.cb-form .btn-secondary {
+    padding: 12px 20px;
+    border-radius: 5px;
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+}
+
+.cb-form button[type="submit"]:hover,
+.cb-form .btn-secondary:hover {
+    background-color: var(--button-hover-color);
+    transform: translateY(-3px); /* Adds a slight lift effect */
+}
+
+.cb-form .btn-secondary {
+    background-color: #6c757d; /* Gray for secondary actions */
+}
+
+.cb-form .btn-secondary:hover {
+    background-color: #5a6268; /* Darker gray on hover */
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--primary-color);
+}
+
+.breadcrumb-nav a.breadcrumb {
+    text-decoration: none;
+    color: var(--accent-color-1);
+}
+
+.breadcrumb-nav a.breadcrumb:hover {
+    text-decoration: underline;
+    color: var(--button-hover-color);
+}
+
+
+.cb-creator-container img, .content-block img, .ql-editor img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px auto; /* Center the image */
+    border-radius: 8px; /* Optional: add some rounding to the corners */
+}

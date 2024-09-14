@@ -1,7 +1,8 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\activity_edit.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\views\activity_edit.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/activity_edit.css' %}" type="text/css">
@@ -10,13 +11,13 @@
 <nav class="breadcrumb-nav">
     <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
     <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">{{ activity.lesson.course.name }}</a> &gt;
-    <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a>
+    <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a> &gt;
     <span class="breadcrumb current">Edit Activity: {{ activity.name }}</span>
 </nav>
 
 <div class="activity-edit-container">
     <h2>Edit Activity: {{ activity.name }}</h2>
-    <form method="post">
+    <form method="post" action=".">
         {% csrf_token %}
         <div class="form-group">
             <label for="activity_name">Name:</label>
@@ -35,28 +36,29 @@
         <div class="form-group">
             <label for="end_date">End Date:</label>
             <input type="date" id="end_date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}" class="form-control">
-        </div>             
+        </div>
 
-        <button type="submit" class="btn btn-primary">Save Activity Details</button>
+        <button type="submit" class="btn">Save Activity Details</button>
     </form>
 
-    <!-- Add Question Button with Insertion Point -->
+    <!-- Add Question Section -->
+    <hr>
     <form method="get" action="{% url 'question_type_selection' activity.id %}">
         <div class="form-group">
             <label for="insert_after_question">Insert New Question After:</label>
             <select id="insert_after_question" name="insert_after" class="form-control">
+                <option value="0">At the Beginning</option>
                 {% for question in activity_questions %}
                     {% if not question.is_separator %}
-                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text }}</option>
+                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text|truncatechars:50 }}</option>
                     {% endif %}
                 {% endfor %}
-                <option value="0">At the Beginning</option>
             </select>
         </div>
         <button type="submit" class="btn btn-secondary">Add Question</button>
     </form>
 
-    <!-- Add New Page Button -->
+    <!-- Add New Page Section -->
     <form method="post" action="{% url 'add_page' activity.id %}">
         {% csrf_token %}
         <div class="form-group">
@@ -64,45 +66,107 @@
             <select id="insert_after_page" name="insert_after" class="form-control">
                 {% for question in activity_questions %}
                     {% if not question.is_separator %}
-                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text }}</option>
+                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text|truncatechars:50 }}</option>
                     {% endif %}
                 {% endfor %}
-                <option value="0">At the Beginning</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Add New Page</button>
+        <button type="submit" class="btn">Add New Page</button>
     </form>
 
+    <!-- Questions Reordering Section -->
+    <hr>
     <form method="post" action="{% url 'reorder_questions' activity.id %}">
         {% csrf_token %}
         <div id="questions-container" class="questions-container">
             {% for question in activity_questions %}
-            {% if question.is_separator %}
-                <!-- Page Separator -->
-                <div class="page-separator">
-                    <span class="separator-text">Page {{ question.page_number }}</span>
-                    <button type="submit" name="remove_page" value="{{ question.page_number }}" class="btn btn-danger btn-sm">Remove Page</button>
-                </div>
-            {% else %}
-                <!-- Question Card -->
-                <div class="question-card">
-                    <div class="card-header">
-                        <p>{{ question.order }}. {{ question.question.text }}</p>
+                {% if question.is_separator %}
+                    <!-- Page Separator -->
+                    <div class="page-separator">
+                        <span class="separator-text">Page {{ question.page_number }}</span>
+                        <button type="button" class="remove-separator remove-page-btn" data-page-number="{{ question.page_number }}" data-url="{% url 'remove_page' activity.id %}">
+                            <!-- Trash Bin SVG -->
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 6l3 18h12l3-18h-18zm16 16h-12l-2.25-14h16.5l-2.25 14zm-10-16v-4h8v4h7v2h-22v-2h7z"/>
+                            </svg>
+                        </button>                        
                     </div>
-                    <div class="card-body">
-                        <p>Question Type: {{ question.question.get_question_type_display }}</p>
-                        <p>Key Name: {{ question.question.key_name }}</p>
-                        <!-- Move Up, Move Down, and Remove buttons -->
-                        <button type="submit" name="move_up" value="{{ question.id }}" class="btn btn-info btn-sm">Move Up</button>
-                        <button type="submit" name="move_down" value="{{ question.id }}" class="btn btn-info btn-sm">Move Down</button>
-                        <button type="submit" name="remove_question" value="{{ question.id }}" class="btn btn-danger btn-sm">Remove</button>
-                        <input type="hidden" name="question_order" value="{{ question.id }}">
-                    </div>
-                </div>
-            {% endif %}
+                {% else %}
+                    <!-- Check if the question exists -->
+                    {% if question.question %}
+                        <!-- Question Card -->
+                        <div class="question-card" draggable="true">
+                            <div class="card-header">
+                                {% if question.question.question_type == 'CONTENT_BLOCK' %}
+                                    <!-- Render content block text and image if present -->
+                                    <div class="content-block">
+                                        <!-- Render content text -->
+                                        <div class="content-text">{{ question.question.content|default:"No content available."|striptags }}</div>
+        
+                                        <!-- Render image if present -->
+                                        {% if question.question.image %}
+                                            <img src="{{ question.question.image.url }}" alt="Content Block Image" class="content-block-image">
+                                        {% endif %}
+
+                                        <!-- Render embedded YouTube video if link is provided -->
+                                        {% if question.question.yt_video_link %}
+                                            <div class="youtube-container">
+                                                <iframe 
+                                                    src="https://www.youtube.com/embed/{{ question.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}" 
+                                                    frameborder="0" 
+                                                    allowfullscreen>
+                                                </iframe>
+                                            </div>
+                                        {% endif %}
+
+                                        <!-- Render file if present -->
+                                        {% if question.question.file_upload %}
+                                            <div class="file-info">Uploaded File: {{ question.question.file_upload.name|basename }}</div>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <!-- Display other question types -->
+                                    <p>{{ question.order }}. {{ question.question.text|default:"[No Question Text]"|truncatechars:50 }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <p>Type: {{ question.question.get_question_type_display }}</p>
+                                    <p>Key Name: {{ question.question.key_name }}</p>
+                                </div>
+                                <!-- Actions -->
+                                <div class="question-actions">
+                                    <button type="button" class="btn-icon move-up-btn" data-question-id="{{ question.id }}" data-url="{% url 'move_question_up' activity.id %}">
+                                        <!-- Up Arrow SVG -->
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M12 4l-8 8h6v8h4v-8h6z"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="btn-icon move-down-btn" data-question-id="{{ question.id }}" data-url="{% url 'move_question_down' activity.id %}">
+                                        <!-- Down Arrow SVG -->
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M12 20l8-8h-6v-8h-4v8h-6z"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" class="btn-trash-icon remove-question-btn" data-question-id="{{ question.id }}" data-url="{% url 'remove_question' activity.id %}">
+                                        <!-- Trash Bin SVG -->
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M3 6l3 18h12l3-18h-18zm16 16h-12l-2.25-14h16.5l-2.25 14zm-10-16v-4h8v4h7v2h-22v-2h7z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>  
+                    {% else %}
+                        <div class="alert alert-warning">This question is missing or was deleted.</div>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </div>
     </form>
 </div>
+
+<!-- Include JavaScript File -->
+<script src="{% static 'edu_core/js/activity_edit.js' %}"></script>
 
 {% endblock %}

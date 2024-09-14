@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edu_core',
+    'django_quill',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,18 @@ LOGOUT_REDIRECT_URL = 'login'  # Assumes you have a URL named 'login'
 # Media files
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+QUILL_CONFIGS = {
+    'default': {
+        'theme': 'snow',
+        'modules': {
+            'toolbar': [
+                [{'header': [1, 2, 3, False]}],
+                ['bold', 'italic', 'underline'],
+                ['link', 'image', 'video'],  # Add video, images, etc.
+                [{'list': 'ordered'}, {'list': 'bullet'}],
+                ['clean']
+            ]
+        }
+    }
+}

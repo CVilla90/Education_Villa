@@ -5,18 +5,24 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from .views.user_views import profile, edit_profile, SignUpView
+from .views.utility_views import home  # Make sure the home view is in the correct file
+
 from .views.activity_views import (
     activity_add, delete_activity, activity_view, add_mcq, question_type_selection,
-    select_from_bank, edit_activity, reorder_questions, add_page, add_question_to_activity
+    select_from_bank, edit_activity, reorder_questions, add_page, add_question_to_activity, add_content_block, upload_image, 
+    move_question_up, move_question_down, remove_question, remove_page
 )
+
 from .views.course_views import create_course, course_detail, delete_course, edit_course
+
 from .views.lesson_views import lesson_add, lesson_view, delete_lesson
+
 from .views.diploma_views import (
     diploma_search, view_diploma_online, download_diploma_pdf, create_diploma
 )
-from .views.utility_views import home  # Make sure the home view is in the correct file
+
 from .views.question_bank_views import (
-    question_bank, add_question_to_bank, edit_question_in_bank, question_type_selection_for_bank, add_mcq_to_bank
+    question_bank, add_question_to_bank, edit_question_in_bank, question_type_selection_for_bank, add_mcq_to_bank, add_content_block_to_bank
 )
 
 urlpatterns = [
@@ -54,12 +60,18 @@ urlpatterns = [
     path('activities/<int:activity_id>/delete/', delete_activity, name='delete_activity'),
     path('activities/<int:activity_id>/', activity_view, name='activity_view'),
     path('activities/<int:activity_id>/add_mcq/', add_mcq, name='add_mcq'),
+    path('activities/<int:activity_id>/add_content_block/', add_content_block, name='add_content_block'),    
     path('activities/<int:activity_id>/question_type_selection/', question_type_selection, name='question_type_selection'),
     path('activities/<int:activity_id>/select_from_bank/', select_from_bank, name='select_from_bank'),
     path('activities/<int:activity_id>/edit/', edit_activity, name='edit_activity'),
     path('activities/<int:activity_id>/reorder_questions/', reorder_questions, name='reorder_questions'),
     path('activities/<int:activity_id>/add_page/', add_page, name='add_page'),
     path('activities/<int:activity_id>/add_question_to_activity/', add_question_to_activity, name='add_question_to_activity'),
+    path('upload_image/', upload_image, name='upload_image'),
+    path('activity/<int:activity_id>/move_question_up/', move_question_up, name='move_question_up'),
+    path('activity/<int:activity_id>/move_question_down/', move_question_down, name='move_question_down'),
+    path('activity/<int:activity_id>/remove_question/', remove_question, name='remove_question'),
+    path('activity/<int:activity_id>/remove_page/', remove_page, name='remove_page'),
 
     # QuestionsBank
     path('courses/<int:course_id>/question_bank/', question_bank, name='question_bank'),
@@ -67,5 +79,6 @@ urlpatterns = [
     path('questions/<int:question_id>/edit/', edit_question_in_bank, name='edit_question_in_bank'),
     path('courses/<int:course_id>/question_type_selection/', question_type_selection_for_bank, name='question_type_selection_for_bank'),
     path('courses/<int:course_id>/add_mcq/', add_mcq_to_bank, name='add_mcq_to_bank'),
+    path('courses/<int:course_id>/add_content_block_to_bank/', add_content_block_to_bank, name='add_content_block_to_bank'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

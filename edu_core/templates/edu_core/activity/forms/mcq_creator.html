@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_forms\mcq_creator.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\forms\mcq_creator.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -10,16 +10,29 @@
 <div class="mcq-creator-container">
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb-nav">
-        <a href="{% url 'activity_view' activity.id %}" class="breadcrumb">Back to Activity: {{ activity.name }}</a>
+        {% if activity %}
+            <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+            <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">{{ activity.lesson.course.name }}</a> &gt;
+            <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a> &gt;
+            <a href="{% url 'edit_activity' activity.id %}" class="breadcrumb">Back to Edit Activity: {{ activity.name }}</a>
+        {% elif course %}
+            <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+            <a href="{% url 'course_detail' course.id %}" class="breadcrumb">{{ course.name }}</a> &gt;
+            <a href="{% url 'question_bank' course.id %}" class="breadcrumb">Back to Question Bank</a>
+        {% endif %}
     </nav>
 
-    <h2>Add a New Multiple Choice Question</h2>
+    <h2>{% if editing %}Edit{% else %}Add a New{% endif %} Multiple Choice Question</h2>
     <form method="post" class="mcq-form">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Add MCQ</button>
-            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Add{% endif %} MCQ</button>
+            {% if activity %}
+                <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Cancel</a>
+            {% elif course %}
+                <a href="{% url 'question_bank' course.id %}" class="btn btn-secondary">Cancel</a>
+            {% endif %}
         </div>
     </form>    
 </div>

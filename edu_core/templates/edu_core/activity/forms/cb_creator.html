@@ -1,0 +1,82 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\forms\cb_creator.html -->
+
+{% extends "edu_core/base.html" %}
+{% load static %}
+{% load custom_filters %}  <!-- Load your custom filters -->
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/cb_creator.css' %}" type="text/css">
+
+<!-- Breadcrumb Navigation -->
+<nav class="breadcrumb-nav">
+    <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+    {% if activity %}
+        <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">{{ activity.lesson.course.name }}</a> &gt;
+        <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a> &gt;
+        <a href="{% url 'edit_activity' activity.id %}" class="breadcrumb">Back to Edit Activity: {{ activity.name }}</a>
+    {% elif course %}
+        <a href="{% url 'course_detail' course.id %}" class="breadcrumb">{{ course.name }}</a> &gt;
+        <a href="{% url 'question_bank' course.id %}" class="breadcrumb">Back to Question Bank</a>
+    {% endif %}
+    <span class="breadcrumb current">{% if editing %}Edit{% else %}Add{% endif %} Content Block</span>
+</nav>
+
+<div class="cb-creator-container">
+    <h2>{% if editing %}Edit{% else %}Add a New{% endif %} Content Block</h2>
+    <form method="post" enctype="multipart/form-data" class="cb-form">
+        {% csrf_token %}
+
+        <!-- Key Name Field -->
+        <div class="form-group">
+            <label for="key_name">Key Name:</label>
+            {{ form.key_name }}
+        </div>
+
+        <!-- Content Text Field -->
+        <div class="form-group">
+            <label for="content">Content Text:</label>
+            {{ form.content }}
+        </div>
+
+        <!-- Image Upload Field -->
+        <div class="form-group">
+            <label for="image">Upload Image:</label>
+            {{ form.image }}
+            {% if editing and question and question.image %}
+                <p>Current Image:</p>
+                <img src="{{ question.image.url }}" alt="Current Image" class="current-image">
+            {% endif %}
+        </div>
+
+        <!-- YouTube Video Link Field -->
+        <div class="form-group">
+            <label for="yt_video_link">YouTube Video Link:</label>
+            {{ form.yt_video_link }}
+        </div>
+
+        <!-- File Upload Field -->
+        <div class="form-group">
+            <label for="file_upload">Upload File:</label>
+            {{ form.file_upload }}
+            {% if editing and question and question.file_upload %}
+                <p>Current File: <a href="{{ question.file_upload.url }}">{{ question.file_upload.name|basename }}</a></p>
+            {% endif %}
+        </div>
+
+        <!-- Add to Bank Field -->
+        <div class="form-group">
+            <label for="in_bank">Add to Course Bank:</label>
+            {{ form.in_bank }}
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Add{% endif %} Content Block</button>
+        {% if activity %}
+            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Cancel</a>
+        {% elif course %}
+            <a href="{% url 'question_bank' course.id %}" class="btn btn-secondary">Cancel</a>
+        {% endif %}
+    </form>
+</div>
+
+{% endblock %}

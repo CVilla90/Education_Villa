@@ -1,80 +1,149 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\activity_view.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\views\activity_view.html -->
 
 {% extends "edu_core/base.html" %}
-
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/activity_view.css' %}" type="text/css">
 
-<div class="activity-details">
-    <!-- Navigation Menu -->
-    <nav class="breadcrumb-nav">
-        <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">Back to Course: {{ activity.lesson.course.name }}</a> >
-        <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a>
+<div class="container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <a href="{% url 'course_detail' activity.lesson.course.id %}">{{ activity.lesson.course.name }}</a>
+        &raquo;
+        <a href="{% url 'lesson_view' activity.lesson.id %}">{{ activity.lesson.name }}</a>
+        &raquo;
+        <span>{{ activity.name }}</span>
     </nav>
 
-    <h2>Activity: {{ activity.name }}</h2>
-    <p>Description: {{ activity.description }}</p>
+    <!-- Activity Header -->
+    <header class="activity-header">
+        <h1>{{ activity.name }}</h1>
+        <p>{{ activity.description }}</p>
+    </header>
 
+    <!-- Score Display and Retry Option -->
     {% if score is not None %}
-        <h2>Your Score: {{ score }} / {{ total_questions }} ({{ percentage_score }}%)</h2>
-        <!-- Retry Button -->
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="retry" value="true">
-            <button type="submit" class="btn btn-primary">Retry Activity</button>
-        </form>
+        <div class="score-section">
+            <h2>Your Score: {{ score }} / {{ total_questions }} ({{ percentage_score }}%)</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="retry" value="true">
+                <button type="submit" class="btn btn-primary" id="retry-button">Retry Activity</button>
+            </form>
+        </div>
     {% else %}
-        <form action="" method="post">
-            {% csrf_token %}
-            <div id="questions-container" class="questions-container" data-activity-id="{{ activity.id }}">
-                {% for aq in questions_on_page %}
-                    <div class="question-card" draggable="true" data-id="{{ aq.question.id }}">
-                        <div class="card-header">
-                            <span class="drag-handle">&#x2630;</span> <!-- Cross arrows icon -->
-                            <p>{{ forloop.counter }}. {{ aq.question.text }}</p>
-                        </div>
-                        <div class="card-body">
-                            {% if aq.question.question_type == 'MCQ' %}
-                                {% for option in aq.question.shuffled_options %}
-                                    <label>
-                                        <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"> {{ option.text }}
-                                    </label><br>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
 
-            <!-- Submit and Pagination Controls -->
-            <div class="submit-container">
-                {% if current_page > 1 %}
-                    <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:-1 }}" class="btn btn-secondary">Previous Page</a>
+    <!-- Activity Form -->
+    <form action="" method="post" id="activity-form" autocomplete="off">
+    {% csrf_token %}
+    <div class="questions-section" id="questions-container">
+            {% for aq in questions_on_page %}
+            <div class="question-card" data-id="{{ aq.question.id }}">
+                <!-- Content Block -->
+                {% if aq.question.question_type == 'CONTENT_BLOCK' %}
+                <div class="content-block">
+                    <!-- Content Text -->
+                    <div class="content-text">
+                        {{ aq.question.content|safe }}
+                    </div>
+                    <!-- Image -->
+                    {% if aq.question.image %}
+                    <img src="{{ aq.question.image.url }}" alt="Content Image">
+                    {% endif %}
+                    <!-- YouTube Video -->
+                    {% if aq.question.yt_video_link %}
+                    <div class="video-container">
+                        <iframe 
+                            src="https://www.youtube.com/embed/{{ aq.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}" 
+                            frameborder="0" allowfullscreen>
+                        </iframe>
+                    </div>
+                    {% endif %}
+                    <!-- File Upload -->
+                    {% if aq.question.file_upload %}
+                        {% if aq.question.file_upload.url|is_audio_file %}
+                        <div class="audio-player">
+                            <audio controls>
+                                <source src="{{ aq.question.file_upload.url }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        {% else %}
+                        <div class="file-download">
+                            <a href="{{ aq.question.file_upload.url }}" download>
+                                <span class="file-icon">📄</span>
+                                {{ aq.question.file_upload.name|basename }}
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                {% else %}
+                <!-- Other Question Types -->
+                <div class="question-content">
+                    <p><strong>{{ forloop.counter }}.</strong> {{ aq.question.text|safe }}</p>
+                    {% if aq.question.question_type == 'MCQ' %}
+                    <div class="options">
+                        {% for option in aq.question.shuffled_options %}
+                        <label>
+                            <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"
+                            {% if option.id|stringformat:"s" == request.session.answers|get_item:aq.question.id|stringformat:"s" %}checked{% endif %}>
+                            {{ option.text }}
+                        </label>
+                        {% endfor %}                        
+                    </div>
+                    {% endif %}
+                </div>
                 {% endif %}
-                <span class="page-indicator">Page {{ current_page }} of {{ total_pages }}</span>
-                {% if current_page < total_pages %}
-                    <a href="{% url 'activity_view' activity.id %}?page={{ current_page|add:1 }}" class="btn btn-secondary">Next Page</a>
-                {% endif %}
-                <button type="submit" class="btn btn-primary">Submit Answers</button>
             </div>
-        </form>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination and Submission -->
+        <div class="form-navigation">
+            {% if current_page > 1 %}
+                <button type="submit" name="previous_page" class="btn btn-secondary">Previous</button>
+            {% endif %}
+            <span>Page {{ current_page }} of {{ total_pages }}</span>
+            {% if current_page < total_pages %}
+                <button type="submit" name="next_page" class="btn btn-secondary">Next</button>
+            {% endif %}
+            {% if current_page == total_pages %}
+                <button type="submit" name="submit_final" class="btn btn-primary">Submit Answers</button>
+            {% endif %}
+        </div>
+    </form>
     {% endif %}
 
-    <!-- Display previous attempts -->
+    <!-- Previous Attempts -->
     {% if grade_history %}
+    <section class="attempts-history">
         <h3>Previous Attempts</h3>
         <ul>
             {% for grade in grade_history %}
-                <li>Attempt on {{ grade.created_at }}: {{ grade.score }}%</li>
+            <li>
+                Attempt on {{ grade.created_at|date:"M d, Y H:i" }}: {{ grade.score }}%
+            </li>
             {% endfor %}
         </ul>
+    </section>
     {% endif %}
 
+    <!-- Edit Activity Option -->
     {% if request.user == activity.lesson.course.author or request.user.is_superuser %}
-        <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Edit Activity</a>
+    <div class="edit-activity">
+        <a href="{% url 'edit_activity' activity.id %}" class="btn btn-edit">Edit Activity</a>
+    </div>
     {% endif %}
 </div>
 
+<!-- JSON Data for JavaScript -->
+<script type="application/json" id="answers-data">
+    {{ answers_json|safe }}
+</script>
+
+<!-- JavaScript File -->
+<script src="{% static 'edu_core/js/activity_view.js' %}"></script>
 {% endblock %}

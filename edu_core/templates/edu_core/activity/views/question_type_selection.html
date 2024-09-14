@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity_views\question_type_selection.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\views\question_type_selection.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
@@ -12,10 +12,12 @@
         {% if activity %}
             <!-- If adding to an activity -->
             <li><a href="{% url 'add_mcq' activity.id %}?insert_after={{ request.GET.insert_after }}" class="btn question-type-btn">Multiple Choice Question</a></li>
+            <li><a href="{% url 'add_content_block' activity.id %}?insert_after={{ request.GET.insert_after }}" class="btn question-type-btn">Content Block</a></li>
             <li><a href="{% url 'select_from_bank' activity.id %}?insert_after={{ request.GET.insert_after }}" class="btn question-type-btn">Add from Question Bank</a></li>
         {% elif course %}
             <!-- If adding to the question bank -->
             <li><a href="{% url 'add_mcq_to_bank' course.id %}" class="btn question-type-btn">Multiple Choice Question</a></li>
+            <li><a href="{% url 'add_content_block_to_bank' course.id %}" class="btn question-type-btn">Content Block</a></li>
         {% endif %}
     </ul>
 </div>

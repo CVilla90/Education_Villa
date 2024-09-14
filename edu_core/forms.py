@@ -1,11 +1,12 @@
 # Portfolio\Education_Villa\edu_core\forms.py
+
 import secrets
 import string
 import json
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser, UserProfile, Certification, Diploma, Course, Lesson, Activity, Question
+from django.core.validators import FileExtensionValidator
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -79,6 +80,7 @@ class ActivityForm(forms.ModelForm):
 
 
 class MCQForm(forms.Form):
+    key_name = forms.CharField(label="Key Name", required=True)  # Add KeyName field
     question_text = forms.CharField(widget=forms.Textarea, label="Question Text")
     option_1 = forms.CharField(label="Option 1")
     option_2 = forms.CharField(label="Option 2")
@@ -96,12 +98,34 @@ class MCQForm(forms.Form):
         required=False,
         initial=False,
     )
-    key_name = forms.CharField(label="Key Name", required=False)  # Add KeyName field
+
     add_to_bank = forms.BooleanField(
         label="Add to Course Bank",
         required=False,
         initial=True,  # Checked by default
     )
+
+
+class ContentBlockForm(forms.ModelForm):
+    key_name = forms.CharField(label="Key Name", required=True)
+    content = forms.CharField(widget=forms.Textarea, label="Content Text", required=False)
+    image = forms.ImageField(required=False, label="Upload Image")
+    yt_video_link = forms.URLField(required=False, label="YouTube Video Link", help_text="Paste a YouTube link to embed the video.")
+    file_upload = forms.FileField(
+        required=False,
+        label="Upload File",
+        help_text="Upload a document or audio file.",
+        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'xls', 'xlsx', 'mp3', 'wav', 'm4a'])]
+    )
+    in_bank = forms.BooleanField(
+        label="Add to Course Bank",
+        required=False,
+        initial=True,  # Checked by default
+    )
+
+    class Meta:
+        model = Question
+        fields = ['key_name', 'content', 'image', 'yt_video_link', 'file_upload', 'in_bank']
 
 
 class QuestionBankForm(forms.ModelForm):

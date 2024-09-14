@@ -1,108 +1,20 @@
 /* Portfolio\Education_Villa\edu_core\static\edu_core\css\activity_edit.css */
 
-/* General container styling */
+/* General Container Styling */
 .activity-edit-container {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Form styling */
-.form-group {
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
     margin-bottom: 20px;
 }
 
-.form-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-    color: #333;
-}
-
-.form-group input, .form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.form-group input[type="date"] {
-    padding: 5px;
-    font-size: 16px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-align: center;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-top: 10px;
-}
-
-.btn:hover {
-    background-color: #2980b9;
-}
-
-/* Reorder Questions Section */
-#questions-container {
-    margin-top: 20px;
-    padding: 10px;
-    border: 2px dashed #ccc;
-    background-color: #fff;
-    border-radius: 8px;
-}
-
-.question-card {
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #ecf0f1;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    cursor: move;
-}
-
-.question-card .card-header {
-    flex-grow: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.drag-handle {
-    font-size: 18px;
-    cursor: move;
-    padding: 5px;
-    color: #7f8c8d;
-}
-
-.drag-handle:hover {
-    color: #34495e;
-}
-
-/* Pagination section */
-h2 {
-    margin-top: 30px;
-    color: #34495e;
-}
-
-hr {
-    border: 0;
-    height: 1px;
-    background-color: #ccc;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-/* Breadcrumb navigation */
 .breadcrumb-nav a.breadcrumb {
     color: #3498db;
     text-decoration: none;
@@ -113,52 +25,280 @@ hr {
     text-decoration: underline;
 }
 
-.separator-placeholder {
-    border-top: 2px dotted #ccc;
-    height: 10px;
-    margin: 10px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .separator-placeholder.active {
-    border-top: 2px solid #007bff;
-    background-color: #e9ecef;
-  }
+.breadcrumb-nav .breadcrumb.current {
+    color: #7f8c8d;
+}
 
-  .page-separator {
+/* Form Styling */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+    color: #2c3e50;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #ecf0f1;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: #3498db;
+    outline: none;
+    background-color: #fff;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #2980b9;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #1f618d;
+}
+
+.btn-secondary {
+    background-color: #bdc3c7;
+}
+
+.btn-secondary:hover {
+    background-color: #95a5a6;
+}
+
+/* Reorder Questions Section */
+#questions-container {
+    margin-top: 30px;
+}
+
+.question-card {
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fdfdfd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    cursor: move;
+    transition: background-color 0.3s ease;
+}
+
+.question-card:hover {
+    background-color: #f7f7f7;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.card-header p {
+    flex-grow: 1;
+    margin: 0;
+    font-size: 18px;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
-    background-color: #f8f9fa;
-    border-top: 2px solid #007bff;
-    border-bottom: 2px solid #007bff;
-    margin: 10px 0;
-    cursor: grab;
-  }
-  
-  .page-separator .separator-text {
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  .page-separator .remove-separator {
-    background: none;
-    border: none;
-    color: #dc3545;
-    cursor: pointer;
-  }
-  
-  .page-separator .remove-separator:hover {
-    color: #bd2130;
-  }
-  
-
-  /* Add this to your activity_edit.css file */
-.hidden {
-    display: none;
 }
 
+.question-actions {
+    display: flex;
+    gap: 10px;
+}
 
+.question-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.question-actions svg {
+    width: 24px;
+    height: 24px;
+    fill: #7f8c8d;
+    transition: fill 0.2s ease;
+}
+
+.question-actions button:hover svg {
+    fill: #3498db;
+}
+
+.btn-trash-icon svg {
+    fill: #e74c3c;
+}
+
+.btn-trash-icon:hover svg {
+    fill: #c0392b;
+}
+
+/* Content Block Styling */
+.content-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.content-text {
+    font-size: 16px;
+    color: #2c3e50;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    width: 100%;
+}
+
+.content-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+    height: 20px;
+    background: linear-gradient(to right, transparent, #fff);
+}
+
+.content-block img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.youtube-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 8px;
+}
+
+.file-info {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+
+/* Page Separator */
+.page-separator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+}
+
+.page-separator .separator-text {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.page-separator .remove-separator {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.page-separator .remove-separator svg {
+    width: 24px;
+    height: 24px;
+    fill: #e74c3c;
+    transition: fill 0.2s ease;
+}
+
+.page-separator .remove-separator:hover svg {
+    fill: #c0392b;
+}
+
+/* Pagination Section */
+h2 {
+    margin-top: 40px;
+    color: #2c3e50;
+    font-size: 28px;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #bdc3c7;
+    margin: 40px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .activity-edit-container {
+        padding: 20px;
+    }
+
+    .card-body {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .question-actions {
+        margin-top: 10px;
+    }
+
+    .content-text {
+        max-height: 80px;
+    }
+}

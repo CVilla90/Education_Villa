@@ -8,6 +8,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete
 from django.core.exceptions import ValidationError
 import os, json
+from django.core.validators import URLValidator
 
 
 class CustomUser(AbstractUser):
@@ -84,26 +85,53 @@ class Question(models.Model):
     MULTIPLE_CHOICE = 'MCQ'
     TRUE_FALSE = 'TF'
     ESSAY = 'ESSAY'
+    CONTENT_BLOCK = 'CONTENT_BLOCK'  # New type
 
     QUESTION_TYPES = [
         (MULTIPLE_CHOICE, 'Multiple Choice'),
         (TRUE_FALSE, 'True or False'),
         (ESSAY, 'Essay'),
-        # Add other types here
+        (CONTENT_BLOCK, 'Content Block'),
     ]
 
-    # Change related_name to avoid conflicts
-    activity = models.ForeignKey('Activity', on_delete=models.CASCADE, related_name='activity_questions', null=True, blank=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_questions')
     question_type = models.CharField(max_length=50, choices=QUESTION_TYPES)
-    text = models.TextField()
+    activity = models.ForeignKey(
+        'Activity', 
+        on_delete=models.CASCADE, 
+        related_name='activity_questions', 
+        null=True, 
+        blank=True
+    )
+    course = models.ForeignKey(
+        'Course', 
+        on_delete=models.CASCADE, 
+        related_name='course_questions'
+    )
+    text = models.TextField(blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='content_blocks/', null=True, blank=True)
+    yt_video_link = models.URLField(validators=[URLValidator()], blank=True, null=True)
+    file_upload = models.FileField(upload_to='content_block_files/', null=True, blank=True)  # Consolidated for all file types
     correct_answer = models.TextField(blank=True, null=True)
     randomize_options = models.BooleanField(default=False)
     key_name = models.CharField(max_length=255, blank=True, null=True)
-    in_bank = models.BooleanField(default=False)  # This is the correct field name
+    in_bank = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.text[:50]
+        text_snippet = self.text[:50] if self.text else ''
+        content_snippet = self.content[:50] if self.content else ''
+        return text_snippet or content_snippet or "Empty Question"
+
+    def save(self, *args, **kwargs):
+        # Handle old image removal when updating the image
+        try:
+            old_image = Question.objects.get(id=self.id).image
+            if old_image and self.image != old_image:
+                if os.path.isfile(old_image.path):
+                    os.remove(old_image.path)
+        except Question.DoesNotExist:
+            pass
+        super(Question, self).save(*args, **kwargs)
 
 
 class Activity(models.Model):
