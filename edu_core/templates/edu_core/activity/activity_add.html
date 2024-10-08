@@ -14,7 +14,7 @@
     </nav>
 
     <h2>Add New Activity</h2>
-    <form method="post" class="activity-form">
+    <form method="post" class="activity-form" id="activity-form">
         {% csrf_token %}
         {{ form.as_p }}
         <div class="form-actions">
@@ -23,5 +23,37 @@
         </div>
     </form>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('activity-form');
+
+        form.addEventListener('submit', function (event) {
+            const nameField = document.querySelector('[name="name"]');
+            const descriptionField = document.querySelector('[name="description"]');
+            let errorMessage = '';
+
+            // Check if name or description fields are blank
+            if (!nameField.value.trim()) {
+                errorMessage += 'Name is required.\n';
+            }
+            if (!descriptionField.value.trim()) {
+                errorMessage += 'Description is required.\n';
+            }
+
+            // If there are any errors, prevent form submission and show an alert
+            if (errorMessage) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Form Incomplete',
+                    text: errorMessage,
+                });
+            }
+        });
+    });
+</script>
 
 {% endblock %}

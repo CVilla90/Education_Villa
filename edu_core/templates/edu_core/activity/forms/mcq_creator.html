@@ -1,7 +1,6 @@
 <!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\forms\mcq_creator.html -->
 
 {% extends "edu_core/base.html" %}
-
 {% load static %}
 
 {% block content %}
@@ -25,7 +24,26 @@
     <h2>{% if editing %}Edit{% else %}Add a New{% endif %} Multiple Choice Question</h2>
     <form method="post" class="mcq-form">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ mcq_form.as_p }}
+
+        <!-- Dynamic Options Section -->
+        <div id="option-forms">
+            {{ option_formset.management_form }}
+            {% for form in option_formset %}
+                <div class="option-form">
+                    <label for="{{ form.text.id_for_label }}">Text:</label>
+                    {{ form.text }}
+                    <label for="{{ form.is_correct.id_for_label }}">Is correct:</label>
+                    <input type="radio" name="correct_option" value="{{ forloop.counter0 }}" id="{{ form.is_correct.id_for_label }}">
+                    <button type="button" class="remove-option btn btn-danger">Remove Option</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Button to Add New Option -->
+        <button type="button" id="add-option" class="btn btn-secondary">Add Option</button>
+
+        <!-- Submit and Cancel Buttons -->
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Add{% endif %} MCQ</button>
             {% if activity %}
@@ -36,4 +54,8 @@
         </div>
     </form>    
 </div>
+
+<!-- Include JavaScript File -->
+<script src="{% static 'edu_core/js/mcq_creator.js' %}"></script>
+
 {% endblock %}

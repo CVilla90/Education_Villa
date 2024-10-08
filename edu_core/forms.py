@@ -5,13 +5,18 @@ import string
 import json
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser, UserProfile, Certification, Diploma, Course, Lesson, Activity, Question
+from .models import CustomUser, UserProfile, Certification, Diploma, Course, Lesson, Activity, Question, Option
 from django.core.validators import FileExtensionValidator
+from django.forms import formset_factory
+from django.utils.translation import gettext_lazy as _
+
+# Forms here:
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = UserCreationForm.Meta.fields + ('first_name', 'last_name', 'email',)  # Updated to include first_name and last_name
+
 
 # Form for creating diplomas
 def generate_random_verification_key(length=12):
@@ -23,6 +28,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['bio', 'profile_picture']
+
 
 class CertificationForm(forms.ModelForm):
     class Meta:
@@ -64,46 +70,77 @@ class LessonForm(forms.ModelForm):
 class ActivityForm(forms.ModelForm):
     class Meta:
         model = Activity
-        fields = ['name', 'description', 'start_date', 'end_date']
+        fields = ['name', 'description', 'start_date', 'end_date', 'max_attempts', 'unlimited_attempts', 'feedback_visibility']
         widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Enter activity name', 'required': 'required'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Enter activity description', 'required': 'required'}),
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'max_attempts': forms.NumberInput(attrs={'min': 1, 'max': 99}),
         }
 
     def __init__(self, *args, **kwargs):
         super(ActivityForm, self).__init__(*args, **kwargs)
+        # Set initial values for name and description to empty strings
+        if not self.instance.pk:
+            self.fields['name'].initial = ''
+            self.fields['description'].initial = ''
+
+        # Set initial feedback visibility if editing
+        if self.instance.pk:
+            self.fields['feedback_visibility'].initial = self.instance.feedback_visibility
 
         # Ensure that the start_date and end_date fields are populated with the stored values
-        if self.instance.pk:  # Check if the instance exists (i.e., the form is in edit mode)
+        if self.instance.pk:  
             self.fields['start_date'].initial = self.instance.start_date
             self.fields['end_date'].initial = self.instance.end_date
 
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise forms.ValidationError("This field is required.")
+        return name
 
-class MCQForm(forms.Form):
-    key_name = forms.CharField(label="Key Name", required=True)  # Add KeyName field
-    question_text = forms.CharField(widget=forms.Textarea, label="Question Text")
-    option_1 = forms.CharField(label="Option 1")
-    option_2 = forms.CharField(label="Option 2")
-    option_3 = forms.CharField(label="Option 3", required=False)  # Optional
-    option_4 = forms.CharField(label="Option 4", required=False)  # Optional
-    correct_answer = forms.ChoiceField(choices=[
-        ("option_1", "Option 1"),
-        ("option_2", "Option 2"),
-        ("option_3", "Option 3"),
-        ("option_4", "Option 4")],
-        label="Correct Answer"
-    )
-    randomize_options = forms.BooleanField(
-        label="Randomize Options",
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        if not description:
+            raise forms.ValidationError("This field is required.")
+        return description
+
+
+class OptionForm(forms.ModelForm):
+    class Meta:
+        model = Option
+        fields = ['text', 'is_correct']
+
+# Define a formset with a minimum of 2 options and the ability to add more
+OptionFormSet = formset_factory(OptionForm, min_num=2, validate_min=True, extra=1)
+
+class MCQForm(forms.ModelForm):
+    key_name = forms.CharField(label="Key Name", required=True)
+    randomize_options = forms.BooleanField(label="Randomize Options", required=False, initial=False)
+    add_to_bank = forms.BooleanField(label="Add to Course Bank", required=False, initial=True)
+
+    DURING_ASSESSMENT = 'during'
+    END_OF_ASSESSMENT = 'end'
+    NEVER = 'never'
+
+    FEEDBACK_VISIBILITY_CHOICES = [
+        (DURING_ASSESSMENT, _('During Assessment')),
+        (END_OF_ASSESSMENT, _('End of Assessment')),
+        (NEVER, _('Never')),
+    ]
+
+    feedback = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4}),
+        label="Feedback",
         required=False,
-        initial=False,
+        help_text="Provide feedback that will help the student understand the answer."
     )
 
-    add_to_bank = forms.BooleanField(
-        label="Add to Course Bank",
-        required=False,
-        initial=True,  # Checked by default
-    )
+    class Meta:
+        model = Question
+        fields = ['key_name', 'text', 'randomize_options', 'add_to_bank', 'feedback']
 
 
 class ContentBlockForm(forms.ModelForm):

@@ -74,6 +74,39 @@ body, html {
     margin-top: 10px;
 }
 
+.registration-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.register-button, .unregister-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+    font-weight: bold;
+}
+
+.register-button {
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+}
+
+.register-button:hover {
+    background-color: #217abf; /* A slightly darker blue for hover */
+}
+
+.unregister-button {
+    background-color: var(--accent-color-2);
+    color: var(--secondary-color-1);
+}
+
+.unregister-button:hover {
+    background-color: #c0392b;
+}
+
 .edit-course, .delete-course {
     padding: 10px 20px;
     border-radius: 5px;
@@ -90,7 +123,6 @@ body, html {
 
 .edit-course:hover {
     background-color: #1e7bbf; /* A slightly darker blue for hover */
-    color: var(--secondary-color-1);
 }
 
 .delete-course {
@@ -99,7 +131,6 @@ body, html {
 
 .delete-course:hover {
     background-color: #e74c3c; /* A darker red for hover */
-    color: var(--secondary-color-1);
 }
 
 .lessons-container {
@@ -126,76 +157,34 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.add-lesson-container {
-    text-align: center;
-}
-
-.add-lesson-button {
-    display: inline-block;
-    background-color: var(--accent-color-1);
-    color: var(--secondary-color-1);
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    text-align: center;
-    margin-top: 20px;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.add-lesson-button:hover {
-    background-color: #217abf; /* A readable color for hover */
-}
-
-.delete-lesson-button {
-    background-color: var(--accent-color-2);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.delete-lesson-button:hover {
-    background-color: #c0392b;
-}
-
-.breadcrumb-nav {
-    margin: 15px 0;
-    font-size: 14px;
-}
-
-.breadcrumb {
-    color: #3498db;
-    text-decoration: none;
-    margin-right: 5px;
-    transition: color 0.3s ease-in-out;
-}
-
-.breadcrumb:hover {
-    text-decoration: underline;
-}
-
-.breadcrumb.current {
-    color: #333;
-    font-weight: bold;
-}
-
-.question-bank-container {
+.add-lesson-container, .question-bank-container, .ai-professor-container {
     text-align: center;
     margin-top: 20px;
 }
 
-.question-bank-button {
+.add-lesson-button, .question-bank-button, .ai-professor-button {
     display: inline-block;
-    background-color: var(--primary-color);
-    color: var(--secondary-color-1);
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
     text-align: center;
     transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.add-lesson-button, .ai-professor-button {
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+}
+
+.add-lesson-button:hover, .ai-professor-button:hover {
+    background-color: #1e7bbf;
+    transform: scale(1.05);
+}
+
+.question-bank-button {
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
 }
 
 .question-bank-button:hover {

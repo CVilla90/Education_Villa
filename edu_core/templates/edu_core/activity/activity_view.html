@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\views\activity_view.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\activity_view.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
@@ -33,69 +33,100 @@
                 <button type="submit" class="btn btn-primary" id="retry-button">Retry Activity</button>
             </form>
         </div>
-    {% else %}
+    {% endif %}
 
     <!-- Activity Form -->
     <form action="" method="post" id="activity-form" autocomplete="off">
-    {% csrf_token %}
-    <div class="questions-section" id="questions-container">
+        {% csrf_token %}
+        <div class="questions-section" id="questions-container">
             {% for aq in questions_on_page %}
             <div class="question-card" data-id="{{ aq.question.id }}">
-                <!-- Content Block -->
+                <!-- Content Block Question -->
                 {% if aq.question.question_type == 'CONTENT_BLOCK' %}
-                <div class="content-block">
-                    <!-- Content Text -->
-                    <div class="content-text">
-                        {{ aq.question.content|safe }}
-                    </div>
-                    <!-- Image -->
-                    {% if aq.question.image %}
-                    <img src="{{ aq.question.image.url }}" alt="Content Image">
-                    {% endif %}
-                    <!-- YouTube Video -->
-                    {% if aq.question.yt_video_link %}
-                    <div class="video-container">
-                        <iframe 
-                            src="https://www.youtube.com/embed/{{ aq.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}" 
-                            frameborder="0" allowfullscreen>
-                        </iframe>
-                    </div>
-                    {% endif %}
-                    <!-- File Upload -->
-                    {% if aq.question.file_upload %}
-                        {% if aq.question.file_upload.url|is_audio_file %}
-                        <div class="audio-player">
-                            <audio controls>
-                                <source src="{{ aq.question.file_upload.url }}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        </div>
-                        {% else %}
-                        <div class="file-download">
-                            <a href="{{ aq.question.file_upload.url }}" download>
-                                <span class="file-icon">📄</span>
-                                {{ aq.question.file_upload.name|basename }}
-                            </a>
-                        </div>
+                    <div class="content-block">
+                        <div class="content-text">{{ aq.question.content|safe }}</div>
+                        {% if aq.question.image %}
+                            <img src="{{ aq.question.image.url }}" alt="Content Image">
                         {% endif %}
-                    {% endif %}
-                </div>
-                {% else %}
-                <!-- Other Question Types -->
-                <div class="question-content">
-                    <p><strong>{{ forloop.counter }}.</strong> {{ aq.question.text|safe }}</p>
-                    {% if aq.question.question_type == 'MCQ' %}
-                    <div class="options">
-                        {% for option in aq.question.shuffled_options %}
-                        <label>
-                            <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"
-                            {% if option.id|stringformat:"s" == request.session.answers|get_item:aq.question.id|stringformat:"s" %}checked{% endif %}>
-                            {{ option.text }}
-                        </label>
-                        {% endfor %}                        
+                        {% if aq.question.yt_video_link %}
+                            <div class="video-container">
+                                <iframe
+                                    src="https://www.youtube.com/embed/{{ aq.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}"
+                                    frameborder="0" allowfullscreen>
+                                </iframe>
+                            </div>
+                        {% endif %}
+                        {% if aq.question.file_upload %}
+                            {% if aq.question.file_upload.url|is_audio_file %}
+                                <div class="audio-player">
+                                    <audio controls>
+                                        <source src="{{ aq.question.file_upload.url }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </div>
+                            {% else %}
+                                <div class="file-download">
+                                    <a href="{{ aq.question.file_upload.url }}" download>
+                                        <span class="file-icon">📄</span>
+                                        {{ aq.question.file_upload.name|basename }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
                     </div>
+                {% else %}
+                    <!-- Other Question Types -->
+                    <div class="question-content">
+                        <p><strong>{{ forloop.counter0|add:question_offset }}.</strong> {{ aq.question.text|safe }}</p>
+                        {% if aq.question.question_type == 'MCQ' %}
+                            <div class="options">
+                                {% for option in aq.question.shuffled_options %}
+                                <label class="{% if score is not None %}grayed-out{% endif %}">
+                                    <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"
+                                    {% if option.id|stringformat:"s" == answers|get_item:aq.question.id|stringformat:"s" %}checked{% endif %}
+                                    {% if request.session.reviewing %}disabled{% endif %}>
+                                    {{ option.text }}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Feedback Section -->
+                {% if activity.feedback_visibility == 'always' %}
+                    {% if aq.question.feedback %}
+                        <div class="feedback-toggle">
+                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                                <span class="arrow">&#9660;</span> Show Feedback
+                            </button>
+                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                                <strong>Feedback:</strong> {{ aq.question.feedback }}
+                            </div>
+                        </div>
                     {% endif %}
-                </div>
+                {% elif activity.feedback_visibility == 'during' %}
+                    {% if aq.question.feedback and not request.session.reviewing %}
+                        <div class="feedback-toggle">
+                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                                <span class="arrow">&#9660;</span> Show Feedback
+                            </button>
+                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                                <strong>Feedback:</strong> {{ aq.question.feedback }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% elif activity.feedback_visibility == 'end' %}
+                    {% if aq.question.feedback and request.session.reviewing %}
+                        <div class="feedback-toggle">
+                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                                <span class="arrow">&#9660;</span> Show Feedback
+                            </button>
+                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                                <strong>Feedback:</strong> {{ aq.question.feedback }}
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endif %}
             </div>
             {% endfor %}
@@ -110,40 +141,49 @@
             {% if current_page < total_pages %}
                 <button type="submit" name="next_page" class="btn btn-secondary">Next</button>
             {% endif %}
-            {% if current_page == total_pages %}
+            {% if current_page == total_pages and score is None %}
                 <button type="submit" name="submit_final" class="btn btn-primary">Submit Answers</button>
             {% endif %}
         </div>
     </form>
-    {% endif %}
 
     <!-- Previous Attempts -->
     {% if grade_history %}
-    <section class="attempts-history">
-        <h3>Previous Attempts</h3>
-        <ul>
-            {% for grade in grade_history %}
-            <li>
-                Attempt on {{ grade.created_at|date:"M d, Y H:i" }}: {{ grade.score }}%
-            </li>
-            {% endfor %}
-        </ul>
-    </section>
+        <section class="attempts-history">
+            <h3>Previous Attempts</h3>
+            <ul>
+                {% for grade in grade_history %}
+                    <li>Attempt on {{ grade.created_at|date:"M d, Y H:i" }}: {{ grade.score }}%</li>
+                {% endfor %}
+            </ul>
+        </section>
     {% endif %}
 
     <!-- Edit Activity Option -->
     {% if request.user == activity.lesson.course.author or request.user.is_superuser %}
-    <div class="edit-activity">
-        <a href="{% url 'edit_activity' activity.id %}" class="btn btn-edit">Edit Activity</a>
-    </div>
+        <div class="edit-activity">
+            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-edit">Edit Activity</a>
+        </div>
     {% endif %}
 </div>
 
-<!-- JSON Data for JavaScript -->
-<script type="application/json" id="answers-data">
-    {{ answers_json|safe }}
+<!-- JavaScript for Feedback Toggle -->
+<script>
+    function toggleFeedback(questionId) {
+        const feedbackContent = document.getElementById(`feedback-${questionId}`);
+        const button = feedbackContent.previousElementSibling;
+        if (feedbackContent.style.display === 'none') {
+            feedbackContent.style.display = 'block';
+            button.querySelector('.arrow').textContent = '▲';
+            button.querySelector('.feedback-expand').textContent = 'Hide Feedback';
+        } else {
+            feedbackContent.style.display = 'none';
+            button.querySelector('.arrow').textContent = '▼';
+            button.querySelector('.feedback-expand').textContent = 'Show Feedback';
+        }
+    }
 </script>
 
-<!-- JavaScript File -->
+<!-- Include JavaScript File -->
 <script src="{% static 'edu_core/js/activity_view.js' %}"></script>
 {% endblock %}

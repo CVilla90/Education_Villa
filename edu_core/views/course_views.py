@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from ..models import Course, UserProfile
+from ..models import Course, UserProfile, Registration
 from ..forms import CourseForm
 
 @login_required
@@ -30,7 +30,34 @@ def create_course(request):
 
 def course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    return render(request, 'edu_core/course/course.html', {'course': course})
+    user = request.user if request.user.is_authenticated else None
+    registered = course.registrations.filter(student=user).exists() if user else False
+
+    context = {
+        'course': course,
+        'registered': registered,
+        'is_author_or_superuser': user == course.author or (user and user.is_superuser),
+    }
+
+    return render(request, 'edu_core/course/course.html', context)
+
+
+@login_required
+def register_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    user = request.user
+
+    if request.method == 'POST':
+        if 'register' in request.POST:
+            Registration.objects.get_or_create(student=user, course=course)
+            messages.success(request, f"You have successfully registered for {course.name}.")
+        elif 'unregister' in request.POST:
+            registration = Registration.objects.filter(student=user, course=course).first()
+            if registration:
+                registration.delete()
+                messages.success(request, f"You have successfully unregistered from {course.name}.")
+    
+    return redirect('course_detail', course_id=course.id)
 
 
 @login_required
@@ -42,6 +69,7 @@ def delete_course(request, pk):
         return redirect('home')
 
     course.delete()
+    messages.success(request, f"The course '{course.name}' has been successfully deleted.")
     return redirect('home')
 
 
@@ -57,6 +85,7 @@ def edit_course(request, course_id):
         form = CourseForm(request.POST, request.FILES, instance=course)
         if form.is_valid():
             form.save()
+            messages.success(request, f"The course '{course.name}' has been successfully updated.")
             return redirect('course_detail', course_id=course.id)
     else:
         form = CourseForm(instance=course)

@@ -27,15 +27,31 @@
     </div>
     {% endif %}
 
-    {% if request.user == course.author or request.user.is_superuser %}
     <div class="controls">
-        <a href="{% url 'edit_course' course.id %}" class="edit-course">Edit Course</a>
-        <form action="{% url 'delete_course' course.id %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="delete-course">Delete Course</button>
-        </form>
+        <!-- Registration/Unregistration Buttons -->
+        <div class="registration-container">
+            {% if registered %}
+                <form action="{% url 'register_course' course.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="unregister" class="unregister-button">Unregister</button>
+                </form>
+            {% else %}
+                <form action="{% url 'register_course' course.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="register" class="register-button">Register</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <!-- Author or Superuser Control Buttons -->
+        {% if is_author_or_superuser %}
+            <a href="{% url 'edit_course' course.id %}" class="edit-course">Edit Course</a>
+            <form action="{% url 'delete_course' course.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-course">Delete Course</button>
+            </form>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 
 <!-- Lessons -->
@@ -43,9 +59,15 @@
     <h2>Lessons</h2>
     {% for lesson in course.lessons.all %}
         <div class="lesson">
-            <h3><a href="{% url 'lesson_view' lesson.id %}">{{ lesson.name }}</a></h3>
-            <p>{{ lesson.content | safe }}</p>
-            {% if request.user == course.author or request.user.is_superuser %}
+            <h3>
+                {% if registered or is_author_or_superuser %}
+                    <a href="{% url 'lesson_view' lesson.id %}">{{ lesson.name }}</a>
+                {% else %}
+                    {{ lesson.name }} <!-- Display lesson name without hyperlink if not registered -->
+                {% endif %}
+            </h3>
+            <p>{{ lesson.content | truncatewords:20 }}...</p> <!-- Show truncated lesson content for preview -->
+            {% if is_author_or_superuser %}
                 <form action="{% url 'delete_lesson' lesson.id %}" method="post" style="display: inline;">
                     {% csrf_token %}
                     <button type="submit" class="delete-lesson-button">Delete Lesson</button>
@@ -54,7 +76,8 @@
         </div>
     {% endfor %}
 
-    {% if request.user == course.author or request.user.is_superuser %}
+    <!-- Author or Superuser Controls for Adding Lessons or Accessing Question Bank -->
+    {% if is_author_or_superuser %}
         <div class="add-lesson-container">
             <a href="{% url 'lesson_add' course.id %}" class="add-lesson-button">Add Lesson</a>
         </div>
@@ -63,5 +86,12 @@
         </div>
     {% endif %}
 </div>
+
+<!-- AI Professor Button (Visible for registered users or author/superuser) -->
+{% if registered or is_author_or_superuser %}
+    <div class="ai-professor-container">
+        <a href="{% url 'ai_course_professor' course.id %}" class="ai-professor-button">AI Course Professor</a>
+    </div>
+{% endif %}
 
 {% endblock %}

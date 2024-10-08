@@ -241,6 +241,10 @@ audio {
     margin-top: 20px;
 }
 
+.feedback-content {
+    transition: max-height 0.3s ease-out;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .form-navigation {

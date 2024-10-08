@@ -1,0 +1,77 @@
+{% extends "edu_core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/ai_professor.css' %}" type="text/css">
+
+<div class="breadcrumb-nav-container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+        <a href="{% url 'course_detail' course.id %}" class="breadcrumb">Back to Course: {{ course.name }}</a> &gt;
+        <span class="breadcrumb current">AI Course Professor</span>
+    </nav>
+</div>
+
+<div class="ai-professor-container">
+    <div class="ai-professor-main">
+        <h2>AI Course Professor for {{ course.name }}</h2>
+        <p>Ask questions about the course content.</p>
+
+        <!-- Corpus File Upload Section (Only for Author or Superuser) -->
+        {% if user_is_author_or_superuser %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="file_input">Upload a Corpus File:</label>
+                <input type="file" id="file_input" name="file_input" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload File</button>
+        </form>
+        <hr>
+        {% endif %}
+
+        <!-- Query Section (Available for Registered Users and Author) -->
+        {% if registered or user_is_author_or_superuser %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="query_input">Ask a Question:</label>
+                <textarea id="query_input" name="query_input" rows="4" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-secondary">Submit Query</button>
+        </form>
+
+        {% if response %}
+        <div class="response-container">
+            <h3>Response:</h3>
+            <p>{{ response }}</p>
+        </div>
+        {% endif %}
+        {% else %}
+        <p>You need to register for this course to ask questions.</p>
+        {% endif %}
+    </div>
+
+    <!-- Corpus File Management Sidebar (Only for Author or Superuser) -->
+    {% if user_is_author_or_superuser %}
+    <div class="corpus-sidebar">
+        <h3>Corpus Files</h3>
+        <ul class="corpus-file-list">
+            {% for corpus in corpus_files %}
+            <li>
+                {{ corpus.file.name|cut:"course_corpus/" }}
+                <form action="{% url 'delete_corpus_file' corpus.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-corpus-btn">&times;</button>
+                </form>
+            </li>
+            {% empty %}
+            <li>No corpus files uploaded yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

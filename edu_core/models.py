@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
@@ -53,8 +54,9 @@ class Course(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, limit_choices_to={'user_type': CustomUser.PROFESSOR}, related_name='authored_courses')
     students = models.ManyToManyField(CustomUser, through='Registration', related_name='registered_courses')
     image = models.ImageField(upload_to='course_images/', null=True, blank=True)
-    description = models.TextField(null=True, blank=True)  # New field for course description
-    
+    description = models.TextField(null=True, blank=True)
+    is_public = models.BooleanField(default=True)  # New field for public visibility
+
     def save(self, *args, **kwargs):
         if self.pk:
             old_image = Course.objects.get(pk=self.pk).image
@@ -63,6 +65,12 @@ class Course(models.Model):
                     os.remove(old_image.path)
         super(Course, self).save(*args, **kwargs)
 
+
+class CourseCorpus(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='corpus')
+    file = models.FileField(upload_to='course_corpus/')
+    upload_date = models.DateTimeField(auto_now_add=True)
+    
 
 @receiver(post_delete, sender=Course)
 def auto_delete_course_files_on_delete(sender, instance, **kwargs):
@@ -95,27 +103,18 @@ class Question(models.Model):
     ]
 
     question_type = models.CharField(max_length=50, choices=QUESTION_TYPES)
-    activity = models.ForeignKey(
-        'Activity', 
-        on_delete=models.CASCADE, 
-        related_name='activity_questions', 
-        null=True, 
-        blank=True
-    )
-    course = models.ForeignKey(
-        'Course', 
-        on_delete=models.CASCADE, 
-        related_name='course_questions'
-    )
+    activity = models.ForeignKey('Activity', on_delete=models.CASCADE, related_name='activity_questions', null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_questions')
     text = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='content_blocks/', null=True, blank=True)
     yt_video_link = models.URLField(validators=[URLValidator()], blank=True, null=True)
-    file_upload = models.FileField(upload_to='content_block_files/', null=True, blank=True)  # Consolidated for all file types
+    file_upload = models.FileField(upload_to='content_block_files/', null=True, blank=True)
     correct_answer = models.TextField(blank=True, null=True)
     randomize_options = models.BooleanField(default=False)
     key_name = models.CharField(max_length=255, blank=True, null=True)
     in_bank = models.BooleanField(default=False)
+    feedback = models.TextField(blank=True, null=True)
 
     def __str__(self):
         text_snippet = self.text[:50] if self.text else ''
@@ -138,12 +137,38 @@ class Activity(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='activities')
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    start_date = models.DateField(blank=True, null=True)  # Add start date
-    end_date = models.DateField(blank=True, null=True)    # Add end date
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
     questions = models.ManyToManyField(Question, through='ActivityQuestion', related_name='activity_set')
+
+    FEEDBACK_VISIBILITY_CHOICES = [
+        ('never', 'Never'),
+        ('during', 'During Assessment'),
+        ('end', 'End of Assessment'),
+        ('always', 'Always')
+    ]
+    feedback_visibility = models.CharField(
+        max_length=10,
+        choices=FEEDBACK_VISIBILITY_CHOICES,
+        default='never',
+        help_text="Choose when to show feedback for all questions in this activity."
+    )
+
+    # New Fields
+    max_attempts = models.PositiveIntegerField(blank=True, null=True, default=1, help_text="Set the maximum number of attempts allowed.")
+    unlimited_attempts = models.BooleanField(default=False, help_text="Allow unlimited attempts if checked.")
 
     def __str__(self):
         return self.name
+
+
+class ActivityAttempt(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='attempts')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'activity', 'created_at')
 
 
 class ActivityQuestion(models.Model):
@@ -160,7 +185,9 @@ class ActivityQuestion(models.Model):
     def __str__(self):
         if self.is_separator:
             return f"Page Separator (Page {self.page_number})"
-        return f"Question: {self.question.text[:50]}"
+        if self.question and self.question.text:
+            return f"Question: {self.question.text[:50]}"
+        return "Missing Question"
 
 
 class Option(models.Model):
