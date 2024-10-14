@@ -8,6 +8,10 @@
     --text-color: #333; /* Dark Gray */
     --background-color: #f5f5f5; /* Light Background */
     --border-color: #ddd; /* Light Gray Border */
+    --green-color: #28a745; /* Green */
+    --yellow-color: #ffd700; /* Yellow */
+    --red-color: #ff6b6b; /* Red */
+    --fade-duration: 2s; /* Duration of the fade animation */
 }
 
 .lesson-view-container {
@@ -148,4 +152,83 @@
     color: var(--text-color);
     text-align: center;
     font-style: italic;
+}
+
+
+/* Add this CSS to style the Activity Dashboard button */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #00254d; /* Darker navy for hover */
+    transform: scale(1.05);
+}
+
+
+.highest-grade {
+    float: right;
+    margin-left: 20px;
+    padding: 10px;
+    color: var(--secondary-color-1);
+    border-radius: 5px;
+    font-weight: bold;
+    animation: fade-border var(--fade-duration) infinite alternate; /* Apply fade animation */
+}
+
+.highest-grade.green {
+    background-color: var(--green-color);
+}
+
+.highest-grade.yellow {
+    background-color: var(--yellow-color);
+    color: black; /* Make text color darker for better contrast on yellow */
+}
+
+.highest-grade.red {
+    background-color: var(--red-color);
+}
+
+/* New Style for No Grade */
+.highest-grade.no-grade {
+    background-color: #f0e8db; /* Pearl white background */
+    color: black; /* Black text for contrast */
+    border: 1px solid #ccc; /* Light border to make it stand out */
+}
+
+.lesson-header-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.lesson-dashboard-button {
+    padding: 10px 20px;
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.lesson-dashboard-button:hover {
+    background-color: #1e7dc1;
+}
+
+/* Keyframes for fade effect on border */
+@keyframes fade-border {
+    from {
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+    }
+    to {
+        box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.1);
+    }
 }

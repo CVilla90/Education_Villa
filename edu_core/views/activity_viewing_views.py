@@ -26,17 +26,20 @@ def activity_view(request, activity_id):
         messages.error(request, 'This activity is not available at this time.')
         return redirect('lesson_view', lesson_id=activity.lesson.id)
 
-    # Count user attempts
-    user_attempts = activity.attempts.filter(user=request.user).count()
+    # Track whether the user has already started an attempt in the session
+    if 'current_activity' not in request.session or request.session['current_activity'] != activity_id:
+        # Count user attempts
+        user_attempts = activity.attempts.filter(user=request.user).count()
 
-    # Check if the user has exceeded the allowed attempts
-    if not activity.unlimited_attempts and activity.max_attempts is not None and user_attempts >= activity.max_attempts:
-        messages.error(request, 'You have reached the maximum number of attempts for this activity.')
-        return redirect('lesson_view', lesson_id=activity.lesson.id)
+        # Check if the user has exceeded the allowed attempts
+        if not activity.unlimited_attempts and activity.max_attempts is not None and user_attempts >= activity.max_attempts:
+            messages.error(request, 'You have reached the maximum number of attempts for this activity.')
+            return redirect('lesson_view', lesson_id=activity.lesson.id)
 
-    # If it's a new attempt, increment the attempts count
-    if not request.session.get('reviewing', False):
+        # Increment the attempt count only when the activity is first accessed
         activity.attempts.create(user=request.user)
+        request.session['current_activity'] = activity_id
+        request.session['attempt_started'] = True
 
     # Fetch all questions and handle pagination
     activity_questions = ActivityQuestion.objects.filter(activity=activity, question__isnull=False).select_related('question').order_by('order')
@@ -58,7 +61,10 @@ def activity_view(request, activity_id):
     # Handle form submission
     if request.method == 'POST':
         if 'retry' in request.POST:
-            return handle_retry(request)
+            # Retry should subtract one attempt
+            retry_result = handle_retry(request, activity)
+            if retry_result:
+                return retry_result
         store_answers_in_session(request, questions_on_page)
         if 'next_page' in request.POST and page < total_pages:
             return redirect(f"{request.path}?page={page + 1}")
@@ -93,11 +99,21 @@ def activity_view(request, activity_id):
         'percentage_score': percentage_score,
         'total_questions': activity_questions.filter(is_separator=False, question__isnull=False, question__question_type=Question.MULTIPLE_CHOICE).count(),
         'answers': answers,  # Ensure answers are passed
-        'user_attempts': user_attempts,
+        'user_attempts': activity.attempts.filter(user=request.user).count(),  # Updated user attempts count
     })
 
+def handle_retry(request, activity):
+    user_attempts = activity.attempts.filter(user=request.user).count()
 
-def handle_retry(request):
+    # Check if the user has exceeded the allowed attempts
+    if not activity.unlimited_attempts and activity.max_attempts is not None and user_attempts >= activity.max_attempts:
+        messages.error(request, 'You have reached the maximum number of attempts for this activity.')
+        return redirect('lesson_view', lesson_id=activity.lesson.id)
+
+    # Create a new attempt and reset session state
+    activity.attempts.create(user=request.user)
+    request.session['current_activity'] = activity.id
+    request.session['attempt_started'] = True
     request.session['answers'] = {}
     request.session['review_answers'] = {}
     request.session['reviewing'] = False
@@ -105,7 +121,9 @@ def handle_retry(request):
     request.session['percentage_score'] = None
     request.session['shuffled_options'] = {}  # Reset shuffled options
     request.session.modified = True
+
     return redirect(f"{request.path}?page=1")
+
 
 def store_answers_in_session(request, questions_on_page):
     """

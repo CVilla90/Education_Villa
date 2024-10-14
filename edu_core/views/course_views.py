@@ -3,7 +3,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from ..models import Course, UserProfile, Registration
+from django.db.models import Max, Avg
+from ..models import Course, UserProfile, Registration, Grade, Lesson
 from ..forms import CourseForm
 
 @login_required
@@ -22,6 +23,10 @@ def create_course(request):
             course = form.save(commit=False)
             course.author = request.user
             course.save()
+            
+            # Register the author as the professor of the course
+            Registration.objects.create(student=request.user, course=course, role=Registration.PROFESSOR)
+
             return redirect('home')
     else:
         form = CourseForm()
@@ -49,7 +54,7 @@ def register_course(request, course_id):
 
     if request.method == 'POST':
         if 'register' in request.POST:
-            Registration.objects.get_or_create(student=user, course=course)
+            Registration.objects.get_or_create(student=user, course=course, defaults={'role': Registration.STUDENT})
             messages.success(request, f"You have successfully registered for {course.name}.")
         elif 'unregister' in request.POST:
             registration = Registration.objects.filter(student=user, course=course).first()
@@ -90,3 +95,65 @@ def edit_course(request, course_id):
     else:
         form = CourseForm(instance=course)
     return render(request, 'edu_core/course/course_edit.html', {'form': form, 'course': course})
+
+
+@login_required
+def course_dashboard(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    # Ensure the current user is either the author of the course or a superuser
+    if request.user != course.author and not request.user.is_superuser:
+        return redirect('home')
+
+    # Get all students registered for the course
+    registered_students = Registration.objects.filter(course=course).select_related('student')
+
+    # Gather lesson and student grade data
+    lessons = course.lessons.all()
+    summary_data = []
+    for student_registration in registered_students:
+        student = student_registration.student
+        student_activities = []
+
+        # Iterate through each lesson
+        for lesson in lessons:
+            lesson_activities = lesson.activities.all()
+
+            # Find the highest grade for the student in each lesson
+            highest_grade = Grade.objects.filter(activity__in=lesson_activities, student=student).aggregate(Max('score'))['score__max']
+            student_activities.append({
+                'lesson': lesson,
+                'highest_grade': highest_grade
+            })
+
+        # Calculate the average score across the course for the student (based on highest grades per activity)
+        highest_grades = Grade.objects.filter(activity__lesson__course=course, student=student).values('activity').annotate(max_score=Max('score')).values_list('max_score', flat=True)
+        average_score = sum(highest_grades) / len(highest_grades) if highest_grades else None
+
+        summary_data.append({
+            'student': student,
+            'student_activities': student_activities,
+            'average_score': average_score
+        })
+
+    # Calculate class averages for each lesson
+    class_averages = []
+    for lesson in lessons:
+        lesson_activities = lesson.activities.all()
+
+        # Calculate class average based on the highest score per student in each activity
+        highest_grades = Grade.objects.filter(activity__in=lesson_activities).values('student').annotate(max_score=Max('score')).values_list('max_score', flat=True)
+        lesson_average = sum(highest_grades) / len(highest_grades) if highest_grades else None
+        class_averages.append({
+            'lesson': lesson,
+            'class_average': lesson_average
+        })
+
+    context = {
+        'course': course,
+        'registered_students': registered_students,
+        'summary_data': summary_data,
+        'class_averages': class_averages,
+    }
+
+    return render(request, 'edu_core/course/course_dashboard.html', context)

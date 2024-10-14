@@ -191,3 +191,20 @@ body, html {
     background-color: #002244; /* Darker blue for hover to keep it visible */
     transform: scale(1.05);
 }
+
+.course-dashboard-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--secondary-color-1);
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    background-color: #ff8c00; /* Orange */
+}
+
+.course-dashboard-button:hover {
+    background-color: #e67300; /* Darker Orange for hover effect */
+    transform: scale(1.05);
+}

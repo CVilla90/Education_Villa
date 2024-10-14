@@ -26,15 +26,35 @@
         {% csrf_token %}
         {{ mcq_form.as_p }}
 
+        <!-- Display Form Errors -->
+        {% if mcq_form.errors %}
+            <div class="alert alert-danger">
+                <strong>Please correct the errors below:</strong>
+                {{ mcq_form.errors }}
+            </div>
+        {% endif %}
+
+        <!-- Display Formset Errors -->
+        {% if option_formset.non_form_errors %}
+            <div class="alert alert-danger">
+                <strong>Please correct the errors in the options:</strong>
+                {{ option_formset.non_form_errors }}
+            </div>
+        {% endif %}
+
         <!-- Dynamic Options Section -->
         <div id="option-forms">
             {{ option_formset.management_form }}
             {% for form in option_formset %}
                 <div class="option-form">
+                    {{ form.id }} <!-- Include the hidden id field -->
+                    {% if form.DELETE %}
+                        {{ form.DELETE }}
+                    {% endif %}
                     <label for="{{ form.text.id_for_label }}">Text:</label>
                     {{ form.text }}
                     <label for="{{ form.is_correct.id_for_label }}">Is correct:</label>
-                    <input type="radio" name="correct_option" value="{{ forloop.counter0 }}" id="{{ form.is_correct.id_for_label }}">
+                    <input type="radio" name="correct_option" value="{{ forloop.counter0 }}" id="{{ form.is_correct.id_for_label }}" {% if form.instance.is_correct %}checked{% endif %}>
                     <button type="button" class="remove-option btn btn-danger">Remove Option</button>
                 </div>
             {% endfor %}

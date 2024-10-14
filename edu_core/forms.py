@@ -111,7 +111,7 @@ class ActivityForm(forms.ModelForm):
 class OptionForm(forms.ModelForm):
     class Meta:
         model = Option
-        fields = ['text', 'is_correct']
+        fields = ['text']  # Exclude 'is_correct' field since we handle it separately
 
 # Define a formset with a minimum of 2 options and the ability to add more
 OptionFormSet = formset_factory(OptionForm, min_num=2, validate_min=True, extra=1)

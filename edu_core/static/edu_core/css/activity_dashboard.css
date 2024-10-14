@@ -1,0 +1,49 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\activity_dashboard.css */
+
+.activity-dashboard-container {
+    width: 80%;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.activity-attempts-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.activity-attempts-table th,
+.activity-attempts-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.activity-attempts-table th {
+    background-color: #f3f3f3;
+    font-weight: bold;
+}
+
+.activity-attempts-table td {
+    background-color: #ffffff;
+}
+
+.btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}

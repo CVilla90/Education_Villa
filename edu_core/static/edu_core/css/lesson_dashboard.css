@@ -1,0 +1,98 @@
+/* Portfolio\Education_Villa\edu_core\static\edu_core\css\lesson_dashboard.css */
+
+:root {
+    --primary-color: #003366; /* Navy Blue */
+    --secondary-color-1: #ffffff; /* White */
+    --accent-color-1: #2a9df4; /* Bright Blue */
+    --accent-color-2: #ff6b6b; /* Red */
+    --text-color: #333; /* Dark Gray */
+    --background-color: #f5f5f5; /* Light Background */
+    --border-color: #ddd; /* Light Gray Border */
+    --highlight-color: #ffd700; /* Gold for highlighting */
+}
+
+.lesson-dashboard-container {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: var(--secondary-color-1);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumb-nav {
+    margin-bottom: 20px;
+}
+
+.breadcrumb {
+    color: var(--accent-color-1);
+    text-decoration: none;
+}
+
+.breadcrumb:hover {
+    text-decoration: underline;
+}
+
+h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.lesson-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.lesson-summary-table th, .lesson-summary-table td {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.lesson-summary-table th {
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+}
+
+.lesson-summary-table tr:nth-child(even) {
+    background-color: var(--background-color);
+}
+
+.lesson-summary-table td {
+    background-color: var(--secondary-color-1);
+    color: var(--text-color);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.lesson-summary-table td.no-grade {
+    color: var(--text-color);
+    background-color: var(--highlight-color);
+}
+
+.lesson-summary-table td:hover {
+    background-color: var(--highlight-color);
+}
+
+h3 {
+    color: var(--primary-color);
+    margin-top: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    font-size: 1rem;
+}
+
+ul li {
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+ul li span.average-score {
+    font-weight: bold;
+    color: var(--accent-color-1);
+}

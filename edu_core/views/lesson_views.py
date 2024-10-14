@@ -3,8 +3,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from ..models import Lesson, Course
+from django.db.models import Count, Max
+from ..models import CustomUser, Lesson, Course, Grade
 from ..forms import LessonForm
 from django.http import HttpResponseForbidden
 
@@ -48,12 +48,17 @@ def lesson_view(request, lesson_id):
             if attempts_left == 0:
                 attempts_left = "No attempts left"
 
+        # Get the highest grade for this activity if any
+        highest_grade = Grade.objects.filter(activity=activity, student=request.user).aggregate(Max('score'))['score__max']
+
+
         activities_with_attempts.append({
             'activity': activity,
             'user_attempts': user_attempts,
             'max_attempts': activity.max_attempts,
             'unlimited_attempts': activity.unlimited_attempts,
-            'attempts_left': attempts_left
+            'attempts_left': attempts_left,
+            'highest_grade': highest_grade
         })
 
     return render(request, 'edu_core/lesson/lesson_view.html', {
@@ -76,3 +81,49 @@ def delete_lesson(request, lesson_id):
         messages.error(request, 'You do not have permission to delete this lesson.')
 
     return redirect('course_detail', course_id=course.id)
+
+
+@login_required
+def lesson_dashboard(request, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+
+    # Ensure only the course author or superuser can view the dashboard
+    if request.user != lesson.course.author and not request.user.is_superuser:
+        return HttpResponseForbidden("You do not have permission to access this dashboard.")
+
+    summary_data = []
+    students = CustomUser.objects.filter(course_registrations__course=lesson.course)
+    for student in students:
+        student_activities = []
+        for activity in lesson.activities.all():
+            highest_grade = Grade.objects.filter(activity=activity, student=student).aggregate(Max('score'))['score__max']
+            student_activities.append({
+                'activity': activity,
+                'highest_grade': highest_grade
+            })
+
+        # Calculate average score based on the highest grade for each activity
+        highest_grades = [grade['highest_grade'] for grade in student_activities if grade['highest_grade'] is not None]
+        average_score = sum(highest_grades) / len(highest_grades) if highest_grades else None
+
+        summary_data.append({
+            'student': student,
+            'student_activities': student_activities,
+            'average_score': average_score
+        })
+
+    # Calculate class averages for each activity based on the highest grade of each student
+    class_averages = []
+    for activity in lesson.activities.all():
+        highest_grades = Grade.objects.filter(activity=activity).values('student').annotate(max_score=Max('score')).values_list('max_score', flat=True)
+        class_average = sum(highest_grades) / len(highest_grades) if highest_grades else None
+        class_averages.append({
+            'activity': activity,
+            'class_average': class_average
+        })
+
+    return render(request, 'edu_core/lesson/lesson_dashboard.html', {
+        'lesson': lesson,
+        'summary_data': summary_data,
+        'class_averages': class_averages
+    })

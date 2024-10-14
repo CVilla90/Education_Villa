@@ -110,3 +110,20 @@ h2 {
 .edit-btn:hover {
     background-color: #00254d; /* Darker navy */
 }
+
+.delete-btn {
+    background-color: var(--accent-color-2);
+    color: var(--secondary-color-1);
+    padding: 8px 12px; /* Match the edit button size */
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #e55b5b; /* Slightly darker red */
+    transform: translateY(-3px);
+}
+
+.delete-btn:focus {
+    outline: none;
+}

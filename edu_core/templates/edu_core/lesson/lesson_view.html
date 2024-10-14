@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\lesson_view.html -->
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\lesson\lesson_view.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
@@ -17,7 +17,14 @@
     <!-- Lesson Header -->
     <header class="lesson-header">
         <h1>{{ lesson.name }}</h1>
-        <p class="lesson-metadata">Part of the course: {{ lesson.course.name }}</p>
+        <div class="lesson-header-details">
+            <p class="lesson-metadata">Part of the course: {{ lesson.course.name }}</p>
+            
+            {% if is_author_or_superuser %}
+            <!-- Lesson Dashboard Button for Author or Superuser -->
+            <a href="{% url 'lesson_dashboard' lesson.id %}" class="btn btn-primary lesson-dashboard-button">Lesson Dashboard</a>
+            {% endif %}
+        </div>
     </header>
 
     <!-- Lesson Content -->
@@ -32,24 +39,51 @@
             {% for activity_data in activities_with_attempts %}
                 {% with activity_data.activity as activity %}
                     <div class="activity-card">
-                        <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
-                        <p>{{ activity.description }}</p>
-
-                        <p class="attempts-info">
-                            Attempts left: {{ activity_data.attempts_left }}
-                        </p>
-
-                        <!-- Only the author or superuser can edit or delete activities -->
-                        {% if is_author_or_superuser %}
-                        <div class="activity-buttons">
-                            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Edit Activity</a>
-
-                            <form action="{% url 'delete_activity' activity.id %}" method="post" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this activity?');">Delete Activity</button>
-                            </form>
+                        <!-- Display Highest Grade on the Right -->
+                        <div class="highest-grade
+                            {% if activity_data.highest_grade %}
+                                {% if activity_data.highest_grade >= 80 %}
+                                    green
+                                {% elif activity_data.highest_grade >= 70 %}
+                                    yellow
+                                {% else %}
+                                    red
+                                {% endif %}
+                            {% else %}
+                                no-grade
+                            {% endif %}
+                        ">
+                            <strong>Highest Grade:</strong>
+                            {% if activity_data.highest_grade %}
+                                {{ activity_data.highest_grade }}%
+                            {% else %}
+                                No grade yet
+                            {% endif %}
                         </div>
-                        {% endif %}
+
+                        <div class="activity-details">
+                            <h3><a href="{% url 'activity_view' activity.id %}">{{ activity.name }}</a></h3>
+                            <p>{{ activity.description }}</p>
+
+                            <p class="attempts-info">
+                                Attempts left: {{ activity_data.attempts_left }}
+                            </p>
+
+                            <!-- Only the author or superuser can edit or delete activities -->
+                            {% if is_author_or_superuser %}
+                            <div class="activity-buttons">
+                                <!-- Activity Dashboard Button -->
+                                <a href="{% url 'activity_dashboard' activity.id %}" class="btn btn-primary">Activity Dashboard</a>
+                            
+                                <a href="{% url 'edit_activity' activity.id %}" class="btn btn-secondary">Edit Activity</a>
+                            
+                                <form action="{% url 'delete_activity' activity.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this activity?');">Delete Activity</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                 {% endwith %}
             {% empty %}

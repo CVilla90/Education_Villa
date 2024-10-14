@@ -50,6 +50,8 @@
                 {% csrf_token %}
                 <button type="submit" class="delete-course">Delete Course</button>
             </form>
+            <!-- Course Dashboard Button -->
+            <a href="{% url 'course_dashboard' course.id %}" class="course-dashboard-button">Course Dashboard</a>
         {% endif %}
     </div>
 </div>

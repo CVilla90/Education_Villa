@@ -210,9 +210,16 @@ class Grade(models.Model):
 
 
 class Registration(models.Model):
+    STUDENT = 'student'
+    PROFESSOR = 'professor'
+    ROLE_CHOICES = [
+        (STUDENT, 'Student'),
+        (PROFESSOR, 'Professor'),
+    ]
     student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_registrations')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registrations')
     registration_date = models.DateField(auto_now_add=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=STUDENT)
 
 
 @receiver(models.signals.post_delete, sender=UserProfile)

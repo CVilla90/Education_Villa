@@ -7,8 +7,9 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.forms import formset_factory
 from ..models import Activity, ActivityQuestion, Question, Option, Course
-from ..forms import MCQForm, OptionFormSet, ContentBlockForm
+from ..forms import MCQForm, OptionFormSet, ContentBlockForm, OptionForm
 import json
 from .helper_functions import update_page_numbers, correct_question_order
 import csv
@@ -27,9 +28,11 @@ def add_mcq(request, activity_id):
 
     insert_after_order = int(request.GET.get('insert_after', 0))
 
+    OptionFormSet = formset_factory(OptionForm, extra=0, min_num=2, validate_min=True)
+
     if request.method == 'POST':
         mcq_form = MCQForm(request.POST)
-        option_formset = OptionFormSet(request.POST)
+        option_formset = OptionFormSet(request.POST, prefix='form')
 
         # Validate the forms before saving
         if mcq_form.is_valid() and option_formset.is_valid():
@@ -82,6 +85,7 @@ def add_mcq(request, activity_id):
                         option.is_correct = (str(idx) == correct_option)  # Mark the correct option
                         option.save()
 
+                messages.success(request, 'MCQ successfully added to the activity.')
                 return redirect('edit_activity', activity_id=activity.id)
 
             # Add error messages if validation fails
@@ -90,9 +94,11 @@ def add_mcq(request, activity_id):
             if not valid_options:
                 mcq_form.add_error(None, "You must select one correct answer.")
 
+        else:
+            messages.error(request, "There was an error adding the MCQ. Please review the form.")
     else:
         mcq_form = MCQForm()
-        option_formset = OptionFormSet()
+        option_formset = OptionFormSet(prefix='form')
 
     return render(request, 'edu_core/activity/forms/mcq_creator.html', {
         'mcq_form': mcq_form,

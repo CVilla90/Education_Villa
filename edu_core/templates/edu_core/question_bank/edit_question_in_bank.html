@@ -1,7 +1,6 @@
 <!-- Portfolio\Education_Villa\edu_core\templates\edu_core\question_bank\edit_question_in_bank.html -->
 
 {% extends "edu_core/base.html" %}
-
 {% load static %}
 
 {% block content %}
@@ -18,11 +17,54 @@
     <h2>Edit Question in {{ question.course.name }} Bank</h2>
     <form method="post" class="edit-question-form">
         {% csrf_token %}
+
+        <!-- Display Form Errors -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Please correct the errors below:</strong>
+                {{ form.errors }}
+            </div>
+        {% endif %}
+
+        <!-- Display Formset Errors -->
+        {% if option_formset.non_form_errors %}
+            <div class="alert alert-danger">
+                <strong>Please correct the errors in the options:</strong>
+                {{ option_formset.non_form_errors }}
+            </div>
+        {% endif %}
+
         {{ form.as_p }}
+
+        <!-- Dynamic Options Section -->
+        <div id="option-forms">
+            {{ option_formset.management_form }}
+            {% for form in option_formset %}
+            <div class="option-form">
+                {{ form.id }} <!-- Include the hidden id field -->
+                {% if form.DELETE %}
+                    {{ form.DELETE.as_hidden }} <!-- Include the delete field as hidden -->
+                {% endif %}
+                <label for="{{ form.text.id_for_label }}">Text:</label>
+                {{ form.text }}
+                <label for="correct_option_{{ forloop.counter0 }}">Is correct:</label>
+                <input type="radio" name="correct_option" value="{{ forloop.counter0 }}" id="correct_option_{{ forloop.counter0 }}" {% if form.instance.is_correct %}checked{% endif %}>
+                <button type="button" class="remove-option btn btn-danger">Remove Option</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Button to Add New Option -->
+        <button type="button" id="add-option" class="btn btn-secondary">Add Option</button>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">Update Question</button>
-            <a href="{% url 'question_bank' question.course.id %}" class="btn btn-secondary">Cancel</a> <!-- Cancel button -->
+            <a href="{% url 'question_bank' question.course.id %}" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>
+
+<!-- Include JavaScript File -->
+<script src="{% static 'edu_core/js/mcq_creator.js' %}"></script>
+
 {% endblock %}

@@ -13,11 +13,11 @@ from .views.utility_views import home
 
 # Course Views
 from .views.course_views import (
-    create_course, course_detail, delete_course, edit_course, register_course
+    create_course, course_detail, delete_course, edit_course, register_course, course_dashboard
 )
 
 # Lesson Views
-from .views.lesson_views import lesson_add, lesson_view, delete_lesson
+from .views.lesson_views import lesson_add, lesson_view, delete_lesson, lesson_dashboard
 
 # Activity CRUD Views
 from .views.activity_crud_views import activity_add, delete_activity, edit_activity
@@ -33,6 +33,9 @@ from .views.activity_question_views import (
     mcq_parser
 )
 
+# Activity Dashboard Views
+from .views.activity_dashboard_views import activity_dashboard, delete_attempt
+
 # AI Professor Views
 from .views.ai_professor_views import ai_course_professor, delete_corpus_file
 
@@ -41,8 +44,8 @@ from .views.diploma_views import diploma_search, view_diploma_online, download_d
 
 # Question Bank Views
 from .views.question_bank_views import (
-    question_bank, add_question_to_bank, edit_question_in_bank, question_type_selection_for_bank,
-    add_mcq_to_bank, add_content_block_to_bank
+    question_bank, add_question_to_bank, edit_mcq_from_bank, question_type_selection_for_bank,
+    add_mcq_to_bank, add_content_block_to_bank, edit_question, delete_question
 )
 
 urlpatterns = [
@@ -70,6 +73,7 @@ urlpatterns = [
     path('courses/delete/<int:pk>/', delete_course, name='delete_course'),
     path('courses/edit/<int:course_id>/', edit_course, name='edit_course'),
     path('courses/<int:course_id>/register/', register_course, name='register_course'),
+    path('course/<int:course_id>/dashboard/', course_dashboard, name='course_dashboard'),
 
     # AI Course Professor URL
     path('courses/<int:course_id>/ai_professor/', ai_course_professor, name='ai_course_professor'),
@@ -79,6 +83,7 @@ urlpatterns = [
     path('courses/<int:course_id>/lesson_add/', lesson_add, name='lesson_add'),    
     path('lessons/<int:lesson_id>/', lesson_view, name='lesson_view'),
     path('lessons/<int:lesson_id>/delete/', delete_lesson, name='delete_lesson'),
+    path('lessons/<int:lesson_id>/dashboard/', lesson_dashboard, name='lesson_dashboard'), 
 
     # Activity Management (activity_views.py)
     path('lessons/<int:lesson_id>/activity_add/', activity_add, name='activity_add'),
@@ -104,12 +109,18 @@ urlpatterns = [
     path('activities/<int:activity_id>/remove_question/', remove_question, name='activity_remove_question'),
     path('activities/<int:activity_id>/remove_page/', remove_page, name='activity_remove_page'),
 
+    # Activity Dashboard (activity_dashboard_views.py)
+    path('activities/<int:activity_id>/dashboard/', activity_dashboard, name='activity_dashboard'),
+    path('attempts/<int:attempt_id>/delete/', delete_attempt, name='delete_attempt'),
+
     # Questions Bank (question_bank_views.py)
     path('courses/<int:course_id>/question_bank/', question_bank, name='question_bank'),
     path('courses/<int:course_id>/add_question_to_bank/', add_question_to_bank, name='add_question_to_bank'),
-    path('questions/<int:question_id>/edit/', edit_question_in_bank, name='edit_question_in_bank'),
+    #path('questions/<int:question_id>/edit/', edit_mcq_from_bank, name='edit_question_in_bank'),
     path('courses/<int:course_id>/question_type_selection/', question_type_selection_for_bank, name='question_type_selection_for_bank'),
     path('courses/<int:course_id>/add_mcq/', add_mcq_to_bank, name='add_mcq_to_bank'),
     path('courses/<int:course_id>/add_content_block_to_bank/', add_content_block_to_bank, name='add_content_block_to_bank'),
+    path('questions/<int:question_id>/edit/', edit_question, name='edit_question'),
+    path('questions/<int:question_id>/delete/', delete_question, name='delete_question'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

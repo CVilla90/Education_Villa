@@ -1,0 +1,52 @@
+<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\activity_dashboard.html -->
+
+{% extends "edu_core/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'edu_core/css/activity_dashboard.css' %}" type="text/css">
+
+<div class="activity-dashboard-container">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb-nav">
+        <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
+        <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">Back to Course: {{ activity.lesson.course.name }}</a> &gt;
+        <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a> &gt;
+        <span class="breadcrumb current">Activity Dashboard</span>
+    </nav>
+
+    <h2>Activity Dashboard for {{ activity.name }}</h2>
+
+    <table class="activity-attempts-table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Attempts</th>
+                <th>Score</th>
+                <th>Attempt Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attempt_data in activity_attempts %}
+            <tr>
+                <td>{{ attempt_data.attempt.user.get_full_name }}</td>
+                <td>{{ attempt_data.attempt.attempts_count }}</td>
+                <td>{{ attempt_data.grade }}</td>
+                <td>{{ attempt_data.attempt.created_at }}</td>
+                <td>
+                    <form action="{% url 'delete_attempt' attempt_data.attempt.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this attempt?');">Delete Attempt</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No attempts have been made for this activity yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
