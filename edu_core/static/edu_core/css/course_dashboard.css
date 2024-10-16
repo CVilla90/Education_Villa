@@ -138,3 +138,32 @@ body, html {
     list-style-type: disc;
 }
 
+.pause-btn {
+    background-color: var(--accent-color-2);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin: 15px 0;  /* Add some margin to separate it from other elements */
+}
+
+.pause-btn:hover {
+    background-color: #ff4c4c; /* Darker red */
+}
+
+.resume-btn {
+    background-color: #2a9df4;  /* Bright blue for resume */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin: 15px 0;  /* Add some margin to separate it from other elements */
+}
+
+.resume-btn:hover {
+    background-color: #1e7dc1; /* Slightly darker blue */
+}

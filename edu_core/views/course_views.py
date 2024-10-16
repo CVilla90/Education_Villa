@@ -4,8 +4,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Max, Avg
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 from ..models import Course, UserProfile, Registration, Grade, Lesson
 from ..forms import CourseForm
+from ..decorators import course_access_check
 
 @login_required
 def create_course(request):
@@ -33,10 +37,17 @@ def create_course(request):
     return render(request, 'edu_core/course/course_create.html', {'form': form})
 
 
+@login_required
+@course_access_check
 def course_detail(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user if request.user.is_authenticated else None
     registered = course.registrations.filter(student=user).exists() if user else False
+
+    # Restrict student access if the course is paused
+    if course.paused and user and user != course.author and not user.is_superuser:
+        context = {'course': course, 'paused': True}
+        return render(request, 'edu_core/course/course_paused.html', context)
 
     context = {
         'course': course,
@@ -157,3 +168,62 @@ def course_dashboard(request, course_id):
     }
 
     return render(request, 'edu_core/course/course_dashboard.html', context)
+
+
+@login_required
+@csrf_exempt
+def toggle_pause_course(request, course_id):
+    if request.method == 'POST':
+        try:
+            course = get_object_or_404(Course, id=course_id)
+
+            # Only allow the author or a superuser to pause/resume the course
+            if request.user != course.author and not request.user.is_superuser:
+                return JsonResponse({'success': False, 'error': 'Unauthorized'}, status=403)
+
+            # Get the pause status from request body
+            data = json.loads(request.body)
+            course.paused = data['pause']
+            course.save()
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+
+@login_required
+@csrf_exempt
+def toggle_ban(request, registration_id):
+    registration = get_object_or_404(Registration, id=registration_id)
+
+    # Only allow the course author or superuser to toggle ban status
+    if request.user != registration.course.author and not request.user.is_superuser:
+        return JsonResponse({'success': False, 'error': 'Permission denied.'})
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(f"Data received: {data}")  # Print statement to see data received
+        registration.is_banned = data.get('is_banned', False)
+        registration.save()
+        print(f"Registration status updated: {registration.is_banned}")  # Print to confirm if saved
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})
+
+
+
+@login_required
+@csrf_exempt
+def remove_student(request, registration_id):
+    registration = get_object_or_404(Registration, id=registration_id)
+
+    # Only allow the course author or superuser to remove a student
+    if request.user != registration.course.author and not request.user.is_superuser:
+        return JsonResponse({'success': False, 'error': 'Permission denied.'})
+
+    if request.method == 'POST':
+        registration.delete()
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request.'})

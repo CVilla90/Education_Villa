@@ -17,6 +17,18 @@
 
     <h2 class="dashboard-header">Course Dashboard for {{ course.name }}</h2>
 
+    <!-- Pause/Resume Course Button -->
+    <form id="pause-course-form">
+        {% csrf_token %}
+        <div class="pause-course-container">
+            <button 
+                class="btn {% if course.paused %}resume-btn{% else %}pause-btn{% endif %}" 
+                onclick="toggleCourseStatus('{{ course.id }}', {{ course.paused|yesno:"false,true" }})">
+                {% if course.paused %}Resume Course{% else %}Pause Course{% endif %}
+            </button>
+        </div>
+    </form>
+
     <!-- Tabs for Registered Students and Grades Summary -->
     <div class="tabs-container">
         <div class="tab active" onclick="openTab(event, 'registered-students')">Registered Students</div>
@@ -43,9 +55,17 @@
                     <td>{{ registration.student.email }}</td>
                     <td>{{ registration.get_role_display }}</td>
                     <td>{{ registration.registration_date }}</td>
+                    <!-- Add Ban/Unban Button -->
                     <td>
-                        <!-- Future Actions Placeholder -->
-                        <button class="btn btn-secondary" disabled>Actions</button>
+                        <button class="btn ban-btn" 
+                                onclick="toggleBan('{{ registration.id }}', {{ registration.is_banned|yesno:"true,false" }})">
+                            {% if registration.is_banned %}Unban{% else %}Ban{% endif %}
+                        </button>
+                        <button class="btn remove-btn" 
+                                onclick="removeStudent('{{ registration.id }}')" 
+                                {% if registration.is_banned %}disabled{% endif %}>
+                            Remove
+                        </button>
                     </td>
                 </tr>
                 {% empty %}
@@ -56,7 +76,6 @@
             </tbody>
         </table>
     </div>
-
 
     <!-- Grades Summary Tab -->
     <div id="grades-summary" class="tab-content">

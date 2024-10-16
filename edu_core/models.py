@@ -56,6 +56,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='course_images/', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     is_public = models.BooleanField(default=True)  # New field for public visibility
+    paused = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.pk:
@@ -220,6 +221,7 @@ class Registration(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='registrations')
     registration_date = models.DateField(auto_now_add=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default=STUDENT)
+    is_banned = models.BooleanField(default=False) 
 
 
 @receiver(models.signals.post_delete, sender=UserProfile)

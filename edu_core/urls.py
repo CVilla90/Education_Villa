@@ -13,7 +13,8 @@ from .views.utility_views import home
 
 # Course Views
 from .views.course_views import (
-    create_course, course_detail, delete_course, edit_course, register_course, course_dashboard
+    create_course, course_detail, delete_course, edit_course, register_course, course_dashboard, toggle_pause_course,
+    toggle_ban, remove_student
 )
 
 # Lesson Views
@@ -74,6 +75,9 @@ urlpatterns = [
     path('courses/edit/<int:course_id>/', edit_course, name='edit_course'),
     path('courses/<int:course_id>/register/', register_course, name='register_course'),
     path('course/<int:course_id>/dashboard/', course_dashboard, name='course_dashboard'),
+    path('courses/<int:course_id>/toggle_pause/', toggle_pause_course, name='toggle_pause_course'),
+    path('registrations/<int:registration_id>/toggle_ban/', toggle_ban, name='toggle_ban'),
+    path('registrations/<int:registration_id>/remove/', remove_student, name='remove_student'),
 
     # AI Course Professor URL
     path('courses/<int:course_id>/ai_professor/', ai_course_professor, name='ai_course_professor'),
