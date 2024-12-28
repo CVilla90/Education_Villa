@@ -1,6 +1,17 @@
-/* Portfolio\Education_Villa\edu_core\static\edu_core\css\lesson_view.css */
+/******************************************************************************
+  LESSON_VIEW.CSS
+  ===============
+  Purpose:
+    - Styles for the Lesson View page in your LMS.
+    - Manages layout, breadcrumb navigation, lesson content, activities, etc.
+    - Minimal but modern design enhancements without breaking existing structure.
+******************************************************************************/
 
-:root {
+/* ===============================
+   1) CSS VARIABLES
+   =============================== */
+
+   :root {
     --primary-color: #003366; /* Navy Blue */
     --secondary-color-1: #ffffff; /* White */
     --accent-color-1: #2a9df4; /* Bright Blue */
@@ -14,6 +25,10 @@
     --fade-duration: 2s; /* Duration of the fade animation */
 }
 
+/* ===============================
+   2) MAIN CONTAINER
+   =============================== */
+
 .lesson-view-container {
     width: 80%;
     margin: 40px auto;
@@ -23,6 +38,10 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* ===============================
+   3) BREADCRUMB NAVIGATION
+   =============================== */
+
 .breadcrumb-nav {
     margin-bottom: 20px;
 }
@@ -30,11 +49,16 @@
 .breadcrumb {
     color: var(--accent-color-1);
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .breadcrumb:hover {
     text-decoration: underline;
 }
+
+/* ===============================
+   4) LESSON HEADER
+   =============================== */
 
 .lesson-header {
     text-align: center;
@@ -44,163 +68,6 @@
 .lesson-header h1 {
     color: var(--primary-color);
     margin: 0;
-}
-
-.lesson-metadata {
-    color: var(--text-color);
-    font-size: 14px;
-}
-
-.lesson-content {
-    padding: 20px;
-    margin-bottom: 30px;
-    background-color: var(--background-color);
-    border-radius: 8px;
-    line-height: 1.6;
-}
-
-.activities-section {
-    margin-top: 30px;
-}
-
-.activities-section h2 {
-    margin-bottom: 15px;
-    color: var(--primary-color);
-}
-
-.activities-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Space between activity cards */
-}
-
-.activity-card {
-    padding: 20px;
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    transition: box-shadow 0.3s ease;
-}
-
-.activity-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.activity-card h3 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: var(--primary-color);
-}
-
-.activity-card p {
-    margin: 0 0 15px 0;
-    color: var(--text-color);
-}
-
-.activity-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    padding: 8px 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    text-align: center;
-    transition: background-color 0.3s ease-in-out, transform 0.2s;
-}
-
-.btn-secondary {
-    background-color: var(--accent-color-1);
-    color: var(--secondary-color-1);
-}
-
-.btn-secondary:hover {
-    background-color: #1e7dc1; /* Slightly darker blue */
-}
-
-.btn-danger {
-    background-color: var(--accent-color-2);
-    color: var(--secondary-color-1);
-    border: none;
-    cursor: pointer;
-}
-
-.btn-danger:hover {
-    background-color: #c0392b; /* Darker red */
-}
-
-.add-activity-container {
-    text-align: right; /* Align add button to the right */
-}
-
-.add-activity-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--secondary-color-1);
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-.add-activity-button:hover {
-    background-color: #00254d; /* Darker navy */
-}
-
-.no-activities {
-    color: var(--text-color);
-    text-align: center;
-    font-style: italic;
-}
-
-
-/* Add this CSS to style the Activity Dashboard button */
-.btn-primary {
-    background-color: var(--primary-color);
-    color: var(--secondary-color-1);
-    padding: 8px 12px;
-    border-radius: 5px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, transform 0.2s;
-}
-
-.btn-primary:hover {
-    background-color: #00254d; /* Darker navy for hover */
-    transform: scale(1.05);
-}
-
-
-.highest-grade {
-    float: right;
-    margin-left: 20px;
-    padding: 10px;
-    color: var(--secondary-color-1);
-    border-radius: 5px;
-    font-weight: bold;
-    animation: fade-border var(--fade-duration) infinite alternate; /* Apply fade animation */
-}
-
-.highest-grade.green {
-    background-color: var(--green-color);
-}
-
-.highest-grade.yellow {
-    background-color: var(--yellow-color);
-    color: black; /* Make text color darker for better contrast on yellow */
-}
-
-.highest-grade.red {
-    background-color: var(--red-color);
-}
-
-/* New Style for No Grade */
-.highest-grade.no-grade {
-    background-color: #f0e8db; /* Pearl white background */
-    color: black; /* Black text for contrast */
-    border: 1px solid #ccc; /* Light border to make it stand out */
 }
 
 .lesson-header-details {
@@ -223,12 +90,222 @@
     background-color: #1e7dc1;
 }
 
-/* Keyframes for fade effect on border */
+/* Lesson metadata text */
+.lesson-metadata {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+/* ===============================
+   5) LESSON CONTENT
+   =============================== */
+
+.lesson-content {
+    padding: 20px;
+    margin-bottom: 30px;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+/* ===============================
+   6) ACTIVITIES SECTION
+   =============================== */
+
+.activities-section {
+    margin-top: 30px;
+}
+
+.activities-section h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+/* Activity cards layout */
+.activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between activity cards */
+}
+
+.activity-card {
+    padding: 20px;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease, transform 0.2s;
+}
+
+.activity-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.activity-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.activity-card p {
+    margin: 0 0 15px 0;
+    color: var(--text-color);
+}
+
+/* Buttons within each activity */
+.activity-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+/* Secondary (blue) button */
+.btn-secondary {
+    background-color: var(--accent-color-1);
+    color: var(--secondary-color-1);
+}
+
+.btn-secondary:hover {
+    background-color: #1e7dc1; /* Slightly darker blue */
+    transform: scale(1.03);
+}
+
+/* Danger (red) button */
+.btn-danger {
+    background-color: var(--accent-color-2);
+    color: var(--secondary-color-1);
+    border: none;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b; /* Darker red */
+    transform: scale(1.03);
+}
+
+/* Add Activity container/button */
+.add-activity-container {
+    text-align: right; /* Align add button to the right */
+}
+
+.add-activity-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.add-activity-button:hover {
+    background-color: #00254d; /* Darker navy */
+    transform: scale(1.03);
+}
+
+/* Message when no activities exist */
+.no-activities {
+    color: var(--text-color);
+    text-align: center;
+    font-style: italic;
+}
+
+/* ===============================
+   7) EXTRA BUTTON STYLES
+   =============================== */
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--secondary-color-1);
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #00254d; /* Darker navy for hover */
+    transform: scale(1.05);
+}
+
+/* ===============================
+   8) HIGHEST GRADE BADGE
+   =============================== */
+
+.highest-grade {
+    float: right;
+    margin-left: 20px;
+    padding: 10px;
+    color: var(--secondary-color-1);
+    border-radius: 5px;
+    font-weight: bold;
+    animation: fade-border var(--fade-duration) infinite alternate;
+}
+
+.highest-grade.green {
+    background-color: var(--green-color);
+}
+
+.highest-grade.yellow {
+    background-color: var(--yellow-color);
+    color: black; /* Better contrast on yellow */
+}
+
+.highest-grade.red {
+    background-color: var(--red-color);
+}
+
+/* Style for "No Grade" */
+.highest-grade.no-grade {
+    background-color: #f0e8db; /* Pearl white background */
+    color: black;
+    border: 1px solid #ccc;
+}
+
+/* Keyframes for fade effect on the border */
 @keyframes fade-border {
     from {
         box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     }
     to {
         box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* ===============================
+   9) RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 600px) {
+    .lesson-view-container {
+        width: 90%;
+        margin: 20px auto;
+    }
+    
+    .lesson-header-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .activities-list {
+        gap: 10px;
+    }
+    
+    .activity-card {
+        padding: 15px;
+    }
+    
+    .no-activities {
+        font-size: 14px;
     }
 }

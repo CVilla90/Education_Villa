@@ -1,10 +1,11 @@
-# Portfolio\Education_Villa\edu_core\views\utility_views.py
+# Education_Villa\edu_core\views\utility_views.py
 
 from django.shortcuts import render
 from django.db.models import Q
 from django.http import JsonResponse
 import base64, os
 from ..models import Course
+
 
 def home(request):
     query = request.GET.get('q', '')  # Retrieve the search query with 'q' as the parameter name
@@ -24,11 +25,12 @@ def home(request):
             'id': course.id,
             'name': course.name,
             'description': course.description,
-            'image_url': course.image.url if course.image else '',
+            'image_url': course.image_url if course.image_url else '',
         } for course in courses]
         return JsonResponse({'courses': course_list})
     
     return render(request, 'edu_core/home.html', {'courses': courses, 'query': query})
+
 
 def get_base64_encoded_image(image_path):
     if os.path.exists(image_path):

@@ -1,4 +1,4 @@
-# Portfolio\Education_Villa\edu_core\models.py
+# Education_Villa\edu_core\models.py
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -10,6 +10,7 @@ from django.db.models.signals import post_delete
 from django.core.exceptions import ValidationError
 import os, json
 from django.core.validators import URLValidator
+from urllib.parse import urlparse
 
 
 class CustomUser(AbstractUser):
@@ -25,26 +26,58 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default=STUDENT)
 
 
+def validate_trusted_url(value):
+    allowed_domains = [
+        'imgur.com',                # Imgur
+        'i.imgur.com',              # Direct Imgur images
+        'drive.google.com',         # Google Drive (file sharing links)
+        'drive.googleusercontent.com', # Google Drive direct image hosting
+        'dropbox.com',              # Dropbox
+        'youtube.com',              # YouTube full links
+        'youtu.be',                 # YouTube short links
+        'facebook.com',             # Facebook
+        'fbcdn.net',                # Facebook's CDN
+        'instagram.com',            # Instagram
+        'cdninstagram.com',         # Instagram CDN
+        'flickr.com',               # Flickr
+        'live.staticflickr.com',    # Flickr CDN
+        'deviantart.com',           # DeviantArt
+        'cdn.discordapp.com',       # Discord image hosting
+        'unsplash.com',             # Unsplash free images
+        'pexels.com',               # Pexels free images
+        'soundcloud.com',           # SoundCloud
+        'w.soundcloud.com',         # SoundCloud embedded player
+    ]
+    
+    # Validate if the URL belongs to one of the allowed domains
+    if not any(domain in value for domain in allowed_domains):
+        raise ValidationError(f"URL must be from one of the trusted domains: {', '.join(allowed_domains)}")
+    
+
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.URLField(
+        max_length=500, null=True, blank=True, 
+        help_text="Paste a URL to your profile picture",
+        validators=[validate_trusted_url]
+    )
 
-    def save(self, *args, **kwargs):
-        try:
-            old_profile_picture = UserProfile.objects.get(id=self.id).profile_picture
-            if old_profile_picture and self.profile_picture != old_profile_picture:
-                if os.path.isfile(old_profile_picture.path):
-                    os.remove(old_profile_picture.path)
-        except UserProfile.DoesNotExist:
-            pass
-        super(UserProfile, self).save(*args, **kwargs)
+    def get_profile_picture_direct_url(self):
+        if 'drive.google.com' in self.profile_picture:
+            file_id = self.profile_picture.split('/d/')[1].split('/')[0]
+            return f"https://drive.google.com/uc?id={file_id}"
+        return self.profile_picture
 
 
 class Certification(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='certifications')
-    image = models.ImageField(upload_to='certifications/')
-    description = models.CharField(max_length=255, null=True, blank=True)
+    image_url = models.URLField(
+        max_length=500, null=True, blank=True,
+        help_text="Paste a URL to the certification image",
+        validators=[validate_trusted_url]
+    )
+    description = models.CharField(max_length=255, null=True, blank=True)  # Ensure this exists
 
 
 class Course(models.Model):
@@ -53,18 +86,14 @@ class Course(models.Model):
     last_update_date = models.DateField(auto_now=True)
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, limit_choices_to={'user_type': CustomUser.PROFESSOR}, related_name='authored_courses')
     students = models.ManyToManyField(CustomUser, through='Registration', related_name='registered_courses')
-    image = models.ImageField(upload_to='course_images/', null=True, blank=True)
+    image_url = models.URLField(
+        max_length=500, null=True, blank=True,
+        help_text="Paste a URL to the course image",
+        validators=[validate_trusted_url]
+    )
     description = models.TextField(null=True, blank=True)
     is_public = models.BooleanField(default=True)  # New field for public visibility
     paused = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self.pk:
-            old_image = Course.objects.get(pk=self.pk).image
-            if old_image and self.image != old_image:
-                if os.path.isfile(old_image.path):
-                    os.remove(old_image.path)
-        super(Course, self).save(*args, **kwargs)
 
 
 class CourseCorpus(models.Model):
@@ -94,7 +123,7 @@ class Question(models.Model):
     MULTIPLE_CHOICE = 'MCQ'
     TRUE_FALSE = 'TF'
     ESSAY = 'ESSAY'
-    CONTENT_BLOCK = 'CONTENT_BLOCK'  # New type
+    CONTENT_BLOCK = 'CONTENT_BLOCK'
 
     QUESTION_TYPES = [
         (MULTIPLE_CHOICE, 'Multiple Choice'),
@@ -108,9 +137,19 @@ class Question(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_questions')
     text = models.TextField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='content_blocks/', null=True, blank=True)
-    yt_video_link = models.URLField(validators=[URLValidator()], blank=True, null=True)
-    file_upload = models.FileField(upload_to='content_block_files/', null=True, blank=True)
+    image_url = models.URLField(
+        validators=[validate_trusted_url],
+        blank=True,
+        null=True,
+        help_text="URL for question images"
+    )
+    yt_video_link = models.URLField(validators=[validate_trusted_url], blank=True, null=True)
+    file_url = models.URLField(
+        validators=[validate_trusted_url],
+        blank=True,
+        null=True,
+        help_text="URL for question files"
+    )
     correct_answer = models.TextField(blank=True, null=True)
     randomize_options = models.BooleanField(default=False)
     key_name = models.CharField(max_length=255, blank=True, null=True)
@@ -121,17 +160,6 @@ class Question(models.Model):
         text_snippet = self.text[:50] if self.text else ''
         content_snippet = self.content[:50] if self.content else ''
         return text_snippet or content_snippet or "Empty Question"
-
-    def save(self, *args, **kwargs):
-        # Handle old image removal when updating the image
-        try:
-            old_image = Question.objects.get(id=self.id).image
-            if old_image and self.image != old_image:
-                if os.path.isfile(old_image.path):
-                    os.remove(old_image.path)
-        except Question.DoesNotExist:
-            pass
-        super(Question, self).save(*args, **kwargs)
 
 
 class Activity(models.Model):

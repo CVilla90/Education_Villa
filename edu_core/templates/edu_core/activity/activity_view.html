@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\activity_view.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\activity\activity_view.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
@@ -8,21 +8,26 @@
 <link rel="stylesheet" href="{% static 'edu_core/css/activity_view.css' %}" type="text/css">
 
 <div class="container">
+    
     <!-- Breadcrumb Navigation -->
     <nav class="breadcrumb">
-        <a href="{% url 'course_detail' activity.lesson.course.id %}">{{ activity.lesson.course.name }}</a>
+        <a href="{% url 'course_detail' activity.lesson.course.id %}">
+            {{ activity.lesson.course.name }}
+        </a>
         &raquo;
-        <a href="{% url 'lesson_view' activity.lesson.id %}">{{ activity.lesson.name }}</a>
+        <a href="{% url 'lesson_view' activity.lesson.id %}">
+            {{ activity.lesson.name }}
+        </a>
         &raquo;
         <span>{{ activity.name }}</span>
     </nav>
-
+    
     <!-- Activity Header -->
     <header class="activity-header">
         <h1>{{ activity.name }}</h1>
         <p>{{ activity.description }}</p>
     </header>
-
+    
     <!-- Score Display and Retry Option -->
     {% if score is not None %}
         <div class="score-section">
@@ -34,137 +39,218 @@
             </form>
         </div>
     {% endif %}
-
+    
     <!-- Activity Form -->
     <form action="" method="post" id="activity-form" autocomplete="off">
         {% csrf_token %}
+        
         <div class="questions-section" id="questions-container">
+            
             {% for aq in questions_on_page %}
             <div class="question-card" data-id="{{ aq.question.id }}">
+                
                 <!-- Content Block Question -->
                 {% if aq.question.question_type == 'CONTENT_BLOCK' %}
                     <div class="content-block">
-                        <div class="content-text">{{ aq.question.content|safe }}</div>
-                        {% if aq.question.image %}
-                            <img src="{{ aq.question.image.url }}" alt="Content Image">
+                        
+                        <!-- Text Content -->
+                        <div class="content-text">
+                            {{ aq.question.content|safe }}
+                        </div>
+                        
+                        <!-- Image Display -->
+                        {% if aq.question.image_url %}
+                            <img src="{{ aq.question.image_url }}" alt="Content Image">
                         {% endif %}
+                        
+                        <!-- YouTube Video Display -->
                         {% if aq.question.yt_video_link %}
                             <div class="video-container">
                                 <iframe
                                     src="https://www.youtube.com/embed/{{ aq.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}"
-                                    frameborder="0" allowfullscreen>
+                                    frameborder="0"
+                                    allowfullscreen>
                                 </iframe>
                             </div>
                         {% endif %}
-                        {% if aq.question.file_upload %}
-                            {% if aq.question.file_upload.url|is_audio_file %}
-                                <div class="audio-player">
-                                    <audio controls>
-                                        <source src="{{ aq.question.file_upload.url }}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
+                        
+                        <!-- File/Audio Display -->
+                        {% if aq.question.file_url %}
+
+                            <!-- Check if the file is an audio file -->
+                            {% if aq.question.file_url|is_audio_file %}
+
+                                <!-- SoundCloud Player -->
+                                {% if 'soundcloud.com' in aq.question.file_url %}
+                                    <iframe
+                                        width="100%"
+                                        height="166"
+                                        scrolling="no"
+                                        frameborder="no"
+                                        allow="autoplay"
+                                        src="https://w.soundcloud.com/player/?url={{ aq.question.file_url|urlencode }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true">
+                                    </iframe>
+
+                                <!-- HTML5 Audio Player -->
+                                {% else %}
+                                    <audio controls preload="auto" controlsList="nodownload">
+                                        <source src="{{ aq.question.file_url|convert_file_url }}" type="audio/mpeg">
+                                        <source src="{{ aq.question.file_url|convert_file_url }}" type="audio/mp4">
+                                        <p>
+                                            Your browser doesn't support HTML5 audio. 
+                                            <a href="{{ aq.question.file_url|convert_file_url }}" target="_blank">Download the audio file</a> instead.
+                                        </p>
                                     </audio>
-                                </div>
+                                {% endif %}
+
+                            <!-- Non-Audio File (Downloadable Link) -->
                             {% else %}
                                 <div class="file-download">
-                                    <a href="{{ aq.question.file_upload.url }}" download>
+                                    <a href="{{ aq.question.file_url|convert_file_url }}" download>
                                         <span class="file-icon">📄</span>
-                                        {{ aq.question.file_upload.name|basename }}
+                                        {{ aq.question.file_url|basename }}
                                     </a>
                                 </div>
                             {% endif %}
+
                         {% endif %}
-                    </div>
+                        </div>
+
+                <!-- Other Question Types -->
                 {% else %}
-                    <!-- Other Question Types -->
                     <div class="question-content">
-                        <p><strong>{{ forloop.counter0|add:question_offset }}.</strong> {{ aq.question.text|safe }}</p>
+                        <p>
+                            <strong>
+                                {{ forloop.counter0|add:question_offset }}.
+                            </strong>
+                            {{ aq.question.text|safe }}
+                        </p>
+                        
                         {% if aq.question.question_type == 'MCQ' %}
                             <div class="options">
                                 {% for option in aq.question.shuffled_options %}
-                                <label class="{% if score is not None %}grayed-out{% endif %}">
-                                    <input type="radio" name="question_{{ aq.question.id }}" value="{{ option.id }}"
-                                    {% if option.id|stringformat:"s" == answers|get_item:aq.question.id|stringformat:"s" %}checked{% endif %}
-                                    {% if request.session.reviewing %}disabled{% endif %}>
-                                    {{ option.text }}
-                                </label>
+                                    <label class="{% if score is not None %}grayed-out{% endif %}">
+                                        <input
+                                            type="radio"
+                                            name="question_{{ aq.question.id }}"
+                                            value="{{ option.id }}"
+                                            {% if option.id|stringformat:"s" == answers|get_item:aq.question.id|stringformat:"s" %}checked{% endif %}
+                                            {% if request.session.reviewing %}disabled{% endif %}>
+                                        {{ option.text }}
+                                    </label>
                                 {% endfor %}
                             </div>
                         {% endif %}
+                        
                     </div>
                 {% endif %}
-
+                
                 <!-- Feedback Section -->
                 {% if activity.feedback_visibility == 'always' %}
                     {% if aq.question.feedback %}
                         <div class="feedback-toggle">
-                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                            <button
+                                type="button"
+                                class="btn btn-link feedback-expand"
+                                onclick="toggleFeedback('{{ aq.question.id }}')">
                                 <span class="arrow">&#9660;</span> Show Feedback
                             </button>
-                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                            <div id="feedback-{{ aq.question.id }}"
+                                 class="feedback-content"
+                                 style="display: none;">
                                 <strong>Feedback:</strong> {{ aq.question.feedback }}
                             </div>
                         </div>
                     {% endif %}
+                
                 {% elif activity.feedback_visibility == 'during' %}
                     {% if aq.question.feedback and not request.session.reviewing %}
                         <div class="feedback-toggle">
-                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                            <button
+                                type="button"
+                                class="btn btn-link feedback-expand"
+                                onclick="toggleFeedback('{{ aq.question.id }}')">
                                 <span class="arrow">&#9660;</span> Show Feedback
                             </button>
-                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                            <div id="feedback-{{ aq.question.id }}"
+                                 class="feedback-content"
+                                 style="display: none;">
                                 <strong>Feedback:</strong> {{ aq.question.feedback }}
                             </div>
                         </div>
                     {% endif %}
+                
                 {% elif activity.feedback_visibility == 'end' %}
                     {% if aq.question.feedback and request.session.reviewing %}
                         <div class="feedback-toggle">
-                            <button type="button" class="btn btn-link feedback-expand" onclick="toggleFeedback('{{ aq.question.id }}')">
+                            <button
+                                type="button"
+                                class="btn btn-link feedback-expand"
+                                onclick="toggleFeedback('{{ aq.question.id }}')">
                                 <span class="arrow">&#9660;</span> Show Feedback
                             </button>
-                            <div id="feedback-{{ aq.question.id }}" class="feedback-content" style="display: none;">
+                            <div id="feedback-{{ aq.question.id }}"
+                                 class="feedback-content"
+                                 style="display: none;">
                                 <strong>Feedback:</strong> {{ aq.question.feedback }}
                             </div>
                         </div>
                     {% endif %}
                 {% endif %}
+                
             </div>
             {% endfor %}
+            
         </div>
-
+        
         <!-- Pagination and Submission -->
         <div class="form-navigation">
             {% if current_page > 1 %}
-                <button type="submit" name="previous_page" class="btn btn-secondary">Previous</button>
+                <button type="submit" name="previous_page" class="btn btn-secondary">
+                    Previous
+                </button>
             {% endif %}
+            
             <span>Page {{ current_page }} of {{ total_pages }}</span>
+            
             {% if current_page < total_pages %}
-                <button type="submit" name="next_page" class="btn btn-secondary">Next</button>
+                <button type="submit" name="next_page" class="btn btn-secondary">
+                    Next
+                </button>
             {% endif %}
+            
             {% if current_page == total_pages and score is None %}
-                <button type="submit" name="submit_final" class="btn btn-primary">Submit Answers</button>
+                <button type="submit" name="submit_final" class="btn btn-primary">
+                    Submit Answers
+                </button>
             {% endif %}
         </div>
+        
     </form>
-
+    
     <!-- Previous Attempts -->
     {% if grade_history %}
         <section class="attempts-history">
             <h3>Previous Attempts</h3>
             <ul>
                 {% for grade in grade_history %}
-                    <li>Attempt on {{ grade.created_at|date:"M d, Y H:i" }}: {{ grade.score }}%</li>
+                    <li>
+                        Attempt on {{ grade.created_at|date:"M d, Y H:i" }}: {{ grade.score }}%
+                    </li>
                 {% endfor %}
             </ul>
         </section>
     {% endif %}
-
+    
     <!-- Edit Activity Option -->
     {% if request.user == activity.lesson.course.author or request.user.is_superuser %}
         <div class="edit-activity">
-            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-edit">Edit Activity</a>
+            <a href="{% url 'edit_activity' activity.id %}" class="btn btn-edit">
+                Edit Activity
+            </a>
         </div>
     {% endif %}
+    
 </div>
 
 <!-- JavaScript for Feedback Toggle -->
@@ -186,4 +272,5 @@
 
 <!-- Include JavaScript File -->
 <script src="{% static 'edu_core/js/activity_view.js' %}"></script>
+
 {% endblock %}

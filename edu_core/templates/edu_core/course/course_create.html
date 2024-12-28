@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\course_create.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\course_create.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -7,12 +7,14 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'edu_core/css/course_create.css' %}" type="text/css">
 
+<!-- Updated form in course_create.html -->
 <div class="course-create-container">
     <h2>Create a New Course</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="create-course-button">Create Course</button>
     </form>
 </div>
+
 {% endblock %}

@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\base.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +27,10 @@
                             {% if user.user_type == 'professor' or user.user_type == 'moderator' or user.is_superuser %}
                                 <a href="{% url 'create_course' %}">Create Course</a>
                             {% endif %}
-                            <a href="{% url 'logout' %}">Logout</a>
+                            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="logout-button">Logout</button>
+                            </form>
                         </div>
                     </div>
                 </div>

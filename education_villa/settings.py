@@ -1,4 +1,4 @@
-# Portfolio\Education_Villa\education_villa\settings.py
+# Education_Villa\education_villa\settings.py
 
 """
 Django settings for education_villa project.
@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'edu_core',
-    'django_quill',
 ]
 
 MIDDLEWARE = [

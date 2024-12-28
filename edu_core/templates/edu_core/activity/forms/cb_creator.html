@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\forms\cb_creator.html -->
+<!--Education_Villa\edu_core\templates\edu_core\activity\forms\cb_creator.html -->
 
 {% extends "edu_core/base.html" %}
 {% load static %}
@@ -38,13 +38,13 @@
             {{ form.content }}
         </div>
 
-        <!-- Image Upload Field -->
+        <!-- Image URL Field -->
         <div class="form-group">
-            <label for="image">Upload Image:</label>
-            {{ form.image }}
-            {% if editing and question and question.image %}
+            <label for="image_url">Image URL:</label>
+            {{ form.image_url }}
+            {% if editing and question and question.image_url %}
                 <p>Current Image:</p>
-                <img src="{{ question.image.url }}" alt="Current Image" class="current-image">
+                <img src="{{ question.image_url }}" alt="Current Image" class="current-image">
             {% endif %}
         </div>
 
@@ -54,12 +54,12 @@
             {{ form.yt_video_link }}
         </div>
 
-        <!-- File Upload Field -->
+        <!-- File URL Field -->
         <div class="form-group">
-            <label for="file_upload">Upload File:</label>
-            {{ form.file_upload }}
-            {% if editing and question and question.file_upload %}
-                <p>Current File: <a href="{{ question.file_upload.url }}">{{ question.file_upload.name|basename }}</a></p>
+            <label for="file_url">File URL:</label>
+            {{ form.file_url }}
+            {% if editing and question and question.file_url %}
+                <p>Current File: <a href="{{ question.file_url }}">View File</a></p>
             {% endif %}
         </div>
 

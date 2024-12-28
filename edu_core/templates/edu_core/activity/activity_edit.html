@@ -1,5 +1,3 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\activity\views\activity_edit.html -->
-
 {% extends "edu_core/base.html" %}
 {% load static %}
 {% load custom_filters %}
@@ -10,89 +8,153 @@
 <!-- Breadcrumb Navigation -->
 <nav class="breadcrumb-nav">
     <a href="{% url 'home' %}" class="breadcrumb">Home</a> &gt;
-    <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">{{ activity.lesson.course.name }}</a> &gt;
-    <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">Back to Lesson: {{ activity.lesson.name }}</a> &gt;
+    <a href="{% url 'course_detail' activity.lesson.course.id %}" class="breadcrumb">
+        {{ activity.lesson.course.name }}
+    </a> &gt;
+    <a href="{% url 'lesson_view' activity.lesson.id %}" class="breadcrumb">
+        Back to Lesson: {{ activity.lesson.name }}
+    </a> &gt;
     <span class="breadcrumb current">Edit Activity: {{ activity.name }}</span>
 </nav>
 
 <div class="activity-edit-container">
     <h2>Edit Activity: {{ activity.name }}</h2>
+
+    <!-- TOP FORM AREA -->
     <form method="post" action=".">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="activity_name">Name:</label>
-            <input type="text" id="activity_name" name="name" value="{{ form.name.value }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="activity_description">Description:</label>
-            <textarea id="activity_description" name="description" class="form-control">{{ form.description.value }}</textarea>
-        </div>
-
-        <!-- Availability Options -->
-        <div class="form-group">
-            <label for="start_date">Start Date:</label>
-            <input type="date" id="start_date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="end_date">End Date:</label>
-            <input type="date" id="end_date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}" class="form-control">
-        </div>
-
-        <!-- Add fields for limiting attempts -->
-        <div class="form-group">
-            <label for="max_attempts">Maximum Attempts</label>
-            <input type="number" id="max_attempts" name="max_attempts" min="1" max="99" value="{{ activity.max_attempts }}" {% if activity.unlimited_attempts %}disabled{% endif %}>
-        </div>
-        <div class="form-group">
-            <label for="unlimited_attempts">
-                <input type="checkbox" id="unlimited_attempts" name="unlimited_attempts" {% if activity.unlimited_attempts %}checked{% endif %}>
-                Unlimited Attempts
-            </label>
+        
+        <!-- Row: Name (left) | Description (right) -->
+        <div class="row-two-cols">
+            <div class="col">
+                <div class="form-group">
+                    <label for="activity_name">Name:</label>
+                    <input type="text" id="activity_name" name="name"
+                           value="{{ form.name.value }}" class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="activity_description">Description:</label>
+                    <textarea id="activity_description" name="description" class="form-control">
+                        {{ form.description.value }}
+                    </textarea>
+                </div>
+            </div>
         </div>
 
-        <!-- Feedback Options -->
-        <div class="form-group">
-            <label for="feedback_visibility">Feedback Visibility:</label>
-            {{ form.feedback_visibility }}
-        </div>        
+        <!-- Row: Start Date (left) | End Date (right) -->
+        <div class="row-two-cols">
+            <div class="col">
+                <div class="form-group">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" id="start_date" name="start_date"
+                           value="{{ form.start_date.value|date:'Y-m-d' }}"
+                           class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" id="end_date" name="end_date"
+                           value="{{ form.end_date.value|date:'Y-m-d' }}"
+                           class="form-control">
+                </div>
+            </div>
+        </div>
 
-        <button type="submit" class="btn">Save Activity Details</button>
+        <!-- Row: Maximum Attempts (left) | Unlimited Attempts (right) -->
+        <div class="row-two-cols">
+            <div class="col">
+                <div class="form-group">
+                    <label for="max_attempts">Maximum Attempts:</label>
+                    <input type="number" id="max_attempts" name="max_attempts"
+                           min="1" max="99"
+                           value="{{ activity.max_attempts }}"
+                           {% if activity.unlimited_attempts %}disabled{% endif %}>
+                </div>
+            </div>
+            <div class="col">
+                <!-- “Unlimited Attempts” in a single form-group so it’s clear -->
+                <div class="form-group unlimited-attempts">
+                    <label for="unlimited_attempts">
+                        <input type="checkbox" id="unlimited_attempts" name="unlimited_attempts"
+                               {% if activity.unlimited_attempts %}checked{% endif %}>
+                        Unlimited Attempts
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row: Feedback Visibility (left) | Save Button (right) -->
+        <div class="row-two-cols">
+            <div class="col">
+                <div class="form-group">
+                    <label for="feedback_visibility">Feedback Visibility:</label>
+                    {{ form.feedback_visibility }}
+                </div>
+            </div>
+            <div class="col text-right">
+                <button type="submit" class="btn">Save Activity Details</button>
+            </div>
+        </div>
     </form>
 
-    <!-- Add Question Section -->
     <hr>
+
+    <!-- Add Question Section -->
     <form method="get" action="{% url 'question_type_selection' activity.id %}">
-        <div class="form-group">
-            <label for="insert_after_question">Insert New Question After:</label>
-            <select id="insert_after_question" name="insert_after" class="form-control">
-                <option value="0">At the Beginning</option>
-                {% for question in activity_questions %}
-                    {% if not question.is_separator %}
-                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text|truncatechars:50 }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+        <div class="row-two-cols">
+            <!-- Left: Insert field -->
+            <div class="col">
+                <div class="form-group">
+                    <label for="insert_after_question">Insert New Question After:</label>
+                    <select id="insert_after_question" name="insert_after" class="form-control">
+                        <option value="0">At the Beginning</option>
+                        {% for question in activity_questions %}
+                            {% if not question.is_separator %}
+                                <option value="{{ question.order }}">
+                                    {{ question.order }}. {{ question.question.text|truncatechars:50 }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Right: Add Question button -->
+            <div class="col text-right">
+                <button type="submit" class="btn btn-secondary">Add Question</button>
+            </div>
         </div>
-        <button type="submit" class="btn btn-secondary">Add Question</button>
     </form>
 
     <!-- Add New Page Section -->
     <form method="post" action="{% url 'activity_add_page' activity.id %}">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="insert_after_page">Insert New Page After:</label>
-            <select id="insert_after_page" name="insert_after" class="form-control">
-                {% for question in activity_questions %}
-                    {% if not question.is_separator %}
-                        <option value="{{ question.order }}">{{ question.order }}. {{ question.question.text|truncatechars:50 }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
+        <div class="row-two-cols">
+            <!-- Left: Insert field -->
+            <div class="col">
+                <div class="form-group">
+                    <label for="insert_after_page">Insert New Page After:</label>
+                    <select id="insert_after_page" name="insert_after" class="form-control">
+                        {% for question in activity_questions %}
+                            {% if not question.is_separator %}
+                                <option value="{{ question.order }}">
+                                    {{ question.order }}. {{ question.question.text|truncatechars:50 }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <!-- Right: Add New Page button -->
+            <div class="col text-right">
+                <button type="submit" class="btn">Add New Page</button>
+            </div>
         </div>
-        <button type="submit" class="btn">Add New Page</button>
     </form>
 
-    <!-- Questions Reordering Section -->
+    <!-- QUESTIONS REORDERING SECTION -->
     <hr>
     <form method="post" action="{% url 'activity_reorder_questions' activity.id %}">
         {% csrf_token %}
@@ -102,7 +164,10 @@
                     <!-- Page Separator -->
                     <div class="page-separator">
                         <span class="separator-text">Page {{ question.page_number }}</span>
-                        <button type="button" class="remove-separator remove-page-btn" data-page-number="{{ question.page_number }}" data-url="{% url 'activity_remove_page' activity.id %}">
+                        <button type="button"
+                                class="remove-separator remove-page-btn"
+                                data-page-number="{{ question.page_number }}"
+                                data-url="{% url 'activity_remove_page' activity.id %}">
                             <!-- Trash Bin SVG -->
                             <svg viewBox="0 0 24 24">
                                 <path d="M3 6l3 18h12l3-18h-18zm16 16h-12l-2.25-14h16.5l-2.25 14zm-10-16v-4h8v4h7v2h-22v-2h7z"/>
@@ -110,57 +175,72 @@
                         </button>
                     </div>
                 {% else %}
-                    <!-- Check if the question exists -->
                     {% if question.question %}
                         <!-- Question Card -->
                         <div class="question-card" draggable="true">
                             <div class="card-header">
                                 {% if question.question.question_type == 'CONTENT_BLOCK' %}
-                                    <!-- Render content block text and image if present -->
                                     <div class="content-block">
-                                        <div class="content-text">{{ question.question.content|default:"No content available."|striptags }}</div>
+                                        <div class="content-text">
+                                            {{ question.question.content|default:"No content available."|striptags }}
+                                        </div>
                                         {% if question.question.image %}
-                                            <img src="{{ question.question.image.url }}" alt="Content Block Image" class="content-block-image">
+                                            <img src="{{ question.question.image.url }}"
+                                                 alt="Content Block Image"
+                                                 class="content-block-image">
                                         {% endif %}
                                         {% if question.question.yt_video_link %}
                                             <div class="youtube-container">
-                                                <iframe 
-                                                    src="https://www.youtube.com/embed/{{ question.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}" 
-                                                    frameborder="0" 
-                                                    allowfullscreen>
-                                                </iframe>
+                                                <iframe
+                                                    src="https://www.youtube.com/embed/{{ question.question.yt_video_link|cut:'https://youtu.be/'|cut:'https://www.youtube.com/watch?v=' }}"
+                                                    frameborder="0"
+                                                    allowfullscreen></iframe>
                                             </div>
                                         {% endif %}
                                         {% if question.question.file_upload %}
-                                            <div class="file-info">Uploaded File: {{ question.question.file_upload.name|basename }}</div>
+                                            <div class="file-info">
+                                                Uploaded File: {{ question.question.file_upload.name|basename }}
+                                            </div>
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    <!-- Display other question types -->
-                                    <p>{{ question.order }}. {{ question.question.text|default:"[No Question Text]"|truncatechars:50 }}</p>
+                                    <p>
+                                        {{ question.order }}.
+                                        {{ question.question.text|default:"[No Question Text]"|truncatechars:50 }}
+                                    </p>
                                 {% endif %}
                             </div>
                             <div class="card-body">
                                 <div>
                                     <p>Type: {{ question.question.get_question_type_display }}</p>
                                     <p>Key Name: {{ question.question.key_name }}</p>
-                                    <p><strong>Feedback:</strong> {{ question.question.feedback|default:"No feedback provided" }}</p>
+                                    <p><strong>Feedback:</strong> 
+                                        {{ question.question.feedback|default:"No feedback provided" }}
+                                    </p>
                                 </div>
-                                <!-- Actions -->
                                 <div class="question-actions">
-                                    <button type="button" class="btn-icon move-up-btn" data-question-id="{{ question.id }}" data-url="{% url 'activity_move_question_up' activity.id %}">
+                                    <button type="button"
+                                            class="btn-icon move-up-btn"
+                                            data-question-id="{{ question.id }}"
+                                            data-url="{% url 'activity_move_question_up' activity.id %}">
                                         <!-- Up Arrow SVG -->
                                         <svg viewBox="0 0 24 24">
                                             <path d="M12 4l-8 8h6v8h4v-8h6z"/>
                                         </svg>
                                     </button>
-                                    <button type="button" class="btn-icon move-down-btn" data-question-id="{{ question.id }}" data-url="{% url 'activity_move_question_down' activity.id %}">
+                                    <button type="button"
+                                            class="btn-icon move-down-btn"
+                                            data-question-id="{{ question.id }}"
+                                            data-url="{% url 'activity_move_question_down' activity.id %}">
                                         <!-- Down Arrow SVG -->
                                         <svg viewBox="0 0 24 24">
                                             <path d="M12 20l8-8h-6v-8h-4v8h-6z"/>
                                         </svg>
                                     </button>
-                                    <button type="button" class="btn-trash-icon remove-question-btn" data-question-id="{{ question.id }}" data-url="{% url 'activity_remove_question' activity.id %}">
+                                    <button type="button"
+                                            class="btn-trash-icon remove-question-btn"
+                                            data-question-id="{{ question.id }}"
+                                            data-url="{% url 'activity_remove_question' activity.id %}">
                                         <!-- Trash Bin SVG -->
                                         <svg viewBox="0 0 24 24">
                                             <path d="M3 6l3 18h12l3-18h-18zm16 16h-12l-2.25-14h16.5l-2.25 14zm-10-16v-4h8v4h7v2h-22v-2h7z"/>
@@ -187,19 +267,17 @@
         const unlimitedAttemptsCheckbox = document.getElementById('unlimited_attempts');
         const maxAttemptsInput = document.getElementById('max_attempts');
 
-        unlimitedAttemptsCheckbox.addEventListener('change', function () {
-            if (this.checked) {
+        function toggleMaxAttempts() {
+            if (unlimitedAttemptsCheckbox.checked) {
                 maxAttemptsInput.disabled = true;
                 maxAttemptsInput.value = '';
             } else {
                 maxAttemptsInput.disabled = false;
             }
-        });
-
-        if (unlimitedAttemptsCheckbox.checked) {
-            maxAttemptsInput.disabled = true;
         }
+
+        unlimitedAttemptsCheckbox.addEventListener('change', toggleMaxAttempts);
+        toggleMaxAttempts();
     });
 </script>
-
 {% endblock %}

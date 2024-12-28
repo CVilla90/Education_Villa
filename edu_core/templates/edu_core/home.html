@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\home.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\home.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -25,9 +25,11 @@
     <div class="course-cards">
         {% for course in courses %}
         <div class="course-card">
-            {% if course.image %}
-            <img src="{{ course.image.url }}" alt="{{ course.name }}" class="course-image">
-            {% endif %}
+            {% if course.image_url %}
+            <img src="{{ course.image_url }}" alt="{{ course.name }}" class="course-image">
+            {% else %}
+            <img src="{% static 'edu_core/images/default-course.jpg' %}" alt="Default Course Image" class="course-image">
+            {% endif %}        
             <a href="{% url 'course_detail' course.id %}"><h3>{{ course.name }}</h3></a>
             <p>{{ course.description|truncatewords:20 }}</p> <!-- Adjust 20 to your desired word limit -->
         </div>

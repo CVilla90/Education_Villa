@@ -1,108 +1,189 @@
-:root {
-  --primary-color: #003366; /* Navy Blue */
-  --secondary-color-1: #ffffff; /* Beige */
-  --secondary-color-2: #3fada8; /* Teal */
-  --accent-color-1: #2a9df4; /* Bright Blue */
-  --accent-color-2: #ffd700; /* Golden Yellow */
-  --neutral-color: #dddddd; /* Light Gray */
-  --background-color: #ffffff; /* Off-White */
-  --text-color: #333333; /* Dark Gray */
-  --hover-bg-color: #e0e0e0; /* Slightly darker gray for hover background */
-  --hover-text-color: #003366; /* Navy Blue for hover text color */
-  --shiny-silver: #c0c0c0; /* Shiny Silver for username */
-}
+/******************************************************************************
+  BASE.CSS
+  =========
+  Purpose:
+    - Holds global CSS variables
+    - Global resets/body styles (if desired)
+    - Navbar & dropdown styling
+    - Basic responsiveness for navbar
+******************************************************************************/
 
-/* Navbar styles */
-.navbar {
-  background-color: var(--primary-color);
-  overflow: visible;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  position: relative;
-  z-index: 10;
-}
-
-.navbar a {
-  display: block;
-  color: var(--background-color);
-  text-align: center;
-  padding: 14px 20px;
-  text-decoration: none;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-.navbar a:hover, .navbar a:focus {
-  background-color: var(--accent-color-1);
-  color: var(--background-color);
-}
-
-.username {
-  color: var(--shiny-silver);
-  font-weight: bold;
-  padding: 14px 20px;
-  transition: color 0.3s ease-in-out;
-}
-
-.username:hover {
-  color: #e6e6e6; /* A lighter silver for hover */
-}
-
-main {
-  padding: 16px;
-  background-color: var(--background-color);
-  color: var(--text-color);
-  position: relative;
-  z-index: 1;
-}
-
-/* Dropdown Menu */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropbtn {
-  background-color: #4CAF50; /* Green button color */
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  z-index: 20;
-}
-
-.dropdown-content {
-  right: 0;
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 100;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.dropdown-content a {
-  color: var(--text-color);
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-.dropdown-content a:hover {
-  background-color: var(--hover-bg-color); /* Light gray background on hover */
-  color: var(--hover-text-color); /* Navy blue text on hover */
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
-
-.dropdown:hover .dropbtn {
-  background-color: #3e8e41; /* Slightly darker green on hover */
-}
+/* ===============================
+   1) GLOBAL VARIABLES
+   =============================== */
+   :root {
+    --primary-color: #003366;     /* Navy Blue */
+    --secondary-color-1: #ffffff; /* Beige (light color) */
+    --secondary-color-2: #3fada8; /* Teal */
+    --accent-color-1: #2a9df4;    /* Bright Blue */
+    --accent-color-2: #ffd700;    /* Golden Yellow */
+    --neutral-color: #dddddd;     /* Light Gray */
+    --background-color: #ffffff;  /* Off-White */
+    --text-color: #333333;        /* Dark Gray */
+    --hover-bg-color: #e0e0e0;    /* Slightly darker gray on hover */
+    --hover-text-color: #003366;  /* Navy Blue text on hover */
+    --shiny-silver: #c0c0c0;      /* Shiny Silver for username */
+  }
+  
+  /* Optionally, you might add:
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  */
+  
+  /* ===============================
+     2) NAVBAR STYLES
+     =============================== */
+  
+  .navbar {
+    background-color: var(--primary-color);
+    overflow: visible;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .navbar a {
+    display: block;
+    color: var(--background-color);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .navbar a:hover,
+  .navbar a:focus {
+    background-color: var(--accent-color-1);
+    color: var(--background-color);
+  }
+  
+  /* Username styling in navbar */
+  .username {
+    color: var(--shiny-silver);
+    font-weight: bold;
+    padding: 14px 20px;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .username:hover {
+    color: #e6e6e6; /* A lighter silver for hover */
+  }
+  
+  /* ===============================
+     3) MAIN CONTENT WRAPPER
+     =============================== */
+  
+  main {
+    padding: 16px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* ===============================
+     4) DROPDOWN MENU
+     =============================== */
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropbtn {
+    background-color: #4CAF50; /* Green button color */
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+  }
+  
+  .dropdown-content {
+    right: 0;
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .dropdown-content a {
+    color: var(--text-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+  }
+  
+  /* Show dropdown on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* Style dropdown button on hover */
+  .dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+  }
+  
+  /* ===============================
+     5) LOGOUT BUTTON
+     =============================== */
+  
+  .logout-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 14px; /* Match the font size of dropdown links */
+    width: 100%;    /* Ensure it spans the full width like the other links */
+    display: block;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+  .logout-button:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--hover-text-color);
+  }
+  
+  /* ===============================
+     6) MEDIA QUERIES (MOBILE)
+     =============================== */
+  
+  @media (max-width: 768px) {
+    /* Example: Adjust navbar spacing on smaller screens */
+    .navbar {
+      padding: 0 10px;
+    }
+    
+    .navbar a {
+      padding: 12px 15px;
+      font-size: 14px;
+    }
+    
+    .dropbtn {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
+  

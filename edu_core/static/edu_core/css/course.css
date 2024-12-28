@@ -1,24 +1,43 @@
-/* Portfolio\Education_Villa\edu_core\static\edu_core\css\course.css */
+/******************************************************************************
+  COURSE.CSS
+  ==========
+  Purpose:
+    - Dedicated styles for the Course detail page.
+    - Includes unique color variables & page-specific layout.
+    - Basic responsiveness for smaller screens.
+******************************************************************************/
 
-:root {
-    --primary-color: #003366; /* Navy Blue */
-    --secondary-color-1: #ffffff; /* White */
-    --accent-color-1: #2a9df4; /* Bright Blue */
-    --accent-color-2: #ff6b6b; /* Soft Red */
-    --text-color: #333; /* Dark Gray */
-    --neutral-color: #dddddd; /* Light Gray */
-    --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color */
+/* ===============================
+   1) UNIQUE (OR OVERRIDING) VARIABLES
+   =============================== */
+
+/* We rename the soft red variable to avoid conflicts
+   with base.css's --accent-color-2 (gold).
+   If you *intentionally* want to override, just keep --accent-color-2. */
+   :root {
+    --soft-red: #ff6b6b;           /* Soft Red unique to course page */
+    --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color unique to course page */
 }
 
+/* ===============================
+   2) BASE OVERRIDES (Optional)
+   =============================== */
+
+/* If you still need a local body/html override, keep these:
+   Otherwise, consider removing them if base.css handles global styles. */
 body, html {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     font-family: 'Arial', sans-serif;
-    background: var(--secondary-color-1);
-    color: var(--text-color);
+    background: var(--secondary-color-1); /* Typically #ffffff */
+    color: var(--text-color);            /* Typically #333333 */
 }
+
+/* ===============================
+   3) COURSE CONTAINER & LAYOUT
+   =============================== */
 
 .course-container {
     width: 80%;
@@ -27,8 +46,14 @@ body, html {
     box-shadow: 0 4px 8px var(--shadow-color);
     background-color: var(--secondary-color-1);
     border-radius: 10px;
+
+    /* Original grid: 3fr 2fr 1fr
+       - 3fr: course info
+       - 2fr: image
+       - 1fr: controls
+    */
     display: grid;
-    grid-template-columns: 3fr 2fr 1fr; /* Redistribute space: 3 for info, 2 for image, 1 for controls */
+    grid-template-columns: 3fr 2fr 1fr;
     gap: 20px;
     align-items: start;
 }
@@ -45,10 +70,16 @@ body, html {
     color: var(--primary-color);
 }
 
-.author, .course-description, .created-date {
+.author,
+.course-description,
+.created-date {
     font-size: 1rem;
     margin: 5px 0;
 }
+
+/* ===============================
+   4) IMAGE & CONTROLS SECTION
+   =============================== */
 
 .course-image-and-controls {
     display: flex;
@@ -69,17 +100,22 @@ body, html {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: auto; /* Adjust to auto to ensure buttons are only as wide as needed */
-    align-items: center; /* Center-align the buttons */
+    width: auto; 
+    align-items: center; 
     margin-top: 10px;
 }
+
+/* ===============================
+   5) REGISTRATION BUTTONS
+   =============================== */
 
 .registration-container {
     text-align: center;
     margin-top: 20px;
 }
 
-.register-button, .unregister-button {
+.register-button,
+.unregister-button {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 5px;
@@ -90,48 +126,57 @@ body, html {
 }
 
 .register-button {
-    background-color: var(--accent-color-1);
-    color: var(--secondary-color-1);
+    background-color: var(--accent-color-1); /* Bright Blue (from base.css) */
+    color: var(--secondary-color-1);         /* White text */
 }
 
 .register-button:hover {
-    background-color: #217abf; /* A slightly darker blue for hover */
+    background-color: #217abf; /* Slightly darker blue */
 }
 
 .unregister-button {
-    background-color: var(--accent-color-2);
-    color: var(--secondary-color-1);
+    background-color: var(--soft-red); /* Use the unique soft red */
+    color: var(--secondary-color-1);   /* White text */
 }
 
 .unregister-button:hover {
-    background-color: #c0392b;
+    background-color: #c0392b; /* Darker red */
 }
 
-.edit-course, .delete-course {
+/* ===============================
+   6) EDIT/DELETE COURSE
+   =============================== */
+
+.edit-course,
+.delete-course {
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
-    color: var(--secondary-color-1);
+    color: var(--secondary-color-1);  /* White text */
     text-align: center;
     transition: background-color 0.3s ease-in-out, transform 0.2s;
-    width: auto; /* Ensure buttons are not overly wide */
+    width: auto;
 }
 
 .edit-course {
-    background-color: var(--accent-color-1);
+    background-color: var(--accent-color-1); /* Bright Blue */
 }
 
 .edit-course:hover {
-    background-color: #1e7bbf; /* A slightly darker blue for hover */
+    background-color: #1e7bbf;
 }
 
 .delete-course {
-    background-color: var(--accent-color-2);
+    background-color: var(--soft-red);
 }
 
 .delete-course:hover {
-    background-color: #e74c3c; /* A darker red for hover */
+    background-color: #b62111; /* Another darker red */
 }
+
+/* ===============================
+   7) LESSONS
+   =============================== */
 
 .lessons-container {
     width: 80%;
@@ -157,12 +202,38 @@ body, html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.add-lesson-container, .question-bank-container, .ai-professor-container {
+.delete-lesson-button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--secondary-color-1);  /* White text */
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, transform 0.2s;
+    width: auto;
+}
+
+.delete-lesson-button {
+    background-color: #d43f2f;
+}
+
+.delete-lesson-button:hover {
+    background-color: #c1301f; /* Another even darker red */
+}
+
+/* ===============================
+   8) OTHER BUTTON CONTAINERS
+   =============================== */
+
+.add-lesson-container,
+.question-bank-container,
+.ai-professor-container {
     text-align: center;
     margin-top: 20px;
 }
 
-.add-lesson-button, .question-bank-button, .ai-professor-button {
+.add-lesson-button,
+.question-bank-button,
+.ai-professor-button {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 5px;
@@ -172,32 +243,38 @@ body, html {
     transition: background-color 0.3s ease-in-out, transform 0.2s;
 }
 
-.add-lesson-button, .ai-professor-button {
-    background-color: var(--accent-color-1);
-    color: var(--secondary-color-1);
+.add-lesson-button,
+.ai-professor-button {
+    background-color: var(--accent-color-1); /* Bright Blue */
+    color: var(--secondary-color-1);         /* White text */
 }
 
-.add-lesson-button:hover, .ai-professor-button:hover {
+.add-lesson-button:hover,
+.ai-professor-button:hover {
     background-color: #1e7bbf;
     transform: scale(1.05);
 }
 
 .question-bank-button {
-    background-color: var(--primary-color);
+    background-color: var(--primary-color); 
     color: var(--secondary-color-1);
 }
 
 .question-bank-button:hover {
-    background-color: #002244; /* Darker blue for hover to keep it visible */
+    background-color: #002244; /* Darker navy */
     transform: scale(1.05);
 }
+
+/* ===============================
+   9) DASHBOARD BUTTON
+   =============================== */
 
 .course-dashboard-button {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
-    color: var(--secondary-color-1);
+    color: var(--secondary-color-1); /* White text */
     text-align: center;
     font-weight: bold;
     transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
@@ -205,6 +282,30 @@ body, html {
 }
 
 .course-dashboard-button:hover {
-    background-color: #e67300; /* Darker Orange for hover effect */
+    background-color: #e67300; /* Darker orange */
     transform: scale(1.05);
+}
+
+/* ===============================
+   10) MEDIA QUERIES (MOBILE)
+   =============================== */
+@media (max-width: 768px) {
+    /* Make the course container single-column for small screens */
+    .course-container {
+        grid-template-columns: 1fr; /* Everything stacks */
+    }
+
+    /* Optional: Adjust margins, widths, etc. */
+    .course-container,
+    .lessons-container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .controls {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
 }

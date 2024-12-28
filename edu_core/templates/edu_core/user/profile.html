@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\profile.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\profile.html -->
 {% extends "edu_core/base.html" %}
 
 {% load static %}
@@ -10,7 +10,7 @@
     <div class="profile-header">
         <div class="profile-picture">
             {% if user.userprofile.profile_picture %}
-            <img src="{{ user.userprofile.profile_picture.url }}" alt="Profile picture" class="profile-img">
+            <img src="{{ user.userprofile.get_profile_picture_direct_url }}" alt="Profile picture" class="profile-img">
             {% else %}
             <div class="no-profile-picture">No profile picture uploaded</div>
             {% endif %}
@@ -25,7 +25,7 @@
         <h3>Certifications</h3>
         {% for cert in user.userprofile.certifications.all %}
             <div class="certification">
-                <img src="{{ cert.image.url }}" alt="{{ cert.description }}" class="cert-img">
+                <img src="{{ cert.image_url }}" alt="{{ cert.description }}" class="cert-img">
                 <p class="cert-description">{{ cert.description }}</p>
             </div>
         {% endfor %}
@@ -35,6 +35,9 @@
         <a href="{% url 'edit_profile' %}" class="edit-profile-button">Edit Profile</a>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block scripts %}
 
 <script src="{% static 'edu_core/js/profile.js' %}"></script>
 {% endblock %}

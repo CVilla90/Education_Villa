@@ -1,74 +1,74 @@
-/* Portfolio\Education_Villa\edu_core\static\edu_core\css\home.css */
+/******************************************************************************
+  HOME.CSS
+  ========
+  Purpose:
+    - Styles specifically for the landing / home page
+    - Uses global variables from base.css
+    - Hero section, waves, course previews, etc.
+    - Mobile responsiveness for content
+******************************************************************************/
 
-:root {
-    --primary-color: #003366; /* Navy Blue */
-    --secondary-color-1: #ffffff; /* Beige */
-    --secondary-color-2: #3fada8; /* Teal */
-    --accent-color-1: #2a9df4; /* Bright Blue */
-    --accent-color-2: #ffd700; /* Golden Yellow */
-    --neutral-color: #dddddd; /* Light Gray */
-    --background-color: #ffffff; /* Off-White */
-    --text-color: #333333; /* Dark Gray */
-}
+/* ===============================
+   1) HERO SECTION
+   =============================== */
 
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background: var(--background-color);
-    color: var(--text-color);
-}
-
-.hero-logo {
+   .hero {
+    position: relative;
+    overflow: hidden; /* Ensures waves don't spill outside */
+    text-align: center;
+    padding: 50px 20px;
+    background: radial-gradient(
+      circle at 50% 20%,
+      var(--secondary-color-2) 20%,
+      var(--primary-color) 100%
+    );
+    color: var(--background-color);
+  }
+  
+  .hero-logo {
     max-width: 200px;
     margin-bottom: 20px;
     border-radius: 50%;
     background: var(--background-color);
     padding: 20px;
     box-shadow: 0 0 0 10px var(--background-color);
-}
-
-.hero {
-    position: relative;
-    overflow: hidden; /* Ensures waves don't spill outside */
-    text-align: center;
-    padding: 50px 20px;
-    background: radial-gradient(circle at 50% 20%, var(--secondary-color-2) 20%, var(--primary-color) 100%);
-    color: var(--background-color);
-}
-
-.wave {
+  }
+  
+  /* Waves on click/tap */
+  .wave {
     position: absolute;
-    width: 10px; /* Adjust size for larger, more subtle waves */
-    height: 10px; /* Keep proportions */
-    background: transparent; /* Make the wave background transparent */
+    width: 10px;          /* Adjust size for larger, more subtle waves */
+    height: 10px;
+    background: transparent;
     border-radius: 50%;
     pointer-events: none; /* Prevents wave from blocking mouse events */
     transform: scale(0);
     animation: wave-animation 0.2s ease-out; /* Adjust animation duration */
-    backdrop-filter: blur(5px) brightness(1.1); /* Create a subtle blur and brightness effect */
-    mix-blend-mode: overlay; /* Use blend mode for subtle visual effect */
-}
-
-@keyframes wave-animation {
+    backdrop-filter: blur(5px) brightness(1.1);
+    mix-blend-mode: overlay;
+  }
+  
+  @keyframes wave-animation {
     from {
-        transform: scale(0);
-        opacity: 1;
+      transform: scale(0);
+      opacity: 1;
     }
     to {
-        transform: scale(2); /* Adjust scale for subtle effect */
-        opacity: 0;
+      transform: scale(2); /* Adjust scale for subtle effect */
+      opacity: 0;
     }
-}
-
-
-.search-container {
+  }
+  
+  /* ===============================
+     2) SEARCH SECTION
+     =============================== */
+  
+  .search-container {
     margin-top: 30px;
-}
-
-.search-container input[type="search"] {
+    text-align: center; /* Make sure search is centered */
+  }
+  
+  .search-container input[type="search"] {
     padding: 10px;
     width: 50%;
     max-width: 300px;
@@ -77,9 +77,10 @@ body, html {
     font-size: 16px;
     color: var(--text-color);
     background: var(--secondary-color-1);
-}
-
-.search-container button {
+    outline: none;
+  }
+  
+  .search-container button {
     padding: 10px 20px;
     margin-left: -5px;
     background-color: var(--accent-color-1);
@@ -88,109 +89,154 @@ body, html {
     font-size: 16px;
     cursor: pointer;
     color: var(--background-color);
-}
-
-.search-container button:hover {
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-container button:hover {
     background-color: var(--accent-color-2);
-}
-
-.courses-preview {
+  }
+  
+  /* ===============================
+     3) COURSE PREVIEW SECTION
+     =============================== */
+  
+  .courses-preview {
     padding: 50px 20px;
     background: var(--secondary-color-1);
-}
-
-.course-cards {
+  }
+  
+  .course-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjusted to have a more uniform card size */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
-    justify-items: center; /* Centers the cards in the grid */
-}
-
-.course-card {
-    width: 300px; /* Fixed width for consistent appearance */
-    height: 300px; /* Fixed height to match width */
+    justify-items: center; 
+  }
+  
+  /* Each individual card */
+  .course-card {
+    width: 300px;  /* Fixed width for consistency */
+    height: 300px; /* Matches width for a square ratio */
     margin: 0 auto;
     background: var(--background-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     overflow: hidden;
     text-align: center;
-    padding: 0; /* Remove padding to ensure content fits within set dimensions */
-    transition: transform 0.3s ease-in-out;
+    padding: 0; /* Remove default padding so content fits exactly */
     display: flex;
-    flex-direction: column; /* Ensures content stacks vertically */
-    opacity: 0; /* Start with 0 opacity for fade-in effect */
-    transform: translateX(20px); /* Slide-in effect from the right */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Apply transitions */
-}
-
-/* Keyframes for the fade-in and slide-in */
-@keyframes fadeIn {
+    flex-direction: column; /* Vertical stacking */
+    opacity: 0; /* Start invisible for fade-in effect */
+    transform: translateX(20px); /* Slide in from the right */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
     from {
-        opacity: 0;
-        transform: translateX(20px);
+      opacity: 0;
+      transform: translateX(20px);
     }
     to {
-        opacity: 1;
-        transform: translateX(0);
+      opacity: 1;
+      transform: translateX(0);
     }
-}
-
-/* Add animation class */
-.course-card.fade-in {
+  }
+  
+  /* Add this class in JS when you want the fade-in effect */
+  .course-card.fade-in {
     opacity: 1;
-    transform: translateX(0); /* Reset transformation to its original position */
-}
-
-.course-card:hover {
+    transform: translateX(0);
+  }
+  
+  .course-card:hover {
     transform: translateY(-10px);
-}
-
-.course-card img {
+  }
+  
+  /* Image in the card */
+  .course-card img {
     width: 100%;
-    height: 150px; /* Ensure consistent image height */
-    object-fit: cover; /* Crop the image to fit the aspect ratio */
-    flex-shrink: 0; /* Prevents the image from shrinking */
-}
-
-.course-card h3 {
+    height: 150px; /* Keep consistent image height */
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  
+  /* Text within the card */
+  .course-card h3 {
     margin: 15px 10px 0 10px;
     color: var(--primary-color);
     font-size: 18px;
-    flex-shrink: 0; /* Prevents the heading from shrinking */
-}
-
-.course-card p {
+    flex-shrink: 0;
+  }
+  
+  .course-card p {
     font-size: 14px;
     line-height: 1.6;
     color: var(--text-color);
     padding: 0 10px;
-    flex-grow: 1; /* Allows the description to take up the remaining space */
+    flex-grow: 1; /* Fills remaining vertical space */
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4; /* Limit description to 4 lines */
+    -webkit-line-clamp: 4; /* Limit to 4 lines */
     overflow: hidden;
     text-overflow: ellipsis;
     position: relative;
-}
-
-.course-card p::after {
+  }
+  
+  /* Subtle fade at the bottom of the text */
+  .course-card p::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 20px;
-    background: linear-gradient(to top, var(--background-color), transparent); /* Fade effect */
-}
-
-.footer-logo {
+    background: linear-gradient(to top, var(--background-color), transparent);
+  }
+  
+  /* ===============================
+     4) FOOTER
+     =============================== */
+  footer {
+    text-align: center;
+    padding: 20px 0;
+    background: var(--background-color); /* Optional background color */
+  }
+  
+  .footer-logo {
     width: 100px;
     display: block;
     margin: 20px auto;
-}
-
-footer {
-    text-align: center;
-    padding: 20px 0;
-}
+  }
+  
+  /* ===============================
+     5) MEDIA QUERIES (MOBILE)
+     =============================== */
+  @media (max-width: 768px) {
+    /* Hero */
+    .hero {
+      padding: 30px 15px;
+    }
+    .hero-logo {
+      max-width: 140px;
+      padding: 15px;
+    }
+  
+    /* Search */
+    .search-container input[type="search"] {
+      width: 70%;
+      max-width: 250px;
+    }
+  
+    /* Courses */
+    .courses-preview {
+      padding: 30px 10px;
+    }
+    .course-cards {
+      grid-template-columns: 1fr; /* Single column on small devices */
+    }
+    .course-card {
+      width: 100%;
+      height: auto; /* Let height auto-adjust */
+      margin-bottom: 20px;
+    }
+  }
+  

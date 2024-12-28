@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\course\course.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\course\course.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -21,9 +21,9 @@
         <p class="created-date">Created on: {{ course.creation_date }}</p>
     </div>
 
-    {% if course.image %}
+    {% if course.image_url %}
     <div class="course-image-and-controls">
-        <img src="{{ course.image.url }}" alt="Course Image" class="course-image">
+        <img src="{{ course.image_url }}" alt="Course Image" class="course-image">
     </div>
     {% endif %}
 

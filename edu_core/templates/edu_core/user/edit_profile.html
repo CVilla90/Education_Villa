@@ -1,4 +1,4 @@
-<!-- Portfolio\Education_Villa\edu_core\templates\edu_core\user\edit_profile.html -->
+<!-- Education_Villa\edu_core\templates\edu_core\user\edit_profile.html -->
 
 {% extends "edu_core/base.html" %}
 
@@ -9,14 +9,14 @@
 
 <div class="edit-profile-container">
     <h2>Edit Profile</h2>
-    <form method="POST" enctype="multipart/form-data" class="profile-form">
+    <form method="POST" class="profile-form">
         {% csrf_token %}
         {{ profile_form.as_p }}
         <button type="submit" name="profile_form" class="btn save-btn">Save Profile</button>
     </form>
 
     <h3>Add Certification</h3>
-    <form method="POST" enctype="multipart/form-data" class="certification-form">
+    <form method="POST" class="certification-form">
         {% csrf_token %}
         {{ certification_form.as_p }}
         <button type="submit" name="certification_form" class="btn add-cert-btn">Add Certification</button>
@@ -28,9 +28,10 @@
         {% for cert in certifications %}
             <div class="certification-item">
                 <p>{{ cert.description }}</p>
-                <img src="{{ cert.image.url }}" alt="{{ cert.description }}" class="certification-image">
+                <img src="{{ cert.image_url }}" alt="{{ cert.description }}" class="certification-image">
             </div>
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}

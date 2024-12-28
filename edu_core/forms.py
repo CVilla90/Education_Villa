@@ -28,18 +28,30 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['bio', 'profile_picture']
+        widgets = {
+            'profile_picture': forms.URLInput(attrs={
+                'placeholder': 'Enter a valid image URL',
+                'class': 'form-control'
+            }),
+        }
 
 
 class CertificationForm(forms.ModelForm):
     class Meta:
         model = Certification
-        fields = ['image', 'description']
+        fields = ['image_url', 'description']
+        widgets = {
+            'image_url': forms.URLInput(attrs={
+                'placeholder': 'Enter a valid image URL',
+                'class': 'form-control'
+            }),
+        }
 
 
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ['name', 'image', 'description']
+        fields = ['name', 'image_url', 'description']
 
 
 class DiplomaForm(forms.ModelForm):
@@ -146,23 +158,30 @@ class MCQForm(forms.ModelForm):
 class ContentBlockForm(forms.ModelForm):
     key_name = forms.CharField(label="Key Name", required=True)
     content = forms.CharField(widget=forms.Textarea, label="Content Text", required=False)
-    image = forms.ImageField(required=False, label="Upload Image")
-    yt_video_link = forms.URLField(required=False, label="YouTube Video Link", help_text="Paste a YouTube link to embed the video.")
-    file_upload = forms.FileField(
+    image_url = forms.URLField(
+        required=False, 
+        label="Image URL",
+        help_text="Paste a URL for the image"
+    )
+    yt_video_link = forms.URLField(
+        required=False, 
+        label="YouTube Video Link", 
+        help_text="Paste a YouTube link to embed the video."
+    )
+    file_url = forms.URLField(
         required=False,
-        label="Upload File",
-        help_text="Upload a document or audio file.",
-        validators=[FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx', 'xls', 'xlsx', 'mp3', 'wav', 'm4a'])]
+        label="File URL",
+        help_text="Paste a URL for the downloadable file"
     )
     in_bank = forms.BooleanField(
         label="Add to Course Bank",
         required=False,
-        initial=True,  # Checked by default
+        initial=True
     )
 
     class Meta:
         model = Question
-        fields = ['key_name', 'content', 'image', 'yt_video_link', 'file_upload', 'in_bank']
+        fields = ['key_name', 'content', 'image_url', 'yt_video_link', 'file_url', 'in_bank']
 
 
 class QuestionBankForm(forms.ModelForm):
